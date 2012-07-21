@@ -5,12 +5,12 @@ package OgameInterprete;
  * and open the template in the editor.
  */
 
+import OgameInterpreter.Interpreter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -41,6 +41,13 @@ public class TestInterpret {
     //
     @Test
     public void interpretTest() {
+    String[] str = new String[]{
+        "ON 2012-09-18 23:00:00 ; LOGIN UNI USER PASS",
+        "AT 23:07:06 ; BUILD KM",
+        "NW ; SEND 2 MT TO 2:30:7 SPEED 100 RESOURCES ALL",
+        "IN 5m  ; LOGOUT"};
+    Interpreter i = new Interpreter();
+    i.interpret(str);
     
     }
 }
