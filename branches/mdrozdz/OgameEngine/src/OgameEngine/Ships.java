@@ -24,5 +24,6 @@ public class Ships {
     public static final Ships KOL = new Ships();
     public static final Ships REC = new Ships();
     public static final Ships SOND = new Ships();
+    public static final Ships SAT = new Ships();
     
 }

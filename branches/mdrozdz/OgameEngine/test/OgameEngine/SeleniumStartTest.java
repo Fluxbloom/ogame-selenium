@@ -80,9 +80,20 @@ public class SeleniumStartTest {
         o.logout();
     }
     @Test
+    @Ignore
     public void BuildMM(){
         o.login(uni, nick, pass);
         o.build(Buildings.MAGAZYN_METALU);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SeleniumStartTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    @Test
+    public void BuildShipyardMT(){
+        o.login(uni, nick, pass);
+        o.buildShip(Ships.LM, "1");
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {

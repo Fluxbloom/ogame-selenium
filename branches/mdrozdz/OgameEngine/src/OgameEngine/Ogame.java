@@ -23,6 +23,7 @@ public class Ogame extends SeleneseTestCase {
     HashMap<Mission, String> missionMap;
     HashMap<Ships, String> shipsMap;
     HashMap<Buildings, String> buildingMap;
+    HashMap<Ships, String> shipyardMap;
     
     public Ogame() {
         System.out.print("Reading static mappings");
@@ -81,6 +82,23 @@ public class Ogame extends SeleneseTestCase {
         buildingMap.put(Buildings.SILOS_RAKIETOWY, mappings.getBuilding_sr());
         buildingMap.put(Buildings.STOCZNIA, mappings.getBuilding_st());
         buildingMap.put(Buildings.TERRAFORMER, mappings.getBuilding_te());
+        System.out.println("[DONE]");
+        System.out.print("Creating Shipyard Map");
+        shipyardMap = new HashMap<Ships, String>();
+        shipyardMap.put(Ships.BOMB, mappings.getShipyard_bomb());
+        shipyardMap.put(Ships.CM, mappings.getShipyard_cm());
+        shipyardMap.put(Ships.DT, mappings.getShipyard_dt());
+        shipyardMap.put(Ships.GS, mappings.getShipyard_gs());
+        shipyardMap.put(Ships.KOL, mappings.getShipyard_skol());
+        shipyardMap.put(Ships.KR, mappings.getShipyard_kraz());
+        shipyardMap.put(Ships.LM, mappings.getShipyard_lm());
+        shipyardMap.put(Ships.MT, mappings.getShipyard_mt());
+        shipyardMap.put(Ships.NISZ, mappings.getShipyard_nisc());
+        shipyardMap.put(Ships.OW, mappings.getShipyard_ow());
+        shipyardMap.put(Ships.PAN, mappings.getShipyard_panc());
+        shipyardMap.put(Ships.REC, mappings.getShipyard_rec());
+        shipyardMap.put(Ships.SOND, mappings.getShipyard_ss());
+        shipyardMap.put(Ships.SAT, mappings.getShipyard_sat());
         System.out.println("[DONE]");
         System.out.print("Inititializing Selenium instance ");
         try {
@@ -191,7 +209,12 @@ public class Ogame extends SeleneseTestCase {
         }
     }
    
-    
+    /**
+     * Login method
+     * @param uni
+     * @param user
+     * @param pass 
+     */
     public void login(String uni, String user, String pass) {
         this.start();
         selenium.open(mappings.getGameUrl());
@@ -272,6 +295,20 @@ public class Ogame extends SeleneseTestCase {
         }
         
         
+    }
+    public void buildShip(Ships s, String count){
+        this.clickStocznia();
+        selenium.click(shipyardMap.get(s));
+        try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        selenium.type(mappings.getShipyard_number(), count);
+        if(selenium.isElementPresent(mappings.getShipyard_NEG())){
+            return; //dodac OgameException
+        }
+        clickAndWait(mappings.getShipyard_OK());
     }
 
 }

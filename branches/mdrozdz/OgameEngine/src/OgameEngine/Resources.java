@@ -30,7 +30,9 @@ public class Resources {
         return metal;
     }
     
-    
+    /**
+     * Odpowiada braku surowcow
+     */
     public static final Resources NO_RESOURCES = new Resources("0","0","0");
     public static final Resources ALL_RESOURCES = new Resources("-1","-1","-1");
 }
