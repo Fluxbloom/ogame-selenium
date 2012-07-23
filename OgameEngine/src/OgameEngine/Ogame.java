@@ -47,18 +47,19 @@ public class Ogame extends SeleneseTestCase {
         System.out.println("[DONE]");
         System.out.print("Creating Mission Map");
         shipsMap = new HashMap<Ships, String>();
-        shipsMap.put(Ships.BOMB, mappings.getFleetSend_bomb());
-        shipsMap.put(Ships.CM, mappings.getFleetSend_cm());
-        shipsMap.put(Ships.DT, mappings.getFleetSend_dt());
-        shipsMap.put(Ships.GS, mappings.getFleetSend_gs());
-        shipsMap.put(Ships.KOL, mappings.getFleetSend_kol());
-        shipsMap.put(Ships.KR, mappings.getFleetSend_kr());
-        shipsMap.put(Ships.LM, mappings.getFleetSend_lm());
-        shipsMap.put(Ships.NISZ, mappings.getFleetSend_nisz());
-        shipsMap.put(Ships.OW, mappings.getFleetSend_ow());
-        shipsMap.put(Ships.PAN, mappings.getFleetSend_pan());
-        shipsMap.put(Ships.REC, mappings.getFleetSend_rec());
-        shipsMap.put(Ships.SOND, mappings.getFleetSend_sond());
+        shipsMap.put(Ships.BOMB, mappings.getFleetSend_bomb());//1
+        shipsMap.put(Ships.CM, mappings.getFleetSend_cm());//2
+        shipsMap.put(Ships.DT, mappings.getFleetSend_dt());//3
+        shipsMap.put(Ships.GS, mappings.getFleetSend_gs());//4
+        shipsMap.put(Ships.KOL, mappings.getFleetSend_kol());//5
+        shipsMap.put(Ships.KR, mappings.getFleetSend_kr());//6
+        shipsMap.put(Ships.LM, mappings.getFleetSend_lm());//7
+        shipsMap.put(Ships.MT, mappings.getFleetSend_mt());//8
+        shipsMap.put(Ships.NISZ, mappings.getFleetSend_nisz());//9
+        shipsMap.put(Ships.OW, mappings.getFleetSend_ow());//10
+        shipsMap.put(Ships.PAN, mappings.getFleetSend_pan());//11
+        shipsMap.put(Ships.REC, mappings.getFleetSend_rec());//12
+        shipsMap.put(Ships.SOND, mappings.getFleetSend_sond());//13
         System.out.println("[DONE]");
         System.out.print("Creating Building Map");
         buildingMap = new HashMap<Buildings, String>();
@@ -219,7 +220,14 @@ public class Ogame extends SeleneseTestCase {
     
     public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) {
         this.clickFlota();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.print("Set Fleet ");
         this.sendFleetSetFleet(f);
+        System.out.println(" [DONE]");
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen1())) {
             System.err.println("Couldnt send fleet - screen 1");
             return;
