@@ -80,10 +80,10 @@ public class SeleniumStartTest {
         o.logout();
     }
     @Test
-    @Ignore
+    //@Ignore
     public void BuildMM(){
         o.login(uni, nick, pass);
-        o.build(Buildings.MAGAZYN_METALU);
+        o.build(Buildings.KOPALNIA_METALU);
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {
@@ -92,10 +92,10 @@ public class SeleniumStartTest {
     }
     
     @Test
-    //@Ignore
+    @Ignore
     public void StudyTB(){
         o.login(uni, nick, pass);
-        o.study(Study.TECHNOLOGIA_NADPRZESTRZENNA);
+        o.study(Study.TECHNOLOGIA_LASEROWA);
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {

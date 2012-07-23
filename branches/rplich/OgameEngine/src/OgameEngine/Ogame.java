@@ -319,6 +319,7 @@ public class Ogame extends SeleneseTestCase {
                 Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
             }
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
+            String str = mappings.getStudyNEG();
             if (selenium.isElementPresent(mappings.getStudyNEG())){
                 return; // TODO some error here
             }
