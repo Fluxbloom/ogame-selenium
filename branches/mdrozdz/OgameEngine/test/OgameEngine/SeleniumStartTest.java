@@ -71,12 +71,11 @@ public class SeleniumStartTest {
         o.logout();
     }
     @Test
-    @Ignore
     public void TrySendingFleet(){
         o.login(uni, nick, pass);
         Fleet f = new Fleet();
         f.add(Ships.SOND, 2);
-        o.sendFleet(f, new Cords("2","243","6"), Speed.S70 ,Mission.MISSION_SPY,Resources.NO_RESOURCES);
+        o.sendFleet(f, new Cords("2","244","8"), Speed.S70 ,Mission.MISSION_SPY,Resources.NO_RESOURCES);
         o.logout();
     }
     @Test
@@ -84,16 +83,6 @@ public class SeleniumStartTest {
     public void BuildMM(){
         o.login(uni, nick, pass);
         o.build(Buildings.MAGAZYN_METALU);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(SeleniumStartTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    @Test
-    public void BuildShipyardMT(){
-        o.login(uni, nick, pass);
-        o.buildShip(Ships.LM, "1");
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {
