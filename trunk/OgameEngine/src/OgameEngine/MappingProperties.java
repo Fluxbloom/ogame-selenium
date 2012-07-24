@@ -96,8 +96,63 @@ private String building_te;//=id=details33
 private String building_stationNEG;//=//a[@class='build-it_disabled']
 private String building_stationOK;//=//a[@class='build-it']
 
-    public MappingProperties() throws IOException {
-        this.path = System.getProperty("user.dir") + "/conf/mappings.properties";
+private String study_te;//=id=details113
+private String study_tl;//=id=details120
+private String study_tj;//=id=details121
+private String study_tn;//=id=details114
+private String study_tp;//=id=details122
+private String study_ts;//=id=details106
+private String study_tk;//=id=details108
+private String study_af;//=id=details124
+private String study_sb;//=id=details123
+private String study_rg;//=id=details199
+private String study_ns;//=id=details115
+private String study_ni;//=id=details117
+private String study_nn;//=id=details118
+private String study_tb;//=id=details109
+private String study_to;//=id=details110
+private String study_op;//=id=details111
+private String studyOK;//a[@class='build-it']
+private String studyNEG;//=//a[@class='build-it_disabled']
+
+private String defence_wr;//=id=details401
+private String defence_ll;//=id=details402
+private String defence_cl;//=id=details403
+private String defence_dg;//=id=details404
+private String defence_dj;//=id=details405
+private String defence_wp;//=id=details406
+private String defence_mp;//=id=details407
+private String defence_dp;//=id=details408
+private String defence_pr;//=id=details502
+private String defence_rm;
+private String defenceOK;//=//a[@class='build-it']
+private String defenceNEG;//=//a[@class='build-it_disabled']
+private String defence_number;
+// shipyard
+private String shipyard_lm;//=id=details204
+private String shipyard_cm;//=id=details205
+private String shipyard_kraz;//=id=details206
+private String shipyard_ow;//=id=details207
+private String shipyard_panc;//=id=details215
+private String shipyard_bomb;//=id=details211
+private String shipyard_nisc;//=id=details213
+private String shipyard_gs;//=id=details214
+private String shipyard_mt;//=id=details202
+private String shipyard_dt;//=id=details203
+private String shipyard_skol;//=id=details208
+private String shipyard_rec;//=id=details209
+private String shipyard_ss;//=id=details210
+private String shipyard_sat;//=id=details212
+private String shipyard_NEG;//=//a[@class='build-it_disabled']
+private String shipyard_OK;//=//a[@class='build-it']
+private String shipyard_number;//=id=number
+
+    MappingProperties() throws IOException {
+        Properties defaultPath = new Properties();
+        defaultPath.load(new FileInputStream(
+                System.getProperty("user.dir") + "/conf/defaultConfFile.properties")
+                );
+        this.path = System.getProperty("user.dir") + "/conf/"+defaultPath.getProperty("folder") +"/mappings.properties";
         properties = new Properties();
         properties.load(new FileInputStream(path));
         this.url = properties.getProperty("start_url");
@@ -179,6 +234,251 @@ private String building_stationOK;//=//a[@class='build-it']
         building_te=properties.getProperty("building_te");
         building_stationNEG=properties.getProperty("building_stationNEG");
         building_stationOK=properties.getProperty("building_stationOK");
+        
+        //study properties
+        study_te=properties.getProperty("study_te");
+        study_tl=properties.getProperty("study_tl");
+        study_tj=properties.getProperty("study_tj");
+        study_tn=properties.getProperty("study_tn");
+        study_tp=properties.getProperty("study_tp");
+        study_ts=properties.getProperty("study_ts");
+        study_tk=properties.getProperty("study_tk");
+        study_af=properties.getProperty("study_af");
+        study_sb=properties.getProperty("study_sb");
+        study_rg=properties.getProperty("study_rg");
+        study_ns=properties.getProperty("study_ns");
+        study_ni=properties.getProperty("study_ni");
+        study_nn=properties.getProperty("study_nn");
+        study_tb=properties.getProperty("study_tb");
+        study_to=properties.getProperty("study_to");
+        study_op=properties.getProperty("study_op");
+        studyOK=properties.getProperty("studyOK");
+        studyNEG=properties.getProperty("studyNEG");
+        
+        //obrona
+        defence_wr=properties.getProperty("defence_wr");//=id=details401
+        defence_ll=properties.getProperty("defence_ll");//=id=details402
+        defence_cl=properties.getProperty("defence_cl");//=id=details403
+        defence_dg=properties.getProperty("defence_dg");//=id=details404
+        defence_dj=properties.getProperty("defence_dj");//=id=details405
+        defence_wp=properties.getProperty("defence_wp");//=id=details406
+        defence_mp=properties.getProperty("defence_mp");//=id=details407
+        defence_dp=properties.getProperty("defence_dp");//=id=details408
+        defence_pr=properties.getProperty("defence_pr");//=id=details502
+        defence_rm=properties.getProperty("defence_rm");
+        defenceOK=properties.getProperty("defence_wr");//=//a[@class='build-it']
+        defenceNEG=properties.getProperty("defence_wr");//=//a[@class='build-it_disabled']
+        defence_number=properties.getProperty("defence_number"); 
+        //shipyard
+       shipyard_lm=properties.getProperty("shipyard_lm");//=id=details204
+       shipyard_cm=properties.getProperty("shipyard_cm");//=id=details205
+       shipyard_kraz=properties.getProperty("shipyard_kraz");//=id=details206
+       shipyard_ow=properties.getProperty("shipyard_ow");//=id=details207
+       shipyard_panc=properties.getProperty("shipyard_panc");//=id=details215
+       shipyard_bomb=properties.getProperty("shipyard_bomb");//=id=details211
+       shipyard_nisc=properties.getProperty("shipyard_nisc");//=id=details213
+       shipyard_gs=properties.getProperty("shipyard_gw");//=id=details214
+       shipyard_mt=properties.getProperty("shipyard_mt");//=id=details202
+       shipyard_dt=properties.getProperty("shipyard_dt");//=id=details203
+       shipyard_skol=properties.getProperty("shipyard_skol");//=id=details208
+       shipyard_rec=properties.getProperty("shipyard_rec");//=id=details209
+       shipyard_ss=properties.getProperty("shipyard_ss");//=id=details210
+       shipyard_sat=properties.getProperty("shipyard_sat");//=id=details212
+       shipyard_NEG=properties.getProperty("shipyard_NEG");//=//a[@class='build-it_disabled']
+       shipyard_OK=properties.getProperty("shipyard_OK");//=//a[@class='build-it']
+       shipyard_number=properties.getProperty("shipyard_number");
+    }
+
+    public String getDefence_number() {
+        return defence_number;
+    }
+
+    public String getShipyard_NEG() {
+        return shipyard_NEG;
+    }
+
+    public String getShipyard_OK() {
+        return shipyard_OK;
+    }
+
+    public String getShipyard_bomb() {
+        return shipyard_bomb;
+    }
+
+    public String getShipyard_cm() {
+        return shipyard_cm;
+    }
+
+    public String getShipyard_dt() {
+        return shipyard_dt;
+    }
+
+    public String getShipyard_gs() {
+        return shipyard_gs;
+    }
+
+    public String getShipyard_kraz() {
+        return shipyard_kraz;
+    }
+
+    public String getShipyard_lm() {
+        return shipyard_lm;
+    }
+
+    public String getShipyard_mt() {
+        return shipyard_mt;
+    }
+
+    public String getShipyard_nisc() {
+        return shipyard_nisc;
+    }
+
+    public String getShipyard_number() {
+        return shipyard_number;
+    }
+
+    public String getShipyard_ow() {
+        return shipyard_ow;
+    }
+
+    public String getShipyard_panc() {
+        return shipyard_panc;
+    }
+
+    public String getShipyard_rec() {
+        return shipyard_rec;
+    }
+
+    public String getShipyard_sat() {
+        return shipyard_sat;
+    }
+
+    public String getShipyard_skol() {
+        return shipyard_skol;
+    }
+
+    public String getShipyard_ss() {
+        return shipyard_ss;
+    }
+
+    public String getDefenceNEG() {
+        return defenceNEG;
+    }
+
+    public String getDefenceOK() {
+        return defenceOK;
+    }
+
+    public String getDefence_cl() {
+        return defence_cl;
+    }
+
+    public String getDefence_dg() {
+        return defence_dg;
+    }
+
+    public String getDefence_dj() {
+        return defence_dj;
+    }
+
+    public String getDefence_dp() {
+        return defence_dp;
+    }
+
+    public String getDefence_ll() {
+        return defence_ll;
+    }
+
+    public String getDefence_mp() {
+        return defence_mp;
+    }
+
+    public String getDefence_pr() {
+        return defence_pr;
+    }
+
+    public String getDefence_rm() {
+        return defence_rm;
+    }
+
+    public String getDefence_wp() {
+        return defence_wp;
+    }
+
+    public String getDefence_wr() {
+        return defence_wr;
+    }
+
+    public String getStudyNEG() {
+        return studyNEG;
+    }
+
+    public String getStudyOK() {
+        return studyOK;
+    }
+
+    public String getStudy_af() {
+        return study_af;
+    }
+
+    public String getStudy_ni() {
+        return study_ni;
+    }
+
+    public String getStudy_nn() {
+        return study_nn;
+    }
+
+    public String getStudy_ns() {
+        return study_ns;
+    }
+
+    public String getStudy_op() {
+        return study_op;
+    }
+
+    public String getStudy_rg() {
+        return study_rg;
+    }
+
+    public String getStudy_sb() {
+        return study_sb;
+    }
+
+    public String getStudy_tb() {
+        return study_tb;
+    }
+
+    public String getStudy_te() {
+        return study_te;
+    }
+
+    public String getStudy_tj() {
+        return study_tj;
+    }
+
+    public String getStudy_tk() {
+        return study_tk;
+    }
+
+    public String getStudy_tl() {
+        return study_tl;
+    }
+
+    public String getStudy_tn() {
+        return study_tn;
+    }
+
+    public String getStudy_to() {
+        return study_to;
+    }
+
+    public String getStudy_tp() {
+        return study_tp;
+    }
+
+    public String getStudy_ts() {
+        return study_ts;
     }
 
     public String getBuilding_ds() {
