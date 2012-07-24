@@ -73,28 +73,28 @@ class MappingProperties {
     private String fleetSend_errorscreen3;//=//a[@class="off" and @id="start"]
     // building
     private String building_km;//=xpath=(//a[@id='details'])[1]
-    private String building_kc;//=xpath=(//a[@id='details'])[2]
-    private String building_ed;//=xpath=(//a[@id='details'])[3]
-    private String building_es;//=xpath=(//a[@id='details'])[4]
-    private String building_ef;//=xpath=(//a[@id='details'])[5]
-    private String building_ss;//=xpath=(//a[@id='details'])[6]
-    private String building_mm;//=xpath=(//a[@id='details'])[7]
-    private String building_mc;//=xpath=(//a[@id='details'])[8]
-    private String building_md;//=xpath=(//a[@id='details'])[9]
-    private String building_sm;//=xpath=(//a[@id='details'])[10]
-    private String building_sc;//=xpath=(//a[@id='details'])[11]
-    private String building_sd;//=xpath=(//a[@id='details'])[12]
-    private String building_resourcesNEG;//=//a[@class='build-it_disabled']
-    private String building_resourcesOK;//=//a[@class='build-it']
-    private String building_fr;//=i`d=details14
-    private String building_st;//=id=details21
-    private String building_lb;//=id=details31
-    private String building_ds;//=id=details34
-    private String building_sr;//=id=details44
-    private String building_fn;//=id=details15
-    private String building_te;//=id=details33
-    private String building_stationNEG;//=//a[@class='build-it_disabled']
-    private String building_stationOK;//=//a[@class='build-it']
+private String building_kc;//=xpath=(//a[@id='details'])[2]
+private String building_ed;//=xpath=(//a[@id='details'])[3]
+private String building_es;//=xpath=(//a[@id='details'])[4]
+private String building_ef;//=xpath=(//a[@id='details'])[5]
+private String building_ss;//=xpath=(//a[@id='details'])[6]
+private String building_mm;//=xpath=(//a[@id='details'])[7]
+private String building_mc;//=xpath=(//a[@id='details'])[8]
+private String building_md;//=xpath=(//a[@id='details'])[9]
+private String building_sm;//=xpath=(//a[@id='details'])[10]
+private String building_sc;//=xpath=(//a[@id='details'])[11]
+private String building_sd;//=xpath=(//a[@id='details'])[12]
+private String building_resourcesNEG;//=//a[@class='build-it_disabled']
+private String building_resourcesOK;//=//a[@class='build-it']
+private String building_fr;//=id=details14
+private String building_st;//=id=details21
+private String building_lb;//=id=details31
+private String building_ds;//=id=details34
+private String building_sr;//=id=details44
+private String building_fn;//=id=details15
+private String building_te;//=id=details33
+private String building_stationNEG;//=//a[@class='build-it_disabled']
+private String building_stationOK;//=//a[@class='build-it']
 
 private String study_te;//=id=details113
 private String study_tl;//=id=details120
@@ -127,9 +127,32 @@ private String defence_pr;//=id=details502
 private String defence_rm;
 private String defenceOK;//=//a[@class='build-it']
 private String defenceNEG;//=//a[@class='build-it_disabled']
+private String defence_number;
+// shipyard
+private String shipyard_lm;//=id=details204
+private String shipyard_cm;//=id=details205
+private String shipyard_kraz;//=id=details206
+private String shipyard_ow;//=id=details207
+private String shipyard_panc;//=id=details215
+private String shipyard_bomb;//=id=details211
+private String shipyard_nisc;//=id=details213
+private String shipyard_gs;//=id=details214
+private String shipyard_mt;//=id=details202
+private String shipyard_dt;//=id=details203
+private String shipyard_skol;//=id=details208
+private String shipyard_rec;//=id=details209
+private String shipyard_ss;//=id=details210
+private String shipyard_sat;//=id=details212
+private String shipyard_NEG;//=//a[@class='build-it_disabled']
+private String shipyard_OK;//=//a[@class='build-it']
+private String shipyard_number;//=id=number
 
-    public MappingProperties() throws IOException {
-        this.path = System.getProperty("user.dir") + "/conf/mappings.properties";
+    MappingProperties() throws IOException {
+        Properties defaultPath = new Properties();
+        defaultPath.load(new FileInputStream(
+                System.getProperty("user.dir") + "/conf/defaultConfFile.properties")
+                );
+        this.path = System.getProperty("user.dir") + "/conf/"+defaultPath.getProperty("folder") +"/mappings.properties";
         properties = new Properties();
         properties.load(new FileInputStream(path));
         this.url = properties.getProperty("start_url");
@@ -245,6 +268,97 @@ private String defenceNEG;//=//a[@class='build-it_disabled']
         defence_rm=properties.getProperty("defence_rm");
         defenceOK=properties.getProperty("defence_wr");//=//a[@class='build-it']
         defenceNEG=properties.getProperty("defence_wr");//=//a[@class='build-it_disabled']
+        defence_number=properties.getProperty("defence_number"); 
+        //shipyard
+       shipyard_lm=properties.getProperty("shipyard_lm");//=id=details204
+       shipyard_cm=properties.getProperty("shipyard_cm");//=id=details205
+       shipyard_kraz=properties.getProperty("shipyard_kraz");//=id=details206
+       shipyard_ow=properties.getProperty("shipyard_ow");//=id=details207
+       shipyard_panc=properties.getProperty("shipyard_panc");//=id=details215
+       shipyard_bomb=properties.getProperty("shipyard_bomb");//=id=details211
+       shipyard_nisc=properties.getProperty("shipyard_nisc");//=id=details213
+       shipyard_gs=properties.getProperty("shipyard_gw");//=id=details214
+       shipyard_mt=properties.getProperty("shipyard_mt");//=id=details202
+       shipyard_dt=properties.getProperty("shipyard_dt");//=id=details203
+       shipyard_skol=properties.getProperty("shipyard_skol");//=id=details208
+       shipyard_rec=properties.getProperty("shipyard_rec");//=id=details209
+       shipyard_ss=properties.getProperty("shipyard_ss");//=id=details210
+       shipyard_sat=properties.getProperty("shipyard_sat");//=id=details212
+       shipyard_NEG=properties.getProperty("shipyard_NEG");//=//a[@class='build-it_disabled']
+       shipyard_OK=properties.getProperty("shipyard_OK");//=//a[@class='build-it']
+       shipyard_number=properties.getProperty("shipyard_number");
+    }
+
+    public String getDefence_number() {
+        return defence_number;
+    }
+
+    public String getShipyard_NEG() {
+        return shipyard_NEG;
+    }
+
+    public String getShipyard_OK() {
+        return shipyard_OK;
+    }
+
+    public String getShipyard_bomb() {
+        return shipyard_bomb;
+    }
+
+    public String getShipyard_cm() {
+        return shipyard_cm;
+    }
+
+    public String getShipyard_dt() {
+        return shipyard_dt;
+    }
+
+    public String getShipyard_gs() {
+        return shipyard_gs;
+    }
+
+    public String getShipyard_kraz() {
+        return shipyard_kraz;
+    }
+
+    public String getShipyard_lm() {
+        return shipyard_lm;
+    }
+
+    public String getShipyard_mt() {
+        return shipyard_mt;
+    }
+
+    public String getShipyard_nisc() {
+        return shipyard_nisc;
+    }
+
+    public String getShipyard_number() {
+        return shipyard_number;
+    }
+
+    public String getShipyard_ow() {
+        return shipyard_ow;
+    }
+
+    public String getShipyard_panc() {
+        return shipyard_panc;
+    }
+
+    public String getShipyard_rec() {
+        return shipyard_rec;
+    }
+
+    public String getShipyard_sat() {
+        return shipyard_sat;
+    }
+
+    public String getShipyard_skol() {
+        return shipyard_skol;
+    }
+
+    public String getShipyard_ss() {
+        return shipyard_ss;
     }
 
     public String getDefenceNEG() {
@@ -367,8 +481,6 @@ private String defenceNEG;//=//a[@class='build-it_disabled']
         return study_ts;
     }
 
-    
-    
     public String getBuilding_ds() {
         return building_ds;
     }

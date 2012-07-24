@@ -25,6 +25,7 @@ public class Ogame extends SeleneseTestCase {
     HashMap<Buildings, String> buildingMap;
     HashMap<Study, String> studyMap;
     HashMap<Defence, String> defenceMap;
+    HashMap<StockyardShips, String> shipyardMap;
     
     public Ogame() {
         System.out.print("Reading static mappings");
@@ -49,18 +50,19 @@ public class Ogame extends SeleneseTestCase {
         System.out.println("[DONE]");
         System.out.print("Creating Mission Map");
         shipsMap = new HashMap<Ships, String>();
-        shipsMap.put(Ships.BOMB, mappings.getFleetSend_bomb());
-        shipsMap.put(Ships.CM, mappings.getFleetSend_cm());
-        shipsMap.put(Ships.DT, mappings.getFleetSend_dt());
-        shipsMap.put(Ships.GS, mappings.getFleetSend_gs());
-        shipsMap.put(Ships.KOL, mappings.getFleetSend_kol());
-        shipsMap.put(Ships.KR, mappings.getFleetSend_kr());
-        shipsMap.put(Ships.LM, mappings.getFleetSend_lm());
-        shipsMap.put(Ships.NISZ, mappings.getFleetSend_nisz());
-        shipsMap.put(Ships.OW, mappings.getFleetSend_ow());
-        shipsMap.put(Ships.PAN, mappings.getFleetSend_pan());
-        shipsMap.put(Ships.REC, mappings.getFleetSend_rec());
-        shipsMap.put(Ships.SOND, mappings.getFleetSend_sond());
+        shipsMap.put(Ships.BOMB, mappings.getFleetSend_bomb());//1
+        shipsMap.put(Ships.CM, mappings.getFleetSend_cm());//2
+        shipsMap.put(Ships.DT, mappings.getFleetSend_dt());//3
+        shipsMap.put(Ships.GS, mappings.getFleetSend_gs());//4
+        shipsMap.put(Ships.KOL, mappings.getFleetSend_kol());//5
+        shipsMap.put(Ships.KR, mappings.getFleetSend_kr());//6
+        shipsMap.put(Ships.LM, mappings.getFleetSend_lm());//7
+        shipsMap.put(Ships.MT, mappings.getFleetSend_mt());//8
+        shipsMap.put(Ships.NISZ, mappings.getFleetSend_nisz());//9
+        shipsMap.put(Ships.OW, mappings.getFleetSend_ow());//10
+        shipsMap.put(Ships.PAN, mappings.getFleetSend_pan());//11
+        shipsMap.put(Ships.REC, mappings.getFleetSend_rec());//12
+        shipsMap.put(Ships.SOND, mappings.getFleetSend_sond());//13
         System.out.println("[DONE]");
         System.out.print("Creating Building Map");
         buildingMap = new HashMap<Buildings, String>();
@@ -84,7 +86,7 @@ public class Ogame extends SeleneseTestCase {
         buildingMap.put(Buildings.STOCZNIA, mappings.getBuilding_st());
         buildingMap.put(Buildings.TERRAFORMER, mappings.getBuilding_te());
         System.out.println("[DONE]");
-        System.out.print("Inititializing Selenium instance ");
+        System.out.print("Initializing studyMap");
         studyMap = new HashMap<Study, String>();
         studyMap.put(Study.ASTROFIZYKA, mappings.getStudy_af());
         studyMap.put(Study.NAPED_IMPULSOWY, mappings.getStudy_ni());
@@ -103,7 +105,7 @@ public class Ogame extends SeleneseTestCase {
         studyMap.put(Study.TECHNOLOGIA_PLAZMOWA, mappings.getStudy_tp());
         studyMap.put(Study.TECHNOLOGIA_SZPIEGOWSKA, mappings.getStudy_ts());        
         System.out.println("[DONE]");
-        System.out.print("Inititializing Selenium instance ");
+        System.out.print("Inititializing defenceMap");
         defenceMap = new HashMap<Defence, String>();
         defenceMap.put(Defence.DUZA_POWLOKA, mappings.getDefence_dp());
         defenceMap.put(Defence.DUZY_LASER, mappings.getDefence_cl());
@@ -115,7 +117,23 @@ public class Ogame extends SeleneseTestCase {
         defenceMap.put(Defence.RAKITA_MIEDZYPLANETARNA, mappings.getDefence_rm());
         defenceMap.put(Defence.WYRZUTNIA_PLAZMY, mappings.getDefence_wp());
         defenceMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getDefence_wr());
-       
+        System.out.println("[DONE]");
+        System.out.print("Creating Shipyard Map");
+        shipyardMap = new HashMap<StockyardShips, String>();
+        shipyardMap.put(Ships.BOMB, mappings.getShipyard_bomb());
+        shipyardMap.put(Ships.CM, mappings.getShipyard_cm());
+        shipyardMap.put(Ships.DT, mappings.getShipyard_dt());
+        shipyardMap.put(Ships.GS, mappings.getShipyard_gs());
+        shipyardMap.put(Ships.KOL, mappings.getShipyard_skol());
+        shipyardMap.put(Ships.KR, mappings.getShipyard_kraz());
+        shipyardMap.put(Ships.LM, mappings.getShipyard_lm());
+        shipyardMap.put(Ships.MT, mappings.getShipyard_mt());
+        shipyardMap.put(Ships.NISZ, mappings.getShipyard_nisc());
+        shipyardMap.put(Ships.OW, mappings.getShipyard_ow());
+        shipyardMap.put(Ships.PAN, mappings.getShipyard_panc());
+        shipyardMap.put(Ships.REC, mappings.getShipyard_rec());
+        shipyardMap.put(Ships.SOND, mappings.getShipyard_ss());
+        shipyardMap.put(Ships.SAT, mappings.getShipyard_sat());
         System.out.println("[DONE]");
         System.out.print("Inititializing Selenium instance ");
         try {
@@ -251,10 +269,20 @@ public class Ogame extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         this.stop();
     }
-    
+
     public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) {
+        // TODO ta metoda musi jeszcze skontrolować misje oraz uzupełnić ataki na księżyc oraz loty na PZ
+        // TODO odrębną sprawą do zrobienia jest misja stacjonuj
+        
         this.clickFlota();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.print("Set Fleet ");
         this.sendFleetSetFleet(f);
+        System.out.println(" [DONE]");
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen1())) {
             System.err.println("Couldnt send fleet - screen 1");
             return;
@@ -308,8 +336,6 @@ public class Ogame extends SeleneseTestCase {
         
         
     }
-
-    
     public void study(Study s){
             this.clickBadania();
             selenium.click(studyMap.get(s));
@@ -326,7 +352,11 @@ public class Ogame extends SeleneseTestCase {
             this.clickAndWait(mappings.getStudyOK());
     }
     
-        public void defence(Defence d){
+    public void defence(Defence d, int i){
+        defence(d,Integer.toString(i));
+    }
+    
+    public void defence(Defence d,String count){
             this.clickObrona();
             selenium.click(defenceMap.get(d));
             try {
@@ -335,10 +365,30 @@ public class Ogame extends SeleneseTestCase {
                 Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
             }
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
+            selenium.type(mappings.getDefence_number(), count);
             if (selenium.isElementPresent(mappings.getDefenceNEG())){
                 return; // TODO some error here
             }
             this.clickAndWait(mappings.getDefenceOK());
     }
     
+    public void buildShip(StockyardShips s, int i){
+        buildShip(s,Integer.toString(i));
+    }
+    
+    public void buildShip(StockyardShips s, String count){
+        this.clickStocznia();
+        selenium.click(shipyardMap.get(s));
+        try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        selenium.type(mappings.getShipyard_number(), count);
+        if(selenium.isElementPresent(mappings.getShipyard_NEG())){
+            return; //dodac OgameException
+        }
+        clickAndWait(mappings.getShipyard_OK());
+    }
+
 }

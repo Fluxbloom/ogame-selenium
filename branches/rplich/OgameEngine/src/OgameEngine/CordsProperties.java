@@ -12,7 +12,7 @@ import java.util.Properties;
  *
  * @author dyschemist
  */
-public class CordsProperties {
+class CordsProperties {
     
     protected String path;
     protected Properties properties;
@@ -34,7 +34,11 @@ public class CordsProperties {
     }
     
     public CordsProperties() throws IOException {
-        this.path = System.getProperty("user.dir") + "/conf/cords.properties";
+                Properties defaultPath = new Properties();
+        defaultPath.load(new FileInputStream(
+                System.getProperty("user.dir") + "/conf/defaultConfFile.properties")
+                );
+        this.path = System.getProperty("user.dir") + "/conf/"+defaultPath.getProperty("folder") +"/cords.properties";
         properties = new Properties();
         properties.load(new FileInputStream(path));
         universes=Integer.parseInt(properties.getProperty("universes"));

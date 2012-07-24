@@ -107,7 +107,7 @@ public class SeleniumStartTest {
     @Ignore
     public void DefenceCL(){
         o.login(uni, nick, pass);
-        o.defence(Defence.MALY_LASER);
+        o.defence(Defence.MALY_LASER,1);
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {
