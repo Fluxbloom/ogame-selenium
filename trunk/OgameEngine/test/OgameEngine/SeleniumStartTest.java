@@ -72,7 +72,7 @@ public class SeleniumStartTest {
     }
     @Test
     @Ignore
-    public void TrySendingFleet(){
+    public void TrySendingFleet() throws OgameException{
         o.login(uni, nick, pass);
         Fleet f = new Fleet();
         f.add(Ships.SOND, 2);
