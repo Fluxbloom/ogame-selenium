@@ -30,10 +30,10 @@ public class Fleet {
         add(s,Integer.parseInt(str));
     }
     
-    public String get(Ships s){
+    public int get(Ships s){
        if (fleet.containsKey(s))
-                return ((Integer) fleet.get(s)).toString();
-       else return "0";      
+                return ((Integer) fleet.get(s)).intValue();
+       else return 0;      
     }
 
     public HashMap<Ships, Integer> getFleet() {

@@ -5,7 +5,9 @@
 package OgameEngine;
 
 import com.thoughtworks.selenium.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,15 +20,16 @@ import java.util.logging.Logger;
  * @author dyschemist
  */
 public class Ogame extends SeleneseTestCase {
-    
-    MappingProperties mappings;
-    HashMap<Mission, String> missionMap;
-    HashMap<Ships, String> shipsMap;
-    HashMap<Buildings, String> buildingMap;
-    HashMap<Study, String> studyMap;
-    HashMap<Defence, String> defenceMap;
-    HashMap<StockyardShips, String> shipyardMap;
-    
+
+    private ServerThread s;
+    private MappingProperties mappings;
+    private HashMap<Mission, String> missionMap;
+    private HashMap<Ships, String> shipsMap;
+    private HashMap<Buildings, String> buildingMap;
+    private HashMap<Study, String> studyMap;
+    private HashMap<Defence, String> defenceMap;
+    private HashMap<StockyardShips, String> shipyardMap;
+
     public Ogame() {
         System.out.print("Reading static mappings");
         try {
@@ -103,7 +106,7 @@ public class Ogame extends SeleneseTestCase {
         studyMap.put(Study.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getStudy_tn());
         studyMap.put(Study.TECHNOLOGIA_OCHRONNA, mappings.getStudy_to());
         studyMap.put(Study.TECHNOLOGIA_PLAZMOWA, mappings.getStudy_tp());
-        studyMap.put(Study.TECHNOLOGIA_SZPIEGOWSKA, mappings.getStudy_ts());        
+        studyMap.put(Study.TECHNOLOGIA_SZPIEGOWSKA, mappings.getStudy_ts());
         System.out.println("[DONE]");
         System.out.print("Inititializing defenceMap");
         defenceMap = new HashMap<Defence, String>();
@@ -138,7 +141,7 @@ public class Ogame extends SeleneseTestCase {
         System.out.print("Inititializing Selenium instance ");
         try {
             selenium = new DefaultSelenium("0.0.0.0", 4444, mappings.getBrowser(), mappings.getUrl()) {
-                
+
                 @Override
                 public void open(String url) {
                     commandProcessor.doCommand("open", new String[]{url, "true"});
@@ -148,9 +151,9 @@ public class Ogame extends SeleneseTestCase {
             System.err.println(" [FAIL]");
         }
         System.out.println(" [DONE]");
-        
+
     }
-    
+
     private void start() {
         System.out.print("Starting selenium ");
         try {
@@ -161,7 +164,7 @@ public class Ogame extends SeleneseTestCase {
         }
         System.out.println("[DONE]");
     }
-    
+
     private void stop() {
         System.out.print("Stoping selenium ");
         try {
@@ -172,39 +175,56 @@ public class Ogame extends SeleneseTestCase {
             System.err.println("[FAIL]");
         }
         System.out.println("[DONE]");
+
     }
-    
+
     private void clickAndWait(String s) {
         selenium.click(s);
         selenium.waitForPageToLoad(mappings.getTimeout());
     }
-    
+
     private void clickPrzeglad() {
         clickAndWait(mappings.getLeftButtonPrzegladaj());
     }
-    
+
     private void clickSurowce() {
         clickAndWait(mappings.getLeftButtonSurowce());
     }
-    
+
     private void clickStacja() {
         clickAndWait(mappings.getLeftButtonStacja());
     }
-    
+
     private void clickBadania() {
         clickAndWait(mappings.getLeftButtonBadania());
     }
-    
+
     private void clickObrona() {
         clickAndWait(mappings.getLeftButtonObrona());
     }
-    
+
     private void clickStocznia() {
         clickAndWait(mappings.getLeftButtonStocznia());
     }
-    
+
     private void clickFlota() {
         clickAndWait(mappings.getLeftButtonFlota());
+    }
+
+    private boolean sendFleetCheckIfAble(Fleet f,Mission m) throws OgameException{
+        boolean result = true;
+        if (m==Mission.MISSION_ACS) 
+                throw OgameException.UNSUPPORTED_MISSION;
+        else if (m==Mission.MISSION_EXPLORE && f.get(Ships.KOL)==0){
+            result= false;
+        }else if (m==Mission.MISSION_MOON && f.get(Ships.GS)==0){
+            result=false;
+        }else if (m==Mission.MISSION_RECYCLE && f.get(Ships.REC)==0){
+            result = false;
+        }else if (m==Mission.MISSION_SPY && f.get(Ships.SOND)==0 ){
+            result = false;
+        }
+        return result;
     }
     
     private void sendFleetSetFleet(Fleet f) {
@@ -215,25 +235,37 @@ public class Ogame extends SeleneseTestCase {
             Set set = fleet.entrySet();
             Iterator it = set.iterator();
             Ships temp2;
-            Map.Entry<Ships,Integer> temp;
+            Map.Entry<Ships, Integer> temp;
             while (it.hasNext()) {
-                temp = (Map.Entry<Ships,Integer>) it.next();
+                temp = (Map.Entry<Ships, Integer>) it.next();
                 temp2 = temp.getKey();
                 selenium.type(shipsMap.get(temp2), ((Integer) fleet.get(temp2)).toString());
             }
         }
     }
-    
-    private void sendFleetSetCords(Cords c) {
+
+    private void sendFleetSetCords(Cords c,Destination d) {
+        if (d==Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_start_planet_deselected())){
+            selenium.click(mappings.getFleetSend_start_planet_selected());
+        }else if (d==Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_start_moon_deselected())){
+            selenium.click(mappings.getFleetSend_start_moon_selected());
+        }
         selenium.type(mappings.getFleetSend_galaxy(), c.getUniverse());
         selenium.type(mappings.getFleetSend_system(), c.getSystem());
         selenium.type(mappings.getFleetSend_position(), c.getPosition());
+        if (c.getDest()==Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_target_planet_deselected())){
+            selenium.click(mappings.getFleetSend_target_planet_selected());
+        }else if (c.getDest()==Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_target_moon_deselected())){
+            selenium.click(mappings.getFleetSend_target_moon_selected());
+        }else if (c.getDest()==Destination.PZ && selenium.isElementPresent(mappings.getFleetSend_target_debris_deselected())){
+            selenium.click(mappings.getFleetSend_target_debris_selected());
+        }
     }
-    
+
     private void sendFleetSetMission(Mission m) {
         selenium.click((String) missionMap.get(m));
     }
-    
+
     private void sendFleetSetResources(Resources r) {
         if (r == Resources.ALL_RESOURCES) {
             selenium.click(mappings.getFleetSend_allResources());
@@ -243,8 +275,78 @@ public class Ogame extends SeleneseTestCase {
             selenium.type(mappings.getFleetSend_deuter(), r.getDeuter());
         }
     }
-   
     
+        private class ServerThread extends Thread {
+
+        @Override
+        public void run() {
+            try {
+                String s;
+                Process p = Runtime.getRuntime().exec(mappings.getServer_start_command());
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                // read the output from the command
+                System.out.println("Here is the standard output of the command:\n");
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println(s);
+                }
+                // read any errors from the attempted command
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while ((s = stdError.readLine()) != null) {
+                    System.out.println(s);
+                }
+            } catch (OgameException ex) {
+                Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    /*
+     * METODY PUBLICZNE 
+     */
+
+
+
+    @Deprecated
+    public void startServer() throws OgameException {
+        s = new ServerThread();
+        s.start();
+        this.wait(10);
+        /*System.err.println(System.getProperty("os.name"));
+        System.err.println(mappings.getServer_start_command());
+        try {
+        Process p = Runtime.getRuntime().exec(mappings.getServer_start_command());
+        p.waitFor();
+        
+        } catch (InterruptedException ex) {
+        throw new OgameException("Couldn't start Selenium Server");
+        } catch (IOException ex) {
+        throw new OgameException("Couldn't start Selenium Server");
+        }*/
+    }
+
+    @Deprecated
+    public void stopServer() {
+        s.stop();
+    }
+
+    public void wait(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void wait(int minute, int seconds) {
+        wait(minute * 60 + seconds);
+    }
+
+    public void wait(int hour, int minute, int seconds) {
+        wait(hour * 60 + minute, seconds);
+    }
+
     public void login(String uni, String user, String pass) {
         this.start();
         selenium.open(mappings.getGameUrl());
@@ -253,59 +355,70 @@ public class Ogame extends SeleneseTestCase {
             // Jeśli nie obecny to
             selenium.click(mappings.getLogin_login_button());
         }
-        selenium.select("id=serverLogin", "label=" + uni);
-        selenium.type("name=login", "");
-        selenium.type("name=login", user);
-        selenium.type("name=pass", "");
-        selenium.type("name=pass", pass);
-        selenium.click("id=loginSubmit");
-        selenium.waitForPageToLoad("30000");
-        
+        selenium.select(mappings.getLogin_uni_target(), mappings.getLogin_uni_pref() + uni);
+        selenium.type(mappings.getLogin_nick_target(), user);
+        selenium.type(mappings.getLogin_pass_target(), pass);
+        clickAndWait(mappings.getLogin_login_with_pass_button());
     }
-    
+
     public void logout() {
         // Wylogowanie
-        selenium.click("link=Wyloguj");
-        selenium.waitForPageToLoad("30000");
+        clickAndWait(mappings.getLogout_button());
         this.stop();
     }
 
-    public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) {
-        // TODO ta metoda musi jeszcze skontrolować misje oraz uzupełnić ataki na księżyc oraz loty na PZ
-        // TODO odrębną sprawą do zrobienia jest misja stacjonuj
-        
-        this.clickFlota();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+    public int getPlanetCount() {
+        String s = selenium.getText(mappings.getCountplanet());
+        return Integer.parseInt(s.split(mappings.getCountplanet_separator())[mappings.getCountplanet_result_pos() - 1]);
+    }
+
+    public void changePlanet(int planetNumber) {
+        clickAndWait(mappings.getChangeplanetbyid_pref() + Integer.toString(planetNumber) + mappings.getChangeplanetbyid_post());
+    }
+
+    public void changePlanetByName(String name) {
+        clickAndWait(mappings.getChangeplanetbyName_pref() + name + mappings.getChangeplanetbyName_post());
+    }
+    
+    public void sendFleet(Fleet f,StartDestination d, Cords c, Speed speed, Mission m, Resources r) throws OgameException{
+        // sprawdzamy czy flota ma dostępną misję
+        if (!this.sendFleetCheckIfAble(f, m)){
+            throw new OgameException("THE FOLLOWING FLEET CANNOT BE ASSIGNED TO THIS TYPE OF MISSIONS");
         }
+        this.clickFlota();
+        wait(1);
         System.out.print("Set Fleet ");
         this.sendFleetSetFleet(f);
         System.out.println(" [DONE]");
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen1())) {
             System.err.println("Couldnt send fleet - screen 1");
-            return;
-        } //TODO error tutaj
+            throw new OgameException("FLEET SEND FIRST SCREEN ERROR");
+        } 
         clickAndWait(mappings.getFleetSend_okscreen1());
-        this.sendFleetSetCords(c);
+        
+        this.sendFleetSetCords(c,d);
         selenium.select(mappings.getFleetSend_speed(), mappings.getFleetSend_speed_ans() + speed.getS());
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen2())) {
             System.err.println("Couldnt send fleet - screen 2");
-            return;
-        } // TODO error tutaj
+            throw new OgameException("FLEET SEND SECOND SCREEN ERROR");
+        } 
         clickAndWait(mappings.getFleetSend_okscreen2());
         sendFleetSetMission(m);
         sendFleetSetResources(r);
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen3())) {
             System.err.println("Couldnt send fleet - screen 3");
-            return;
-        } // TODO error tu
+            throw new OgameException("FLEET SEND THIRD SCREEN ERROR");
+        }
         clickAndWait(mappings.getFleetSend_okscreen3());
     }
 
-    public void build(Buildings b){
-        if(b==Buildings.FABRYKA_ROBOTOW || b==Buildings.STOCZNIA || b==Buildings.LABORATORIUM_BADAWCZE || b==Buildings.DEPOZYT || b==Buildings.SILOS_RAKIETOWY || b==Buildings.FABRYKA_NANITOW || b==Buildings.TERRAFORMER){
+    public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) throws OgameException {
+        this.sendFleet(f, StartDestination.PLANET, c, speed, m, r);
+        
+    }
+
+    public void build(Buildings b) {
+        if (b == Buildings.FABRYKA_ROBOTOW || b == Buildings.STOCZNIA || b == Buildings.LABORATORIUM_BADAWCZE || b == Buildings.DEPOZYT || b == Buildings.SILOS_RAKIETOWY || b == Buildings.FABRYKA_NANITOW || b == Buildings.TERRAFORMER) {
             this.clickStacja();
             selenium.click(buildingMap.get(b));
             try {
@@ -314,81 +427,81 @@ public class Ogame extends SeleneseTestCase {
                 Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
             }
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
-            if (selenium.isElementPresent(mappings.getBuilding_stationNEG())){
+            if (selenium.isElementPresent(mappings.getBuilding_stationNEG())) {
                 return; // TODO some error here
             }
             this.clickAndWait(mappings.getBuilding_stationOK());
-        }else{ 
+        } else {
             this.clickSurowce();
-                        selenium.click(buildingMap.get(b));
+            selenium.click(buildingMap.get(b));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
             }
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
-            if (selenium.isElementPresent(mappings.getBuilding_resourcesNEG())){
+            if (selenium.isElementPresent(mappings.getBuilding_resourcesNEG())) {
                 System.err.print("element not present");
                 return; // TODO some error here
             }
             this.clickAndWait(mappings.getBuilding_resourcesOK());
         }
-        
-        
+
+
     }
-    public void study(Study s){
-            this.clickBadania();
-            selenium.click(studyMap.get(s));
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //this.clickAndWait(buildingMap.get(b)); //selenium.click
-            String str = mappings.getStudyNEG();
-            if (selenium.isElementPresent(mappings.getStudyNEG())){
-                return; // TODO some error here
-            }
-            this.clickAndWait(mappings.getStudyOK());
+
+    public void study(Study s) {
+        this.clickBadania();
+        selenium.click(studyMap.get(s));
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //this.clickAndWait(buildingMap.get(b)); //selenium.click
+        String str = mappings.getStudyNEG();
+        if (selenium.isElementPresent(mappings.getStudyNEG())) {
+            return; // TODO some error here
+        }
+        this.clickAndWait(mappings.getStudyOK());
     }
-    
-    public void defence(Defence d, int i){
-        defence(d,Integer.toString(i));
+
+    public void defence(Defence d, int i) {
+        defence(d, Integer.toString(i));
     }
-    
-    public void defence(Defence d,String count){
-            this.clickObrona();
-            selenium.click(defenceMap.get(d));
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //this.clickAndWait(buildingMap.get(b)); //selenium.click
-            selenium.type(mappings.getDefence_number(), count);
-            if (selenium.isElementPresent(mappings.getDefenceNEG())){
-                return; // TODO some error here
-            }
-            this.clickAndWait(mappings.getDefenceOK());
+
+    public void defence(Defence d, String count) {
+        this.clickObrona();
+        selenium.click(defenceMap.get(d));
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //this.clickAndWait(buildingMap.get(b)); //selenium.click
+        selenium.type(mappings.getDefence_number(), count);
+        if (selenium.isElementPresent(mappings.getDefenceNEG())) {
+            return; // TODO some error here
+        }
+        this.clickAndWait(mappings.getDefenceOK());
     }
-    
-    public void buildShip(StockyardShips s, int i){
-        buildShip(s,Integer.toString(i));
+
+    public void buildShip(StockyardShips s, int i) {
+        buildShip(s, Integer.toString(i));
     }
-    
-    public void buildShip(StockyardShips s, String count){
+
+    public void buildShip(StockyardShips s, String count) {
         this.clickStocznia();
         selenium.click(shipyardMap.get(s));
         try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         selenium.type(mappings.getShipyard_number(), count);
-        if(selenium.isElementPresent(mappings.getShipyard_NEG())){
+        if (selenium.isElementPresent(mappings.getShipyard_NEG())) {
             return; //dodac OgameException
         }
         clickAndWait(mappings.getShipyard_OK());
     }
-
 }
