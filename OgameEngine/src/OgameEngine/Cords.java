@@ -66,6 +66,20 @@ public class Cords {
         this.position=pos;
         this.dest=dest;
     }
+    
+    public Cords(int uni,int sys, int pos){
+        this.universe=Integer.toString(uni);
+        this.system=Integer.toString(sys);
+        this.position=Integer.toString(pos);
+        this.dest=Cords.PLANET;
+    }
+    
+    public Cords(int uni,int sys, int pos,Destination dest){
+        this.universe=Integer.toString(uni);
+        this.system=Integer.toString(sys);
+        this.position=Integer.toString(pos);
+        this.dest=dest;
+    }
 
     
     static final public Destination PLANET = Destination.PLANET;
