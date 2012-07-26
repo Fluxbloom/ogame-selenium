@@ -410,6 +410,7 @@ public class Ogame extends SeleneseTestCase {
             throw new OgameException("FLEET SEND THIRD SCREEN ERROR");
         }
         clickAndWait(mappings.getFleetSend_okscreen3());
+        this.clickPrzeglad();
     }
 
     public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) throws OgameException {
