@@ -13,8 +13,15 @@ public class Cords {
     private String system;
     private String position;
     private CordsProperties properties;
-    
-    //TODO Brak moon pozycji i PZ
+    private Destination dest;
+
+    public Destination getDest() {
+        return dest;
+    }
+
+    public void setDest(Destination dest) {
+        this.dest = dest;
+    }
 
     public String getPosition() {
         return position;
@@ -50,5 +57,18 @@ public class Cords {
         this.universe=uni;
         this.system=sys;
         this.position=pos;
+        this.dest=Cords.PLANET;
     }
+    
+    public Cords(String uni,String sys, String pos,Destination dest){
+        this.universe=uni;
+        this.system=sys;
+        this.position=pos;
+        this.dest=dest;
+    }
+
+    
+    static final public Destination PLANET = Destination.PLANET;
+    static final public Destination MOON = Destination.MOON;
+    static final public Destination PZ = Destination.PZ;
 }

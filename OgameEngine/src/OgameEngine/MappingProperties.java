@@ -6,8 +6,12 @@ package OgameEngine;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import java.util.Properties;
+import java.util.Set;
 
 /**
  *
@@ -21,8 +25,16 @@ class MappingProperties {
     private String browser;
     private String gameUrl;
     private String timeout;
+    private HashMap<String, String> server_start_command;
+    private String server_path;
+    // LOGIN
     private String login_closed_login_frame;
     private String login_login_button;
+    private String login_uni_target;//=id=serverLogin
+    private String login_uni_pref;//=label=
+    private String login_nick_target;//=name=login
+    private String login_pass_target;//=name=pass
+    private String login_login_with_pass_button;//=id=loginSubmit
     // LEFT MENU
     private String leftButtonPrzegladaj;
     private String leftButtonSurowce;
@@ -31,6 +43,15 @@ class MappingProperties {
     private String leftButtonStocznia;
     private String leftButtonObrona;
     private String leftButtonFlota;
+    //CHANGE PLANET
+    private String countplanet;//=//div[@id="countColonies"]/p/span
+    private String countplanet_separator;//=/
+    private int countplanet_result_pos;//=1
+    private String changeplanetbyid_pref;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
+    private String changeplanetbyid_post;//=]
+    private String changeplanetbyName_pref;//f=//div[@id="myWorlds"]/div[contains(@class,"planet")]/a[contains(@title,"
+    private String changeplanetbyName_post;//=")]
+    private String logout_button;
     // FLEET SEND MENU
     private String fleetSend_lm;
     private String fleetSend_cm;
@@ -48,6 +69,16 @@ class MappingProperties {
     private String fleetSend_sendAll;
     private String fleetSend_okscreen1;//=//a[@class="on" and @id="continue"]
     private String fleetSend_errorscreen1;//=//a[@class="off" and @id="continue"]
+    private String fleetSend_start_planet_selected;//=//td[@id="start"]/div[@class="target"]/a[contains(@class,"planet_selected")]
+    private String fleetSend_start_planet_deselected;//=//td[@id="start"]/div[@class="target"]/a[contains(@class,"planet")]
+    private String fleetSend_start_moon_selected;//=//td[@id="start"]/div[@class="target"]/a[contains(@class,"moon_selected")]
+    private String fleetSend_start_moon_deselected;//=//td[@id="start"]/div[@class="target"]/a[contains(@class,"moon")]
+    private String fleetSend_target_planet_selected;//=//td[@id="target"]/div[@class="target"]/a[contains(@class,"planet_selected")]
+    private String fleetSend_target_planet_deselected;//=//td[@id="target"]/div[@class="target"]/a[contains(@class,"planet")]
+    private String fleetSend_target_moon_selected;//=//td[@id="target"]/div[@class="target"]/a[contains(@class,"moon_selected")]
+    private String fleetSend_target_moon_deselected;//=//td[@id="target"]/div[@class="target"]/a[contains(@class,"moon")]
+    private String fleetSend_target_debris_selected;//=//td[@id="target"]/div[@class="target"]/a[contains(@class,"moon_selected")]
+    private String fleetSend_target_debris_deselected;//=//td[@id="target"]/div[@class="target"]/a[contains(@class,"moon")]
     private String fleetSend_galaxy;
     private String fleetSend_system;
     private String fleetSend_position;
@@ -73,95 +104,110 @@ class MappingProperties {
     private String fleetSend_errorscreen3;//=//a[@class="off" and @id="start"]
     // building
     private String building_km;//=xpath=(//a[@id='details'])[1]
-private String building_kc;//=xpath=(//a[@id='details'])[2]
-private String building_ed;//=xpath=(//a[@id='details'])[3]
-private String building_es;//=xpath=(//a[@id='details'])[4]
-private String building_ef;//=xpath=(//a[@id='details'])[5]
-private String building_ss;//=xpath=(//a[@id='details'])[6]
-private String building_mm;//=xpath=(//a[@id='details'])[7]
-private String building_mc;//=xpath=(//a[@id='details'])[8]
-private String building_md;//=xpath=(//a[@id='details'])[9]
-private String building_sm;//=xpath=(//a[@id='details'])[10]
-private String building_sc;//=xpath=(//a[@id='details'])[11]
-private String building_sd;//=xpath=(//a[@id='details'])[12]
-private String building_resourcesNEG;//=//a[@class='build-it_disabled']
-private String building_resourcesOK;//=//a[@class='build-it']
-private String building_fr;//=id=details14
-private String building_st;//=id=details21
-private String building_lb;//=id=details31
-private String building_ds;//=id=details34
-private String building_sr;//=id=details44
-private String building_fn;//=id=details15
-private String building_te;//=id=details33
-private String building_stationNEG;//=//a[@class='build-it_disabled']
-private String building_stationOK;//=//a[@class='build-it']
-
-private String study_te;//=id=details113
-private String study_tl;//=id=details120
-private String study_tj;//=id=details121
-private String study_tn;//=id=details114
-private String study_tp;//=id=details122
-private String study_ts;//=id=details106
-private String study_tk;//=id=details108
-private String study_af;//=id=details124
-private String study_sb;//=id=details123
-private String study_rg;//=id=details199
-private String study_ns;//=id=details115
-private String study_ni;//=id=details117
-private String study_nn;//=id=details118
-private String study_tb;//=id=details109
-private String study_to;//=id=details110
-private String study_op;//=id=details111
-private String studyOK;//a[@class='build-it']
-private String studyNEG;//=//a[@class='build-it_disabled']
-
-private String defence_wr;//=id=details401
-private String defence_ll;//=id=details402
-private String defence_cl;//=id=details403
-private String defence_dg;//=id=details404
-private String defence_dj;//=id=details405
-private String defence_wp;//=id=details406
-private String defence_mp;//=id=details407
-private String defence_dp;//=id=details408
-private String defence_pr;//=id=details502
-private String defence_rm;
-private String defenceOK;//=//a[@class='build-it']
-private String defenceNEG;//=//a[@class='build-it_disabled']
-private String defence_number;
+    private String building_kc;//=xpath=(//a[@id='details'])[2]
+    private String building_ed;//=xpath=(//a[@id='details'])[3]
+    private String building_es;//=xpath=(//a[@id='details'])[4]
+    private String building_ef;//=xpath=(//a[@id='details'])[5]
+    private String building_ss;//=xpath=(//a[@id='details'])[6]
+    private String building_mm;//=xpath=(//a[@id='details'])[7]
+    private String building_mc;//=xpath=(//a[@id='details'])[8]
+    private String building_md;//=xpath=(//a[@id='details'])[9]
+    private String building_sm;//=xpath=(//a[@id='details'])[10]
+    private String building_sc;//=xpath=(//a[@id='details'])[11]
+    private String building_sd;//=xpath=(//a[@id='details'])[12]
+    private String building_resourcesNEG;//=//a[@class='build-it_disabled']
+    private String building_resourcesOK;//=//a[@class='build-it']
+    private String building_fr;//=id=details14
+    private String building_st;//=id=details21
+    private String building_lb;//=id=details31
+    private String building_ds;//=id=details34
+    private String building_sr;//=id=details44
+    private String building_fn;//=id=details15
+    private String building_te;//=id=details33
+    private String building_stationNEG;//=//a[@class='build-it_disabled']
+    private String building_stationOK;//=//a[@class='build-it']
+    // STUDIES 
+    private String study_te;//=id=details113
+    private String study_tl;//=id=details120
+    private String study_tj;//=id=details121
+    private String study_tn;//=id=details114
+    private String study_tp;//=id=details122
+    private String study_ts;//=id=details106
+    private String study_tk;//=id=details108
+    private String study_af;//=id=details124
+    private String study_sb;//=id=details123
+    private String study_rg;//=id=details199
+    private String study_ns;//=id=details115
+    private String study_ni;//=id=details117
+    private String study_nn;//=id=details118
+    private String study_tb;//=id=details109
+    private String study_to;//=id=details110
+    private String study_op;//=id=details111
+    private String studyOK;//a[@class='build-it']
+    private String studyNEG;//=//a[@class='build-it_disabled']
+    private String defence_wr;//=id=details401
+    private String defence_ll;//=id=details402
+    private String defence_cl;//=id=details403
+    private String defence_dg;//=id=details404
+    private String defence_dj;//=id=details405
+    private String defence_wp;//=id=details406
+    private String defence_mp;//=id=details407
+    private String defence_dp;//=id=details408
+    private String defence_pr;//=id=details502
+    private String defence_rm;
+    private String defenceOK;//=//a[@class='build-it']
+    private String defenceNEG;//=//a[@class='build-it_disabled']
+    private String defence_number;
 // shipyard
-private String shipyard_lm;//=id=details204
-private String shipyard_cm;//=id=details205
-private String shipyard_kraz;//=id=details206
-private String shipyard_ow;//=id=details207
-private String shipyard_panc;//=id=details215
-private String shipyard_bomb;//=id=details211
-private String shipyard_nisc;//=id=details213
-private String shipyard_gs;//=id=details214
-private String shipyard_mt;//=id=details202
-private String shipyard_dt;//=id=details203
-private String shipyard_skol;//=id=details208
-private String shipyard_rec;//=id=details209
-private String shipyard_ss;//=id=details210
-private String shipyard_sat;//=id=details212
-private String shipyard_NEG;//=//a[@class='build-it_disabled']
-private String shipyard_OK;//=//a[@class='build-it']
-private String shipyard_number;//=id=number
+    private String shipyard_lm;//=id=details204
+    private String shipyard_cm;//=id=details205
+    private String shipyard_kraz;//=id=details206
+    private String shipyard_ow;//=id=details207
+    private String shipyard_panc;//=id=details215
+    private String shipyard_bomb;//=id=details211
+    private String shipyard_nisc;//=id=details213
+    private String shipyard_gs;//=id=details214
+    private String shipyard_mt;//=id=details202
+    private String shipyard_dt;//=id=details203
+    private String shipyard_skol;//=id=details208
+    private String shipyard_rec;//=id=details209
+    private String shipyard_ss;//=id=details210
+    private String shipyard_sat;//=id=details212
+    private String shipyard_NEG;//=//a[@class='build-it_disabled']
+    private String shipyard_OK;//=//a[@class='build-it']
+    private String shipyard_number;//=id=number
 
     MappingProperties() throws IOException {
         Properties defaultPath = new Properties();
         defaultPath.load(new FileInputStream(
-                System.getProperty("user.dir") + "/conf/defaultConfFile.properties")
-                );
-        this.path = System.getProperty("user.dir") + "/conf/"+defaultPath.getProperty("folder") +"/mappings.properties";
+                System.getProperty("user.dir") + "/conf/defaultConfFile.properties"));
+        this.path = System.getProperty("user.dir") + "/conf/" + defaultPath.getProperty("folder") + "/mappings.properties";
+        // Server start command
+        String[] str = defaultPath.getProperty("osMap").split(";");
+        String[] temp;
+        this.server_start_command = new HashMap<String, String>();
+        for (int i = 0; i < str.length; i++) {
+            temp = str[i].split(",");
+            this.server_start_command.put(temp[0], temp[1]);
+        }
+        server_path = defaultPath.getProperty("server_path");
+        // reading property file
         properties = new Properties();
         properties.load(new FileInputStream(path));
         this.url = properties.getProperty("start_url");
         this.browser = properties.getProperty("browser");
         this.gameUrl = properties.getProperty("game_url");
-        this.timeout = properties.getProperty("timeout"); 
-        // LEFT MENU PROPERTIES
+        this.timeout = properties.getProperty("timeout");
+        // LOGIN PROPERTIES
         this.login_closed_login_frame = properties.getProperty("login_closed_login_frame_text");
         this.login_login_button = properties.getProperty("login_login_button");
+        login_uni_target = properties.getProperty("login_uni_target");//=id=serverLogin
+        login_uni_pref = properties.getProperty("login_uni_pref");//=label=
+        login_nick_target = properties.getProperty("login_nick_target");//=name=login
+        login_pass_target = properties.getProperty("login_pass_target");//=name=pass
+        login_login_with_pass_button = properties.getProperty("login_login_with_pass_button");//=id=loginSubmit
+        logout_button = properties.getProperty("logout_button");//=id=loginSubmit
+        // LEFT MENU PROPERTIES
         this.leftButtonPrzegladaj = properties.getProperty("leftButtonPrzegladaj");
         this.leftButtonSurowce = properties.getProperty("leftButtonSurowce");
         this.leftButtonStacja = properties.getProperty("leftButtonStacja");
@@ -169,6 +215,14 @@ private String shipyard_number;//=id=number
         this.leftButtonStocznia = properties.getProperty("leftButtonStocznia");
         this.leftButtonObrona = properties.getProperty("leftButtonObrona");
         this.leftButtonFlota = properties.getProperty("leftButtonFlota");
+        // CHANGE PLANET
+        countplanet = properties.getProperty("countplanet");//=//div[@id="countColonies"]/p/span
+        countplanet_separator = properties.getProperty("countplanet_separator");//=/
+        countplanet_result_pos = Integer.parseInt(properties.getProperty("countplanet_result_pos"));//=1
+        changeplanetbyid_pref = properties.getProperty("changeplanetbyid_pref");//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
+        changeplanetbyid_post = properties.getProperty("changeplanetbyid_post");//=]
+        changeplanetbyName_pref = properties.getProperty("changeplanetbyName_pref");//f=//div[@id="myWorlds"]/div[contains(@class,"planet")]/a[contains(@title,"
+        changeplanetbyName_post = properties.getProperty("changeplanetbyName_post");//=")]
         // FLEET SEND MENU
         fleetSend_lm = properties.getProperty("fleetSend_lm");
         fleetSend_cm = properties.getProperty("fleetSend_cm");
@@ -186,6 +240,16 @@ private String shipyard_number;//=id=number
         fleetSend_sendAll = properties.getProperty("fleetSend_sendAll");
         fleetSend_okscreen1 = properties.getProperty("fleetSend_okscreen1");
         fleetSend_errorscreen1 = properties.getProperty("fleetSend_errorscreen1");
+        fleetSend_start_planet_selected = properties.getProperty("fleetSend_start_planet_selected");
+        fleetSend_start_planet_deselected = properties.getProperty("fleetSend_start_planet_deselected");
+        fleetSend_start_moon_selected = properties.getProperty("fleetSend_start_moon_selected");
+        fleetSend_start_moon_deselected = properties.getProperty("fleetSend_start_moon_deselected");
+        fleetSend_target_planet_selected = properties.getProperty("fleetSend_target_planet_selected");
+        fleetSend_target_planet_deselected = properties.getProperty("fleetSend_target_planet_deselected");
+        fleetSend_target_moon_selected = properties.getProperty("fleetSend_target_moon_selected");
+        fleetSend_target_moon_deselected = properties.getProperty("fleetSend_target_moon_deselected");
+        fleetSend_target_debris_selected = properties.getProperty("fleetSend_target_debris_selected");
+        fleetSend_target_debris_deselected = properties.getProperty("fleetSend_target_debris_deselected");
         fleetSend_galaxy = properties.getProperty("fleetSend_galaxy");
         fleetSend_system = properties.getProperty("fleetSend_system");
         fleetSend_position = properties.getProperty("fleetSend_position");
@@ -209,84 +273,190 @@ private String shipyard_number;//=id=number
         fleetSend_allResources = properties.getProperty("fleetSend_allResources");
         fleetSend_okscreen3 = properties.getProperty("fleetSend_okscreen3");
         fleetSend_errorscreen3 = properties.getProperty("fleetSend_errorscreen3");
-        
+
         //build properties
-        building_km=properties.getProperty("building_km");
-        building_kc=properties.getProperty("building_kc");
-        building_ed=properties.getProperty("building_ed");
-        building_es=properties.getProperty("building_es");
-        building_ef=properties.getProperty("building_ef");
-        building_ss=properties.getProperty("building_ss");
-        building_mm=properties.getProperty("building_mm");
-        building_mc=properties.getProperty("building_mc");
-        building_md=properties.getProperty("building_md");
-        building_sm=properties.getProperty("building_sm");
-        building_sc=properties.getProperty("building_sc");
-        building_sd=properties.getProperty("building_sd");
-        building_resourcesNEG=properties.getProperty("building_resourcesNEG");
-        building_resourcesOK=properties.getProperty("building_resourcesOK");
-        building_fr=properties.getProperty("building_fr");
-        building_st=properties.getProperty("building_st");
-        building_lb=properties.getProperty("building_lb");
-        building_ds=properties.getProperty("building_ds");
-        building_sr=properties.getProperty("building_sr");
-        building_fn=properties.getProperty("building_fn");
-        building_te=properties.getProperty("building_te");
-        building_stationNEG=properties.getProperty("building_stationNEG");
-        building_stationOK=properties.getProperty("building_stationOK");
-        
+        building_km = properties.getProperty("building_km");
+        building_kc = properties.getProperty("building_kc");
+        building_ed = properties.getProperty("building_ed");
+        building_es = properties.getProperty("building_es");
+        building_ef = properties.getProperty("building_ef");
+        building_ss = properties.getProperty("building_ss");
+        building_mm = properties.getProperty("building_mm");
+        building_mc = properties.getProperty("building_mc");
+        building_md = properties.getProperty("building_md");
+        building_sm = properties.getProperty("building_sm");
+        building_sc = properties.getProperty("building_sc");
+        building_sd = properties.getProperty("building_sd");
+        building_resourcesNEG = properties.getProperty("building_resourcesNEG");
+        building_resourcesOK = properties.getProperty("building_resourcesOK");
+        building_fr = properties.getProperty("building_fr");
+        building_st = properties.getProperty("building_st");
+        building_lb = properties.getProperty("building_lb");
+        building_ds = properties.getProperty("building_ds");
+        building_sr = properties.getProperty("building_sr");
+        building_fn = properties.getProperty("building_fn");
+        building_te = properties.getProperty("building_te");
+        building_stationNEG = properties.getProperty("building_stationNEG");
+        building_stationOK = properties.getProperty("building_stationOK");
+
         //study properties
-        study_te=properties.getProperty("study_te");
-        study_tl=properties.getProperty("study_tl");
-        study_tj=properties.getProperty("study_tj");
-        study_tn=properties.getProperty("study_tn");
-        study_tp=properties.getProperty("study_tp");
-        study_ts=properties.getProperty("study_ts");
-        study_tk=properties.getProperty("study_tk");
-        study_af=properties.getProperty("study_af");
-        study_sb=properties.getProperty("study_sb");
-        study_rg=properties.getProperty("study_rg");
-        study_ns=properties.getProperty("study_ns");
-        study_ni=properties.getProperty("study_ni");
-        study_nn=properties.getProperty("study_nn");
-        study_tb=properties.getProperty("study_tb");
-        study_to=properties.getProperty("study_to");
-        study_op=properties.getProperty("study_op");
-        studyOK=properties.getProperty("studyOK");
-        studyNEG=properties.getProperty("studyNEG");
-        
+        study_te = properties.getProperty("study_te");
+        study_tl = properties.getProperty("study_tl");
+        study_tj = properties.getProperty("study_tj");
+        study_tn = properties.getProperty("study_tn");
+        study_tp = properties.getProperty("study_tp");
+        study_ts = properties.getProperty("study_ts");
+        study_tk = properties.getProperty("study_tk");
+        study_af = properties.getProperty("study_af");
+        study_sb = properties.getProperty("study_sb");
+        study_rg = properties.getProperty("study_rg");
+        study_ns = properties.getProperty("study_ns");
+        study_ni = properties.getProperty("study_ni");
+        study_nn = properties.getProperty("study_nn");
+        study_tb = properties.getProperty("study_tb");
+        study_to = properties.getProperty("study_to");
+        study_op = properties.getProperty("study_op");
+        studyOK = properties.getProperty("studyOK");
+        studyNEG = properties.getProperty("studyNEG");
+
         //obrona
-        defence_wr=properties.getProperty("defence_wr");//=id=details401
-        defence_ll=properties.getProperty("defence_ll");//=id=details402
-        defence_cl=properties.getProperty("defence_cl");//=id=details403
-        defence_dg=properties.getProperty("defence_dg");//=id=details404
-        defence_dj=properties.getProperty("defence_dj");//=id=details405
-        defence_wp=properties.getProperty("defence_wp");//=id=details406
-        defence_mp=properties.getProperty("defence_mp");//=id=details407
-        defence_dp=properties.getProperty("defence_dp");//=id=details408
-        defence_pr=properties.getProperty("defence_pr");//=id=details502
-        defence_rm=properties.getProperty("defence_rm");
-        defenceOK=properties.getProperty("defence_wr");//=//a[@class='build-it']
-        defenceNEG=properties.getProperty("defence_wr");//=//a[@class='build-it_disabled']
-        defence_number=properties.getProperty("defence_number"); 
+        defence_wr = properties.getProperty("defence_wr");//=id=details401
+        defence_ll = properties.getProperty("defence_ll");//=id=details402
+        defence_cl = properties.getProperty("defence_cl");//=id=details403
+        defence_dg = properties.getProperty("defence_dg");//=id=details404
+        defence_dj = properties.getProperty("defence_dj");//=id=details405
+        defence_wp = properties.getProperty("defence_wp");//=id=details406
+        defence_mp = properties.getProperty("defence_mp");//=id=details407
+        defence_dp = properties.getProperty("defence_dp");//=id=details408
+        defence_pr = properties.getProperty("defence_pr");//=id=details502
+        defence_rm = properties.getProperty("defence_rm");
+        defenceOK = properties.getProperty("defence_wr");//=//a[@class='build-it']
+        defenceNEG = properties.getProperty("defence_wr");//=//a[@class='build-it_disabled']
+        defence_number = properties.getProperty("defence_number");
         //shipyard
-       shipyard_lm=properties.getProperty("shipyard_lm");//=id=details204
-       shipyard_cm=properties.getProperty("shipyard_cm");//=id=details205
-       shipyard_kraz=properties.getProperty("shipyard_kraz");//=id=details206
-       shipyard_ow=properties.getProperty("shipyard_ow");//=id=details207
-       shipyard_panc=properties.getProperty("shipyard_panc");//=id=details215
-       shipyard_bomb=properties.getProperty("shipyard_bomb");//=id=details211
-       shipyard_nisc=properties.getProperty("shipyard_nisc");//=id=details213
-       shipyard_gs=properties.getProperty("shipyard_gw");//=id=details214
-       shipyard_mt=properties.getProperty("shipyard_mt");//=id=details202
-       shipyard_dt=properties.getProperty("shipyard_dt");//=id=details203
-       shipyard_skol=properties.getProperty("shipyard_skol");//=id=details208
-       shipyard_rec=properties.getProperty("shipyard_rec");//=id=details209
-       shipyard_ss=properties.getProperty("shipyard_ss");//=id=details210
-       shipyard_sat=properties.getProperty("shipyard_sat");//=id=details212
-       shipyard_NEG=properties.getProperty("shipyard_NEG");//=//a[@class='build-it_disabled']
-       shipyard_OK=properties.getProperty("shipyard_OK");//=//a[@class='build-it']
-       shipyard_number=properties.getProperty("shipyard_number");
+        shipyard_lm = properties.getProperty("shipyard_lm");//=id=details204
+        shipyard_cm = properties.getProperty("shipyard_cm");//=id=details205
+        shipyard_kraz = properties.getProperty("shipyard_kraz");//=id=details206
+        shipyard_ow = properties.getProperty("shipyard_ow");//=id=details207
+        shipyard_panc = properties.getProperty("shipyard_panc");//=id=details215
+        shipyard_bomb = properties.getProperty("shipyard_bomb");//=id=details211
+        shipyard_nisc = properties.getProperty("shipyard_nisc");//=id=details213
+        shipyard_gs = properties.getProperty("shipyard_gw");//=id=details214
+        shipyard_mt = properties.getProperty("shipyard_mt");//=id=details202
+        shipyard_dt = properties.getProperty("shipyard_dt");//=id=details203
+        shipyard_skol = properties.getProperty("shipyard_skol");//=id=details208
+        shipyard_rec = properties.getProperty("shipyard_rec");//=id=details209
+        shipyard_ss = properties.getProperty("shipyard_ss");//=id=details210
+        shipyard_sat = properties.getProperty("shipyard_sat");//=id=details212
+        shipyard_NEG = properties.getProperty("shipyard_NEG");//=//a[@class='build-it_disabled']
+        shipyard_OK = properties.getProperty("shipyard_OK");//=//a[@class='build-it']
+        shipyard_number = properties.getProperty("shipyard_number");
+    }
+
+    public String getChangeplanetbyName_pref() {
+        return changeplanetbyName_pref;
+    }
+
+    public String getServer_start_command() throws OgameException {
+        String os = System.getProperty("os.name");
+        Set<Entry<String, String>> set = server_start_command.entrySet();
+        Iterator<Entry<String, String>> it = set.iterator();
+        Entry<String, String> temp;
+        while (it.hasNext()) {
+            temp = it.next();
+            if (os.compareTo(temp.getKey()) == 0) {
+                return temp.getValue().replace("%lib", this.server_path);
+            }
+        }
+        throw new OgameException("Couln't find server start option, unrecognised OS perhaps");
+    }
+
+    public String getFleetSend_start_moon_deselected() {
+        return fleetSend_start_moon_deselected;
+    }
+
+    public String getFleetSend_start_moon_selected() {
+        return fleetSend_start_moon_selected;
+    }
+
+    public String getFleetSend_start_planet_deselected() {
+        return fleetSend_start_planet_deselected;
+    }
+
+    public String getFleetSend_start_planet_selected() {
+        return fleetSend_start_planet_selected;
+    }
+
+    public String getFleetSend_target_debris_deselected() {
+        return fleetSend_target_debris_deselected;
+    }
+
+    public String getFleetSend_target_debris_selected() {
+        return fleetSend_target_debris_selected;
+    }
+
+    public String getFleetSend_target_moon_deselected() {
+        return fleetSend_target_moon_deselected;
+    }
+
+    public String getFleetSend_target_moon_selected() {
+        return fleetSend_target_moon_selected;
+    }
+
+    public String getFleetSend_target_planet_deselected() {
+        return fleetSend_target_planet_deselected;
+    }
+
+    public String getFleetSend_target_planet_selected() {
+        return fleetSend_target_planet_selected;
+    }
+
+    public String getLogout_button() {
+        return logout_button;
+    }
+
+    public String getChangeplanetbyName_post() {
+        return changeplanetbyName_post;
+    }
+
+    public String getChangeplanetbyid_post() {
+        return changeplanetbyid_post;
+    }
+
+    public String getChangeplanetbyid_pref() {
+        return changeplanetbyid_pref;
+    }
+
+    public String getCountplanet() {
+        return countplanet;
+    }
+
+    public int getCountplanet_result_pos() {
+        return countplanet_result_pos;
+    }
+
+    public String getCountplanet_separator() {
+        return countplanet_separator;
+    }
+
+    public String getLogin_login_with_pass_button() {
+        return login_login_with_pass_button;
+    }
+
+    public String getLogin_nick_target() {
+        return login_nick_target;
+    }
+
+    public String getLogin_pass_target() {
+        return login_pass_target;
+    }
+
+    public String getLogin_uni_pref() {
+        return login_uni_pref;
+    }
+
+    public String getLogin_uni_target() {
+        return login_uni_target;
     }
 
     public String getDefence_number() {
@@ -780,5 +950,4 @@ private String shipyard_number;//=id=number
     public String getUrl() {
         return url;
     }
-
 }
