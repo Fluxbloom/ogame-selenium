@@ -47,11 +47,11 @@ class MappingProperties {
     private String countplanet;//=//div[@id="countColonies"]/p/span
     private String countplanet_separator;//=/
     private int countplanet_result_pos;//=1
-    private String changeplanetbyid_pref;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
-    private String changeplanetbyid_post;//=]
-    private String changeplanetbyName_pref;//f=//div[@id="myWorlds"]/div[contains(@class,"planet")]/a[contains(@title,"
-    private String changeplanetbyName_post;//=")]
+    private String changeplanetbyid;//=]
+    private String changeplanetbyName;//=")]
     private String logout_button;
+    private String changeplanetgetName;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
+    private String changeplanetgetCoords;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
     // FLEET SEND MENU
     private String fleetSend_lm;
     private String fleetSend_cm;
@@ -182,15 +182,6 @@ class MappingProperties {
         defaultPath.load(new FileInputStream(
                 System.getProperty("user.dir") + "/conf/defaultConfFile.properties"));
         this.path = System.getProperty("user.dir") + "/conf/" + defaultPath.getProperty("folder") + "/mappings.properties";
-        // Server start command
-        String[] str = defaultPath.getProperty("osMap").split(";");
-        String[] temp;
-        this.server_start_command = new HashMap<String, String>();
-        for (int i = 0; i < str.length; i++) {
-            temp = str[i].split(",");
-            this.server_start_command.put(temp[0], temp[1]);
-        }
-        server_path = defaultPath.getProperty("server_path");
         // reading property file
         properties = new Properties();
         properties.load(new FileInputStream(path));
@@ -219,10 +210,10 @@ class MappingProperties {
         countplanet = properties.getProperty("countplanet");//=//div[@id="countColonies"]/p/span
         countplanet_separator = properties.getProperty("countplanet_separator");//=/
         countplanet_result_pos = Integer.parseInt(properties.getProperty("countplanet_result_pos"));//=1
-        changeplanetbyid_pref = properties.getProperty("changeplanetbyid_pref");//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
-        changeplanetbyid_post = properties.getProperty("changeplanetbyid_post");//=]
-        changeplanetbyName_pref = properties.getProperty("changeplanetbyName_pref");//f=//div[@id="myWorlds"]/div[contains(@class,"planet")]/a[contains(@title,"
-        changeplanetbyName_post = properties.getProperty("changeplanetbyName_post");//=")]
+        changeplanetbyid = properties.getProperty("changeplanetbyid");//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
+        changeplanetbyName = properties.getProperty("changeplanetbyName");//=")]
+        changeplanetgetName=properties.getProperty("changeplanetgetName");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
+        changeplanetgetCoords=properties.getProperty("changeplanetgetCoords");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
         // FLEET SEND MENU
         fleetSend_lm = properties.getProperty("fleetSend_lm");
         fleetSend_cm = properties.getProperty("fleetSend_cm");
@@ -353,10 +344,6 @@ class MappingProperties {
         shipyard_number = properties.getProperty("shipyard_number");
     }
 
-    public String getChangeplanetbyName_pref() {
-        return changeplanetbyName_pref;
-    }
-
     public String getServer_start_command() throws OgameException {
         String os = System.getProperty("os.name");
         Set<Entry<String, String>> set = server_start_command.entrySet();
@@ -415,16 +402,12 @@ class MappingProperties {
         return logout_button;
     }
 
-    public String getChangeplanetbyName_post() {
-        return changeplanetbyName_post;
+    public String getChangeplanetbyid(int i) {
+        return changeplanetbyid.replace("%i", Integer.toString(i));
     }
 
-    public String getChangeplanetbyid_post() {
-        return changeplanetbyid_post;
-    }
-
-    public String getChangeplanetbyid_pref() {
-        return changeplanetbyid_pref;
+    public String getChangeplanetbyName(String s) {
+        return changeplanetbyName.replace("%s", s);
     }
 
     public String getCountplanet() {
@@ -437,6 +420,14 @@ class MappingProperties {
 
     public String getCountplanet_separator() {
         return countplanet_separator;
+    }
+
+    public String getChangeplanetgetCoords(int i) {
+        return changeplanetgetCoords.replace("%i", Integer.toString(i));
+    }
+
+    public String getChangeplanetgetName(int i) {
+        return changeplanetgetName.replace("%i", Integer.toString(i));
     }
 
     public String getLogin_login_with_pass_button() {

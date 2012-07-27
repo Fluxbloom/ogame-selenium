@@ -5,11 +5,11 @@
 package OgameEngine;
 
 import com.thoughtworks.selenium.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -21,7 +21,6 @@ import java.util.logging.Logger;
  */
 class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
-    private ServerThread s;
     private MappingProperties mappings;
     private HashMap<Mission, String> missionMap;
     private HashMap<Ships, String> shipsMap;
@@ -277,61 +276,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     
-    
-        private class ServerThread extends Thread {
-
-        @Override
-        public void run() {
-            try {
-                String s;
-                Process p = Runtime.getRuntime().exec(mappings.getServer_start_command());
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-                // read the output from the command
-                System.out.println("Here is the standard output of the command:\n");
-                while ((s = stdInput.readLine()) != null) {
-                    System.out.println(s);
-                }
-                // read any errors from the attempted command
-                System.out.println("Here is the standard error of the command (if any):\n");
-                while ((s = stdError.readLine()) != null) {
-                    System.out.println(s);
-                }
-            } catch (OgameException ex) {
-                Logger.getLogger(Ogame116pl.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Ogame116pl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
     /*
      * METODY PUBLICZNE 
      */
-
-
-
-    @Deprecated
-    public void startServer() throws OgameException {
-        s = new ServerThread();
-        s.start();
-        this.wait(10);
-        /*System.err.println(System.getProperty("os.name"));
-        System.err.println(mappings.getServer_start_command());
-        try {
-        Process p = Runtime.getRuntime().exec(mappings.getServer_start_command());
-        p.waitFor();
-        
-        } catch (InterruptedException ex) {
-        throw new OgameException("Couldn't start Selenium Server");
-        } catch (IOException ex) {
-        throw new OgameException("Couldn't start Selenium Server");
-        }*/
-    }
-
-    @Deprecated
-    public void stopServer() {
-        s.stop();
-    }
 
     @Override
     public void wait(int seconds) {
@@ -382,12 +329,12 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public void changePlanet(int planetNumber) {
-        clickAndWait(mappings.getChangeplanetbyid_pref() + Integer.toString(planetNumber) + mappings.getChangeplanetbyid_post());
+        clickAndWait(mappings.getChangeplanetbyid(planetNumber));
     }
 
     @Override
     public void changePlanetByName(String name) {
-        clickAndWait(mappings.getChangeplanetbyName_pref() + name + mappings.getChangeplanetbyName_post());
+        clickAndWait(mappings.getChangeplanetbyName(name) );
     }
     
     @Override
@@ -526,5 +473,30 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             return; //dodac OgameException
         }
         clickAndWait(mappings.getShipyard_OK());
+    }
+
+    @Override
+    public List<String> getPlanetNames() {
+        int i = this.getPlanetCount();
+        List<String> list = new ArrayList<String>();
+        for (int j=1; j<i+1;j++){
+            list.add(selenium.getText(mappings.getChangeplanetgetName(j)));
+        }
+        return list;
+    }
+
+    @Override
+    public List<String> getPlanetCoords() {
+        int i = this.getPlanetCount();
+        List<String> list = new ArrayList<String>();
+        for (int j=1; j<i+1;j++){
+            list.add(selenium.getText(mappings.getChangeplanetgetCoords(j)));
+        }
+        return list;
+    }
+
+    @Override
+    public List<Flights> getFlightsList() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
