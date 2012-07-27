@@ -5,6 +5,8 @@
 package OgameEngine;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -89,6 +91,25 @@ public class SeleniumStartTest {
     }
 
     @Test
+    public void wykrycieListyPlanet() {
+       o.login(uni, nick, pass);
+       List<String> planety = o.getPlanetNames();
+       Iterator<String> it = planety.iterator();
+       while(it.hasNext()){
+           System.out.println("Planeta "+it.next());
+       }
+       planety = o.getPlanetCoords();
+       it = planety.iterator();
+       while(it.hasNext()){
+           System.out.println("Planeta "+it.next());
+       }
+       o.logout();
+    }
+    
+
+    
+    @Test
+    @Ignore
     public void farming() throws OgameException {
         o.login(uni, nick, pass);
         Fleet farmiaca = new Fleet();
