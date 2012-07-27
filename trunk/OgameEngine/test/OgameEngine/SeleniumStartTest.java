@@ -39,7 +39,7 @@ public class SeleniumStartTest {
 
     @Before
     public void setUp() throws IOException {
-        o = new Ogame();
+        o = Ogame.ogameFabric("116", "pl");
         prop = new TestProperties();
         uni = prop.getUniverse();
         nick = prop.getNick();
@@ -104,10 +104,6 @@ public class SeleniumStartTest {
         new Cords(2,108,12,Destination.PZ)
         };
         Cords[] farms = new Cords[]{
-        new Cords(2,119,10),
-        new Cords(2,119,8),
-        new Cords(2,118,12),
-        new Cords(2,118,10),
         new Cords(2,114,8),
         new Cords(2,112,8),
         new Cords(2,110,6),
@@ -115,10 +111,10 @@ public class SeleniumStartTest {
         new Cords(2,109,8)
         };
         Cords[] hinataFarms = new Cords[]{
-        new Cords(2,200,4)
+        new Cords(2,107,8)
         };
         
-        int aisha_fleets = 3;
+        int aisha_fleets = 4;
         int hinata_fleets = 1;
         int pz_fleets = 1;
         o.changePlanetByName("Aisha");
@@ -131,7 +127,7 @@ public class SeleniumStartTest {
             }
         }
         o.changePlanetByName("Hinata");
-        for( int i=0; i< hinata_fleets; i++){
+        for( int i=0; i< hinata_fleets-1; i++){
             o.sendFleet(fs, hinataFarms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
         }
         o.changePlanet(1);
