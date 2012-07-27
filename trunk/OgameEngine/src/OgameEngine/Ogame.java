@@ -5,6 +5,7 @@
 package OgameEngine;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
+import java.util.List;
 
 /**
  *
@@ -20,6 +21,8 @@ public abstract class Ogame extends SeleneseTestCase {
     abstract public int getPlanetCount();
     abstract public void changePlanet(int planetNumber);
     abstract public void changePlanetByName(String name);
+    abstract public List<String> getPlanetNames();
+    abstract public List<String> getPlanetCoords();
     abstract public void sendFleet(Fleet f,StartDestination d, Cords c, Speed speed, Mission m, Resources r) throws OgameException;
     abstract public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) throws OgameException;
     abstract public void sendFleet(Fleet f, Cords c, Mission m, Resources r) throws OgameException;
@@ -30,6 +33,7 @@ public abstract class Ogame extends SeleneseTestCase {
     abstract public void buildShip(StockyardShips s, int i);
     abstract public void buildShip(StockyardShips s, String count);
     
+    abstract public List<Flights> getFlightsList();
     
     public static Ogame ogameFabric(String uni,String lang){
         return new Ogame116pl();
