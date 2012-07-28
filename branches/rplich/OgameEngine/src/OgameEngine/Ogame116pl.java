@@ -6,6 +6,8 @@ package OgameEngine;
 
 import OgameEngine.Flights.FriendOrFoe;
 import OgameEngine.Flights.Multiplicity;
+import OgameEngine.Performance.Production;
+import OgameEngine.Performance.ResourceField;
 import com.thoughtworks.selenium.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,6 +35,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Study, String> studyMap;
     private HashMap<Defence, String> defenceMap;
     private HashMap<StockyardShips, String> shipyardMap;
+    private HashMap<Performance.ResourceField, String> performanceMap;
 
     public Ogame116pl() {
         System.out.print("Reading static mappings");
@@ -141,6 +144,16 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         shipyardMap.put(Ships.REC, mappings.getShipyard_rec());
         shipyardMap.put(Ships.SOND, mappings.getShipyard_ss());
         shipyardMap.put(Ships.SAT, mappings.getShipyard_sat());
+        System.out.println("[DONE]");
+        System.out.print("Inititializing Selenium instance ");
+                System.out.print("Creating Shipyard Map");
+        performanceMap = new HashMap<Performance.ResourceField, String>();
+        performanceMap.put(Performance.METAL, mappings.getPerformance_m());
+        performanceMap.put(Performance.KRYSZTAL, mappings.getPerformance_k());
+        performanceMap.put(Performance.DEUTER, mappings.getPerformance_d());
+        performanceMap.put(Performance.EL_SLONECZNA, mappings.getPerformance_es());
+        performanceMap.put(Performance.EL_FUZYJNA, mappings.getPerformance_ef());
+        performanceMap.put(Performance.SAT_SLONECZNA, mappings.getPerformance_ss());
         System.out.println("[DONE]");
         System.out.print("Inititializing Selenium instance ");
         try {
@@ -610,7 +623,7 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
         }
 
         return lista;
-
+           
     }
     /*
      * Testowe metody
@@ -622,4 +635,26 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
 //        for (int i=1; i<j+1;i++)
 //        System.out.println(selenium.getText(mappings.getTest1(i)));
 //    }
+
+    @Override
+    public void setResoursesSetting(ResourceField r, Production p) {
+        this.clickResourceSettings();
+        this.selenium.select(this.performanceMap.get(r), mappings.getPerformance_select()+p.getS());
+        this.selenium.click(this.mappings.getPerformance_ok());
+
+    }
+
+    @Override
+    public void setResoursesSett(Performance p) {
+        this.clickResourceSettings();
+        this.selenium.select(this.performanceMap.get(Performance.METAL), mappings.getPerformance_select()+p.getMetal().getS());
+        this.selenium.select(this.performanceMap.get(Performance.KRYSZTAL), mappings.getPerformance_select()+p.getKrzysztal().getS());
+        this.selenium.select(this.performanceMap.get(Performance.DEUTER), mappings.getPerformance_select()+p.getDeuter().getS());
+        this.selenium.select(this.performanceMap.get(Performance.EL_SLONECZNA), mappings.getPerformance_select()+p.getEl_Sloneczna().getS());
+        this.selenium.select(this.performanceMap.get(Performance.EL_FUZYJNA), mappings.getPerformance_select()+p.getEl_Fuzyjna().getS());
+        this.selenium.select(this.performanceMap.get(Performance.SAT_SLONECZNA), mappings.getPerformance_select()+p.getSat_Sloneczna().getS());
+        //throw new UnsupportedOperationException("Not supported yet.");
+        this.selenium.click(this.mappings.getPerformance_ok());
+    }
+    
 }

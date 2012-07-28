@@ -108,6 +108,7 @@ public class SeleniumStartTest {
     }
     
     @Test
+    @Ignore
     public void eventList()throws OgameException{
         try{
         o.login(uni, nick, pass);
@@ -177,5 +178,21 @@ public class SeleniumStartTest {
         }
         o.sendFleet(fs, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
         o.logout();
+    }
+    @Test
+    @Ignore
+        public void zmienCos() {
+       o.login(uni, nick, pass);
+       o.setResoursesSetting(Performance.METAL, Performance.P30);
+       o.wait(10);
+       o.logout();
+    }
+    @Test
+    //@Ignore
+        public void zmienCos2() {
+       o.login(uni, nick, pass);
+       o.setResoursesSett(new Performance(Performance.P10, Performance.P20, Performance.P30, Performance.P40, Performance.P50, Performance.P60));
+       o.wait(10);
+       o.logout();
     }
 }

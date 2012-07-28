@@ -200,6 +200,15 @@ class MappingProperties {
     private String event_list_time_parser_hour;//=g
     private String event_list_time_parser_minute;//=min.
     private String event_list_time_parser_second;//=sek.
+    //Performance
+    private String performance_m;//=name=last1
+    private String performance_k;//=name=last2
+    private String performance_d;//=name=last3
+    private String performance_es;//=name=last4
+    private String performance_ef;//=name=last12
+    private String performance_ss;//=name=last212
+    private String performance_ok;//=//span[@class="factorbutton"/input
+    private String performance_select;
     //parametry testowe
 
     MappingProperties() throws IOException {
@@ -396,7 +405,72 @@ class MappingProperties {
         event_list_time_parser_hour = properties.getProperty("event_list_time_parser_hour");
         event_list_time_parser_minute = properties.getProperty("event_list_time_parser_minute");
         event_list_time_parser_second = properties.getProperty("event_list_time_parser_second");
+        
+            //Performance
+    performance_m=properties.getProperty("performance_m");//=name=last1
+    performance_k=properties.getProperty("performance_k");//=name=last1
+    performance_d=properties.getProperty("performance_d");//=name=last1
+    performance_es=properties.getProperty("performance_es");//=name=last1
+    performance_ef=properties.getProperty("performance_ef");//=name=last1
+    performance_ss=properties.getProperty("performance_ss");//=name=last1
+    performance_ok=properties.getProperty("performance_ok");//=name=last1
+    performance_select=properties.getProperty("performance_select");
+    }
 
+    public String getPerformance_select() {
+        return performance_select;
+    }
+
+    public String getChangeplanetbyName() {
+        return changeplanetbyName;
+    }
+
+    public String getChangeplanetbyid() {
+        return changeplanetbyid;
+    }
+
+    public String getChangeplanetgetCoords() {
+        return changeplanetgetCoords;
+    }
+
+    public String getChangeplanetgetName() {
+        return changeplanetgetName;
+    }
+
+    public String getEvent_list_flight() {
+        return event_list_flight;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getPerformance_d() {
+        return performance_d;
+    }
+
+    public String getPerformance_ef() {
+        return performance_ef;
+    }
+
+    public String getPerformance_es() {
+        return performance_es;
+    }
+
+    public String getPerformance_k() {
+        return performance_k;
+    }
+
+    public String getPerformance_m() {
+        return performance_m;
+    }
+
+    public String getPerformance_ok() {
+        return performance_ok;
+    }
+
+    public String getPerformance_ss() {
+        return performance_ss;
     }
 
     public String getEvent_list_time_parser_day() {
