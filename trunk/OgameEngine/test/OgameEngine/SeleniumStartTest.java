@@ -91,6 +91,7 @@ public class SeleniumStartTest {
     }
 
     @Test
+    @Ignore
     public void wykrycieListyPlanet() {
        o.login(uni, nick, pass);
        List<String> planety = o.getPlanetNames();
@@ -106,6 +107,24 @@ public class SeleniumStartTest {
        o.logout();
     }
     
+    @Test
+    public void eventList()throws OgameException{
+        try{
+        o.login(uni, nick, pass);
+        List<Flights> lista = o.getEventList();
+        Iterator<Flights> it = lista.iterator();
+        while(it.hasNext()){
+            System.err.println(it.next().toString());
+        }
+        } catch(OgameException ex){
+            System.err.println(ex.getMessage());
+        } catch(Exception ex){
+            System.err.println(ex.getMessage());
+        }
+        finally {
+        o.logout();
+        }
+    }
 
     
     @Test

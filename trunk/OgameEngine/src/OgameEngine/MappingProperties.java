@@ -25,8 +25,6 @@ class MappingProperties {
     private String browser;
     private String gameUrl;
     private String timeout;
-    private HashMap<String, String> server_start_command;
-    private String server_path;
     // LOGIN
     private String login_closed_login_frame;
     private String login_login_button;
@@ -43,13 +41,16 @@ class MappingProperties {
     private String leftButtonStocznia;
     private String leftButtonObrona;
     private String leftButtonFlota;
+    private String leftButtonEventList;
+    private String leftButtonResourceSettings;
+    private String leftButtonFlightsList;
+    private String logout_button;
     //CHANGE PLANET
     private String countplanet;//=//div[@id="countColonies"]/p/span
     private String countplanet_separator;//=/
     private int countplanet_result_pos;//=1
     private String changeplanetbyid;//=]
     private String changeplanetbyName;//=")]
-    private String logout_button;
     private String changeplanetgetName;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
     private String changeplanetgetCoords;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
     // FLEET SEND MENU
@@ -176,6 +177,30 @@ class MappingProperties {
     private String shipyard_NEG;//=//a[@class='build-it_disabled']
     private String shipyard_OK;//=//a[@class='build-it']
     private String shipyard_number;//=id=number
+    // event list
+    private String event_list_root;//=//table[@id="eventContent"]/tbody/tr
+    private String event_list_flight;//=//table[@id="eventContent"]/tbody/tr[%i]
+    private String event_list_class_atribute;//=//table[@id="eventContent"]/tbody/tr[%i]@class
+    private String event_list_class_atribute_enemy_alliance;//=allianceAttack
+    private String event_list_class_atribute_friendly;//=eventFleet
+    private String event_list_class_atribute_friendly_return;//=eventFleet odd
+    private String event_list_atribute_count_down_time;//=/td[contains(@class,"countDown")]
+    private String event_list_atribute_is_friendly;//=/td[contains(@class,"friendly")]
+    private String event_list_atribute_is_neutral;//=/td[contains(@class,"neutral")]
+    private String event_list_atribute_is_enemy;//=/td[contains(@class,"hostile")]
+    private String event_list_atribute_is_spy;//=/td[@class="missionFleet"]/img[contains(@title,"Szpieguj")]
+    private String event_list_atribute_is_attack;//=/td[@class="missionFleet"]/img[contains(@title,"Atakuj")]
+    private String event_list_atribute_arrival_time;//=/td[@class="arrivalTime"]
+    private String event_list_atribute_originFleet;//=/td[@class="originFleet"]
+    private String event_list_atribute_originCoords;//=/td[@class="coordsOrigin"]/a
+    private String event_list_atribute_detailsFleet;//=/td[@class="detailsFleet"]/span
+    private String event_list_atribute_destFleet;//=/td[@class="destFleet"]
+    private String event_list_atribute_destCoords;//=/td[@class="destCoords"]/a
+    private String event_list_time_parser_day;//=c
+    private String event_list_time_parser_hour;//=g
+    private String event_list_time_parser_minute;//=min.
+    private String event_list_time_parser_second;//=sek.
+    //parametry testowe
 
     MappingProperties() throws IOException {
         Properties defaultPath = new Properties();
@@ -197,6 +222,10 @@ class MappingProperties {
         login_nick_target = properties.getProperty("login_nick_target");//=name=login
         login_pass_target = properties.getProperty("login_pass_target");//=name=pass
         login_login_with_pass_button = properties.getProperty("login_login_with_pass_button");//=id=loginSubmit
+        leftButtonEventList = properties.getProperty("leftButtonEventList");
+        leftButtonResourceSettings = properties.getProperty("leftButtonResourceSettings");
+        leftButtonFlightsList = properties.getProperty("leftButtonFlightsList");
+
         logout_button = properties.getProperty("logout_button");//=id=loginSubmit
         // LEFT MENU PROPERTIES
         this.leftButtonPrzegladaj = properties.getProperty("leftButtonPrzegladaj");
@@ -212,8 +241,8 @@ class MappingProperties {
         countplanet_result_pos = Integer.parseInt(properties.getProperty("countplanet_result_pos"));//=1
         changeplanetbyid = properties.getProperty("changeplanetbyid");//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
         changeplanetbyName = properties.getProperty("changeplanetbyName");//=")]
-        changeplanetgetName=properties.getProperty("changeplanetgetName");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
-        changeplanetgetCoords=properties.getProperty("changeplanetgetCoords");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
+        changeplanetgetName = properties.getProperty("changeplanetgetName");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
+        changeplanetgetCoords = properties.getProperty("changeplanetgetCoords");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
         // FLEET SEND MENU
         fleetSend_lm = properties.getProperty("fleetSend_lm");
         fleetSend_cm = properties.getProperty("fleetSend_cm");
@@ -342,20 +371,132 @@ class MappingProperties {
         shipyard_NEG = properties.getProperty("shipyard_NEG");//=//a[@class='build-it_disabled']
         shipyard_OK = properties.getProperty("shipyard_OK");//=//a[@class='build-it']
         shipyard_number = properties.getProperty("shipyard_number");
+
+        // event list
+        event_list_root = properties.getProperty("event_list_root");//table[@id="eventContent"]/tbody/tr
+        event_list_flight = properties.getProperty("event_list_flight");//table[@id="eventContent"]/tbody/tr[%i]
+        event_list_class_atribute = properties.getProperty("event_list_class_atribute");//table[@id="eventContent"]/tbody/tr[%i]@class
+        event_list_class_atribute_enemy_alliance = properties.getProperty("event_list_class_atribute_enemy_alliance");//allianceAttack
+        event_list_class_atribute_friendly = properties.getProperty("event_list_class_atribute_friendly");//eventFleet
+        event_list_class_atribute_friendly_return = properties.getProperty("event_list_class_atribute_friendly_return");//eventFleet odd
+        event_list_atribute_count_down_time = properties.getProperty("event_list_atribute_count_down_time");///td[contains(@class,"countDown")]
+        event_list_atribute_is_friendly = properties.getProperty("event_list_atribute_is_friendly");///td[contains(@class,"friendly")]
+        event_list_atribute_is_neutral = properties.getProperty("event_list_atribute_is_neutral");///td[contains(@class,"neutral")]
+        event_list_atribute_is_enemy = properties.getProperty("event_list_atribute_is_enemy");///td[contains(@class,"hostile")]
+        event_list_atribute_is_spy = properties.getProperty("event_list_atribute_is_spy");///td[@class="missionFleet"]/img[contains(@title,"Szpieguj")]
+        event_list_atribute_is_attack = properties.getProperty("event_list_atribute_is_attack");///td[@class="missionFleet"]/img[contains(@title,"Atakuj")]
+        event_list_atribute_arrival_time = properties.getProperty("event_list_atribute_arrival_time");///td[@class="arrivalTime"]
+        event_list_atribute_originFleet = properties.getProperty("event_list_atribute_originFleet");///td[@class="originFleet"]
+        event_list_atribute_originCoords = properties.getProperty("event_list_atribute_originCoords");///td[@class="coordsOrigin"]/a
+        event_list_atribute_detailsFleet = properties.getProperty("event_list_atribute_detailsFleet");///td[@class="detailsFleet"]/span
+        event_list_atribute_destFleet = properties.getProperty("event_list_atribute_destFleet");///td[@class="destFleet"]
+        event_list_atribute_destCoords = properties.getProperty("event_list_atribute_destCoords");///td[@class="destCoords"]/a
+
+        event_list_time_parser_day = properties.getProperty("event_list_time_parser_day");
+        event_list_time_parser_hour = properties.getProperty("event_list_time_parser_hour");
+        event_list_time_parser_minute = properties.getProperty("event_list_time_parser_minute");
+        event_list_time_parser_second = properties.getProperty("event_list_time_parser_second");
+
     }
 
-    public String getServer_start_command() throws OgameException {
-        String os = System.getProperty("os.name");
-        Set<Entry<String, String>> set = server_start_command.entrySet();
-        Iterator<Entry<String, String>> it = set.iterator();
-        Entry<String, String> temp;
-        while (it.hasNext()) {
-            temp = it.next();
-            if (os.compareTo(temp.getKey()) == 0) {
-                return temp.getValue().replace("%lib", this.server_path);
-            }
-        }
-        throw new OgameException("Couln't find server start option, unrecognised OS perhaps");
+    public String getEvent_list_time_parser_day() {
+        return event_list_time_parser_day;
+    }
+
+    public String getEvent_list_time_parser_hour() {
+        return event_list_time_parser_hour;
+    }
+
+    public String getEvent_list_time_parser_minute() {
+        return event_list_time_parser_minute;
+    }
+
+    public String getEvent_list_time_parser_second() {
+        return event_list_time_parser_second;
+    }
+
+    public String getEvent_list_atribute_is_attack() {
+        return event_list_atribute_is_attack;
+    }
+
+    public String getEvent_list_atribute_is_enemy() {
+        return event_list_atribute_is_enemy;
+    }
+
+    public String getEvent_list_atribute_is_spy() {
+        return event_list_atribute_is_spy;
+    }
+
+    public String getEvent_list_atribute_arrival_time() {
+        return event_list_atribute_arrival_time;
+    }
+
+    public String getEvent_list_atribute_count_down_time() {
+        return event_list_atribute_count_down_time;
+    }
+
+    public String getEvent_list_atribute_destCoords() {
+        return event_list_atribute_destCoords;
+    }
+
+    public String getEvent_list_atribute_destFleet() {
+        return event_list_atribute_destFleet;
+    }
+
+    public String getEvent_list_atribute_detailsFleet() {
+        return event_list_atribute_detailsFleet;
+    }
+
+    public String getEvent_list_atribute_is_friendly() {
+        return event_list_atribute_is_friendly;
+    }
+
+    public String getEvent_list_atribute_is_neutral() {
+        return event_list_atribute_is_neutral;
+    }
+
+    public String getEvent_list_atribute_originCoords() {
+        return event_list_atribute_originCoords;
+    }
+
+    public String getEvent_list_atribute_originFleet() {
+        return event_list_atribute_originFleet;
+    }
+
+    public String getEvent_list_class_atribute() {
+        return event_list_class_atribute;
+    }
+
+    public String getEvent_list_class_atribute_enemy_alliance() {
+        return event_list_class_atribute_enemy_alliance;
+    }
+
+    public String getEvent_list_class_atribute_friendly() {
+        return event_list_class_atribute_friendly;
+    }
+
+    public String getEvent_list_class_atribute_friendly_return() {
+        return event_list_class_atribute_friendly_return;
+    }
+
+    public String getEvent_list_flight(int i) {
+        return event_list_flight.replace("%i", Integer.toString(i));
+    }
+
+    public String getEvent_list_root() {
+        return event_list_root;
+    }
+
+    public String getLeftButtonEventList() {
+        return leftButtonEventList;
+    }
+
+    public String getLeftButtonFlightsList() {
+        return leftButtonFlightsList;
+    }
+
+    public String getLeftButtonResourceSettings() {
+        return leftButtonResourceSettings;
     }
 
     public String getFleetSend_start_moon_deselected() {

@@ -4,9 +4,14 @@
  */
 package OgameEngine;
 
+import OgameEngine.Flights.FriendOrFoe;
+import OgameEngine.Flights.Multiplicity;
 import com.thoughtworks.selenium.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -210,22 +215,36 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         clickAndWait(mappings.getLeftButtonFlota());
     }
 
-    private boolean sendFleetCheckIfAble(Fleet f,Mission m) throws OgameException{
+    private void clickEventList() {
+        this.clickPrzeglad();
+        selenium.click(mappings.getLeftButtonEventList());
+        wait(1);
+    }
+
+    private void clickResourceSettings() {
+        clickAndWait(mappings.getLeftButtonResourceSettings());
+    }
+
+    private void clickFlights() {
+        clickAndWait(mappings.getLeftButtonFlightsList());
+    }
+
+    private boolean sendFleetCheckIfAble(Fleet f, Mission m) throws OgameException {
         boolean result = true;
-        if (m==Mission.MISSION_ACS) 
-                throw OgameException.UNSUPPORTED_MISSION;
-        else if (m==Mission.MISSION_EXPLORE && f.get(Ships.KOL)==0){
-            result= false;
-        }else if (m==Mission.MISSION_MOON && f.get(Ships.GS)==0){
-            result=false;
-        }else if (m==Mission.MISSION_RECYCLE && f.get(Ships.REC)==0){
+        if (m == Mission.MISSION_ACS) {
+            throw OgameException.UNSUPPORTED_MISSION;
+        } else if (m == Mission.MISSION_EXPLORE && f.get(Ships.KOL) == 0) {
             result = false;
-        }else if (m==Mission.MISSION_SPY && f.get(Ships.SOND)==0 ){
+        } else if (m == Mission.MISSION_MOON && f.get(Ships.GS) == 0) {
+            result = false;
+        } else if (m == Mission.MISSION_RECYCLE && f.get(Ships.REC) == 0) {
+            result = false;
+        } else if (m == Mission.MISSION_SPY && f.get(Ships.SOND) == 0) {
             result = false;
         }
         return result;
     }
-    
+
     private void sendFleetSetFleet(Fleet f) {
         if (f == Fleet.WHOLE_FLEET) {
             selenium.click(mappings.getFleetSend_sendAll());
@@ -243,20 +262,20 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
     }
 
-    private void sendFleetSetCords(Cords c,Destination d) {
-        if (d==Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_start_planet_deselected())){
+    private void sendFleetSetCords(Cords c, Destination d) {
+        if (d == Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_start_planet_deselected())) {
             selenium.click(mappings.getFleetSend_start_planet_deselected());
-        }else if (d==Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_start_moon_deselected())){
+        } else if (d == Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_start_moon_deselected())) {
             selenium.click(mappings.getFleetSend_start_moon_deselected());
         }
         selenium.type(mappings.getFleetSend_galaxy(), c.getUniverse());
         selenium.type(mappings.getFleetSend_system(), c.getSystem());
         selenium.type(mappings.getFleetSend_position(), c.getPosition());
-        if (c.getDest()==Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_target_planet_deselected())){
+        if (c.getDest() == Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_target_planet_deselected())) {
             selenium.click(mappings.getFleetSend_target_planet_deselected());
-        }else if (c.getDest()==Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_target_moon_deselected())){
+        } else if (c.getDest() == Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_target_moon_deselected())) {
             selenium.click(mappings.getFleetSend_target_moon_deselected());
-        }else if (c.getDest()==Destination.PZ && selenium.isElementPresent(mappings.getFleetSend_target_debris_deselected())){
+        } else if (c.getDest() == Destination.PZ && selenium.isElementPresent(mappings.getFleetSend_target_debris_deselected())) {
             selenium.click(mappings.getFleetSend_target_debris_deselected());
         }
     }
@@ -275,11 +294,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
     }
 
-    
     /*
      * METODY PUBLICZNE 
      */
-
     @Override
     public void wait(int seconds) {
         try {
@@ -334,32 +351,32 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public void changePlanetByName(String name) {
-        clickAndWait(mappings.getChangeplanetbyName(name) );
+        clickAndWait(mappings.getChangeplanetbyName(name));
     }
-    
+
     @Override
-    public void sendFleet(Fleet f,StartDestination d, Cords c, Speed speed, Mission m, Resources r) throws OgameException{
+    public void sendFleet(Fleet f, StartDestination d, Cords c, Speed speed, Mission m, Resources r) throws OgameException {
         // sprawdzamy czy flota ma dostępną misję
-        if (!this.sendFleetCheckIfAble(f, m)){
+        if (!this.sendFleetCheckIfAble(f, m)) {
             throw new OgameException("THE FOLLOWING FLEET CANNOT BE ASSIGNED TO THIS TYPE OF MISSIONS");
         }
         this.clickFlota();
-        wait(0,1);
+        wait(0, 1);
         System.out.print("Set Fleet ");
         this.sendFleetSetFleet(f);
         System.out.println(" [DONE]");
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen1())) {
             System.err.println("Couldnt send fleet - screen 1");
             throw new OgameException("FLEET SEND FIRST SCREEN ERROR");
-        } 
+        }
         clickAndWait(mappings.getFleetSend_okscreen1());
-        wait(0,1);
-        this.sendFleetSetCords(c,d);
+        wait(0, 1);
+        this.sendFleetSetCords(c, d);
         selenium.select(mappings.getFleetSend_speed(), mappings.getFleetSend_speed_ans() + speed.getS());
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen2())) {
             System.err.println("Couldnt send fleet - screen 2");
             throw new OgameException("FLEET SEND SECOND SCREEN ERROR");
-        } 
+        }
         clickAndWait(mappings.getFleetSend_okscreen2());
         sendFleetSetMission(m);
         sendFleetSetResources(r);
@@ -374,8 +391,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) throws OgameException {
         this.sendFleet(f, StartDestination.PLANET, c, speed, m, r);
-        
+
     }
+
     @Override
     public void sendFleet(Fleet f, Cords c, Mission m, Resources r) throws OgameException {
         this.sendFleet(f, StartDestination.PLANET, c, Speed.S100, m, r);
@@ -479,7 +497,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public List<String> getPlanetNames() {
         int i = this.getPlanetCount();
         List<String> list = new ArrayList<String>();
-        for (int j=1; j<i+1;j++){
+        for (int j = 1; j < i + 1; j++) {
             list.add(selenium.getText(mappings.getChangeplanetgetName(j)));
         }
         return list;
@@ -489,14 +507,119 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public List<String> getPlanetCoords() {
         int i = this.getPlanetCount();
         List<String> list = new ArrayList<String>();
-        for (int j=1; j<i+1;j++){
+        for (int j = 1; j < i + 1; j++) {
             list.add(selenium.getText(mappings.getChangeplanetgetCoords(j)));
         }
         return list;
     }
+private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss");
+    private Calendar parseArrivalTime(String countDownTime, String arrivalTime){
+        int[] countDownList = new int[4];
+        String day = mappings.getEvent_list_time_parser_day();
+        String hour = mappings.getEvent_list_time_parser_hour();
+        String min = mappings.getEvent_list_time_parser_minute();
+        String second = mappings.getEvent_list_time_parser_second();
+        countDownList[0] = Integer.parseInt(
+                countDownTime.substring(0, Math.max(countDownTime.indexOf(day), 0)).isEmpty()
+                ? "0" : countDownTime.substring(0, Math.max(countDownTime.indexOf(day), 0)).replace(" ", ""));
+        countDownTime = countDownTime.substring(Math.max(countDownTime.indexOf(day) + day.length(), 0));
+        countDownList[1] = Integer.parseInt(
+                countDownTime.substring(0, Math.max(countDownTime.indexOf(hour), 0)).isEmpty()
+                ? "0" : countDownTime.substring(0, Math.max(countDownTime.indexOf(hour), 0)).replace(" ", ""));
+        countDownTime = countDownTime.substring(Math.max(countDownTime.indexOf(hour) + hour.length(), 0));
+        countDownList[2] = Integer.parseInt(
+                countDownTime.substring(0, Math.max(countDownTime.indexOf(min), 0)).isEmpty()
+                ? "0" : countDownTime.substring(0, Math.max(countDownTime.indexOf(min), 0)).replace(" ", ""));
+        countDownTime = countDownTime.substring(Math.max(countDownTime.indexOf(min) + min.length(), 0));
+        countDownList[3] = Integer.parseInt(
+                countDownTime.substring(0, Math.max(countDownTime.indexOf(second), 0)).isEmpty()
+                ? "0" : countDownTime.substring(0, Math.max(countDownTime.indexOf(second), 0)).replace(" ", ""));
+         String[] str = arrivalTime.split(":");
+        int[] i = new int[3];
+        i[0]=Integer.parseInt(str[0]);
+        i[1]=Integer.parseInt(str[1]);
+        i[2]=Integer.parseInt(str[2].substring(0, str[2].indexOf(" ")));
+        Calendar result= new GregorianCalendar();
+        int t =countDownList[0]*24+countDownList[1];
+        result.add(Calendar.HOUR_OF_DAY, t);
+        result.add(Calendar.MINUTE, countDownList[2]);
+        result.add(Calendar.SECOND, countDownList[3]);
+        result.set(Calendar.HOUR_OF_DAY, i[0]);
+        result.set(Calendar.MINUTE, i[1]);
+        result.set(Calendar.SECOND, i[2]);
+        return result;
+    }
+    private Planet parsePlanet(String s){
+        String[] str =s.replace("[", "").replace("]", "").split(":");
+        return new Planet(str[0],str[1],str[2]);
+    }
 
     @Override
-    public List<Flights> getFlightsList() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Flights> getEventList() throws OgameException {
+        // najpierw ilosc pozycji
+        this.clickEventList();
+        int iloscFlot = selenium.getXpathCount(mappings.getEvent_list_root()).intValue();
+        String flightXPath;
+        
+        FriendOrFoe nastawienie;
+        Multiplicity mp;
+        Calendar arrival;
+        Planet origin;
+        Planet target;
+        int size;
+        
+        List<Flights> lista = new ArrayList<Flights>();
+
+        for (int i = 1; i < iloscFlot + 1; i++) {
+            // konwersja na loty
+            flightXPath = mappings.getEvent_list_flight(i);
+            if (selenium.getAttribute(flightXPath + mappings.getEvent_list_class_atribute()).compareTo(
+                    mappings.getEvent_list_class_atribute_friendly()) == 0
+                    | selenium.getAttribute(flightXPath + mappings.getEvent_list_class_atribute()).compareTo(
+                    mappings.getEvent_list_class_atribute_friendly_return()) == 0) {
+                mp = Flights.SINGLE_FLEET;
+            } else if (selenium.getAttribute(flightXPath + mappings.getEvent_list_class_atribute()).compareTo(
+                    mappings.getEvent_list_class_atribute_enemy_alliance()) == 0) {
+                mp = Flights.ACS_FLEET;
+            } else {
+                throw new OgameException("Error cannot recognized is fleet is single od ACS");
+            }
+            // sprawdźmy nastawienie floty
+            if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_friendly())) {
+                nastawienie = Flights.FRIEND;
+            } else if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_neutral())) {
+                nastawienie = Flights.NEUTRAL;
+            } else if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_enemy())
+                    & selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_spy())) {
+                nastawienie = Flights.SPY;
+            } else if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_enemy())
+                    & selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_attack())) {
+                nastawienie = Flights.ATTACK;
+            } else {
+                throw new OgameException("Error cannot recognized whether the fleet is friend or foe");
+            }
+            arrival = this.parseArrivalTime(
+                    selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()), 
+                    selenium.getText(flightXPath + mappings.getEvent_list_atribute_arrival_time()));
+            origin = this.parsePlanet(selenium.getText(flightXPath + mappings.getEvent_list_atribute_originCoords())) ;
+            target = this.parsePlanet(selenium.getText(flightXPath + mappings.getEvent_list_atribute_destCoords()));
+            size = Integer.parseInt(selenium.getText(flightXPath + mappings.getEvent_list_atribute_detailsFleet()));
+            
+            lista.add(new Flights(nastawienie,mp,arrival,origin,size,target));
+            
+        }
+
+        return lista;
+
     }
+    /*
+     * Testowe metody
+     */
+//    @Override
+//    void test() {
+//        this.clickEventList();
+//        int j = selenium.getXpathCount(mappings.getTest2()).intValue();
+//        for (int i=1; i<j+1;i++)
+//        System.out.println(selenium.getText(mappings.getTest1(i)));
+//    }
 }
