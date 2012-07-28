@@ -42,4 +42,16 @@ public class Fleet {
     
     public static final Fleet WHOLE_FLEET = new Fleet();
 
+    @Override
+    public String toString() {
+        return "Fleet{ LM="+this.get(Ships.LM)+" CM="+this.get(Ships.CM)+
+                " KRAZ="+this.get(Ships.KR)+" OW="+this.get(Ships.OW)+
+                " PANC="+this.get(Ships.PAN)+" BOMB="+this.get(Ships.BOMB)+
+                " NISC="+this.get(Ships.NISZ)+" GS="+this.get(Ships.GS)+
+                " MT="+this.get(Ships.MT)+" DT="+this.get(Ships.DT)+
+                " SKOL="+this.get(Ships.KOL)+" REC="+this.get(Ships.REC)+
+                " SS="+this.get(Ships.SOND) +'}';
+    }
+
+
 }

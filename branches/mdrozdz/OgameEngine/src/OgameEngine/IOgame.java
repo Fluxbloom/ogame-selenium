@@ -31,4 +31,6 @@ public interface IOgame {
     abstract public void buildShip(StockyardShips s, int i);
     abstract public void buildShip(StockyardShips s, String count);
     abstract public List<Flights> getEventList() throws OgameException;
+    abstract public Resources getResources();
+    abstract public Fleet getPlanetFleet();
 }

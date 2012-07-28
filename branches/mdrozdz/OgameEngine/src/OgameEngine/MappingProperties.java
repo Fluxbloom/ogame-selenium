@@ -200,6 +200,28 @@ class MappingProperties {
     private String event_list_time_parser_hour;//=g
     private String event_list_time_parser_minute;//=min.
     private String event_list_time_parser_second;//=sek.
+    //Zasoby
+    private String resources_m;//=id=resources_metal
+    private String resources_k;//=id=resources_crystal
+    private String resources_d;//=id=resources_deuterium
+    //Ilosc statkow w stoczni
+    private String hm;//li[@id="%s"]/div/a@title
+    private String hm_lm;//=button204
+    private String hm_cm;//=button205
+    private String hm_kraz;//=button206
+    private String hm_ow;//=button207
+    private String hm_panc;//=button215
+    private String hm_bomb;//=button211
+    private String hm_nisc;//=button213
+    private String hm_gs;//=button214
+    private String hm_mt;//=button202
+    private String hm_dt;//=button203
+    private String hm_skol;//=button208
+    private String hm_rec;//=button209
+    private String hm_ss;//=button210
+
+        
+
     //parametry testowe
 
     MappingProperties() throws IOException {
@@ -396,7 +418,98 @@ class MappingProperties {
         event_list_time_parser_hour = properties.getProperty("event_list_time_parser_hour");
         event_list_time_parser_minute = properties.getProperty("event_list_time_parser_minute");
         event_list_time_parser_second = properties.getProperty("event_list_time_parser_second");
+        
+        //Resources
+        
+        resources_m = properties.getProperty("resources_m");//=id=resources_metal
+        resources_k = properties.getProperty("resources_k");//=id=resources
+        resources_d = properties.getProperty("resources_d");//=id=resources_metal
+        
+        //Shipyard Details
+        
+        hm = properties.getProperty("hm");
+        hm_lm = properties.getProperty("hm_lm");
+        hm_cm = properties.getProperty("hm_cm");
+        hm_kraz = properties.getProperty("hm_kraz");
+        hm_ow = properties.getProperty("hm_ow");
+        hm_panc = properties.getProperty("hm_panc");
+        hm_bomb = properties.getProperty("hm_bomb");
+        hm_nisc = properties.getProperty("hm_nisc");
+        hm_gs = properties.getProperty("hm_gs");
+        hm_mt = properties.getProperty("hm_mt");
+        hm_dt = properties.getProperty("hm_dt");
+        hm_skol = properties.getProperty("hm_skol");
+        hm_rec = properties.getProperty("hm_rec");
+        hm_ss = properties.getProperty("hm_ss");
+        
+        
+        
 
+    }
+
+    public String getHm_bomb() {
+        return hm.replace("%s", hm_bomb);
+    }
+
+    public String getHm_cm() {
+        return hm.replace("%s", hm_cm);
+    }
+
+    public String getHm_dt() {
+        return hm.replace("%s", hm_dt);    
+    }
+
+    public String getHm_gs() {
+        return hm.replace("%s", hm_gs);
+    }
+
+    public String getHm_kraz() {
+        return hm.replace("%s", hm_kraz);
+    }
+
+    public String getHm_lm() {
+        return hm.replace("%s", hm_lm);
+    }
+
+    public String getHm_mt() {
+        return hm.replace("%s", hm_mt);
+    }
+
+    public String getHm_nisc() {
+        return hm.replace("%s", hm_nisc);
+    }
+
+    public String getHm_ow() {
+        return hm.replace("%s", hm_ow);
+    }
+
+    public String getHm_panc() {
+        return hm.replace("%s", hm_panc);
+    }
+
+    public String getHm_rec() {
+        return hm.replace("%s", hm_rec);
+    }
+
+    public String getHm_skol() {
+        return hm.replace("%s", hm_skol);
+    }
+
+    public String getHm_ss() {
+        return hm.replace("%s", hm_ss);
+    }
+    
+
+    public String getResources_d() {
+        return resources_d;
+    }
+
+    public String getResources_k() {
+        return resources_k;
+    }
+
+    public String getResources_m() {
+        return resources_m;
     }
 
     public String getEvent_list_time_parser_day() {

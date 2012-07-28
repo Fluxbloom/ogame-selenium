@@ -33,6 +33,8 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Study, String> studyMap;
     private HashMap<Defence, String> defenceMap;
     private HashMap<StockyardShips, String> shipyardMap;
+    private HashMap<Ships, String> fleetMap;
+
 
     public Ogame116pl() {
         System.out.print("Reading static mappings");
@@ -70,6 +72,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         shipsMap.put(Ships.PAN, mappings.getFleetSend_pan());//11
         shipsMap.put(Ships.REC, mappings.getFleetSend_rec());//12
         shipsMap.put(Ships.SOND, mappings.getFleetSend_sond());//13
+       
         System.out.println("[DONE]");
         System.out.print("Creating Building Map");
         buildingMap = new HashMap<Buildings, String>();
@@ -141,6 +144,24 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         shipyardMap.put(Ships.REC, mappings.getShipyard_rec());
         shipyardMap.put(Ships.SOND, mappings.getShipyard_ss());
         shipyardMap.put(Ships.SAT, mappings.getShipyard_sat());
+        System.out.println("[DONE]");
+        
+        System.out.print("Creating Mission Map");
+        fleetMap = new HashMap<Ships, String>();
+        fleetMap.put(Ships.BOMB, mappings.getHm_bomb());//1
+        fleetMap.put(Ships.CM, mappings.getHm_cm());//2
+        fleetMap.put(Ships.DT, mappings.getHm_dt());//3
+        fleetMap.put(Ships.GS, mappings.getHm_gs());//4
+        fleetMap.put(Ships.KOL, mappings.getHm_skol());//5
+        fleetMap.put(Ships.KR, mappings.getHm_kraz());//6
+        fleetMap.put(Ships.LM, mappings.getHm_lm());//7
+        fleetMap.put(Ships.MT, mappings.getHm_mt());//8
+        fleetMap.put(Ships.NISZ, mappings.getHm_nisc());//9
+        fleetMap.put(Ships.OW, mappings.getHm_ow());//10
+        fleetMap.put(Ships.PAN, mappings.getHm_panc());//11
+        fleetMap.put(Ships.REC, mappings.getHm_rec());//12
+        fleetMap.put(Ships.SOND, mappings.getHm_ss());//13
+       
         System.out.println("[DONE]");
         System.out.print("Inititializing Selenium instance ");
         try {
@@ -610,6 +631,7 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
         }
 
         return lista;
+        
 
     }
     /*
@@ -622,4 +644,53 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
 //        for (int i=1; i<j+1;i++)
 //        System.out.println(selenium.getText(mappings.getTest1(i)));
 //    }
+
+    /**
+     * Metoda tworzy nowy obiekt zasobów;
+     * @return zwraca za pomoca funckji ilosc metalu,krysztalu i deuteru
+     */
+    @Override
+    public Resources getResources() {
+        String metal = selenium.getText(mappings.getResources_m());
+        String krysztal = selenium.getText(mappings.getResources_k());
+        String deuter = selenium.getText(mappings.getResources_d());
+        return new Resources(metal,krysztal,deuter);
+        
+    }
+
+    @Override
+    public Fleet getPlanetFleet() {
+        this.clickFlota();
+        Fleet result = new Fleet();
+        Set set = fleetMap.entrySet();
+        Iterator it = set.iterator();
+        Ships temp;
+        Map.Entry<Ships,String> temp2;
+        String temp3;
+        int i;
+        while (it.hasNext()){
+            temp2 = (Map.Entry<Ships,String>)it.next();
+            temp = temp2.getKey();
+            temp3 = selenium.getAttribute(temp2.getValue());
+            temp3 = temp3.substring(temp3.indexOf("(")+1, temp3.indexOf(")"));
+            i = Integer.parseInt(temp3);
+            if (i >0)
+                result.add(temp, temp3);
+        }
+        return result;
+    }
+    /*
+     * HashMap<Ships, Integer> fleet 
+     * = f.getFleet();
+            Set set = fleet.entrySet();
+            Iterator it = set.iterator();
+            Ships temp2;
+            Map.Entry<Ships, Integer> temp;
+            while (it.hasNext()) {
+                temp = (Map.Entry<Ships, Integer>) it.next();
+                temp2 = temp.getKey();
+                selenium.type(shipsMap.get(temp2), ((Integer) fleet.get(temp2)).toString());
+            }
+     */
+    
 }

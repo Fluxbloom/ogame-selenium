@@ -108,6 +108,7 @@ public class SeleniumStartTest {
     }
     
     @Test
+    @Ignore
     public void eventList()throws OgameException{
         try{
         o.login(uni, nick, pass);
@@ -125,7 +126,30 @@ public class SeleniumStartTest {
         o.logout();
         }
     }
-
+    
+    @Test
+    @Ignore
+    public void PobierzR(){
+        try{
+        o.login(uni, nick, pass);
+        Resources r = o.getResources();
+        System.out.println("zapasy "+r.getMetal()+" "+r.getCrystal()+" "+r.getDeuter());
+        }
+        catch (Exception ex){
+            
+        } finally {
+        o.logout();
+        }
+    } 
+    
+    @Test
+    public void PobierzS(){
+        o.login(uni, nick, pass);
+        Fleet f = o.getPlanetFleet();
+        System.out.println(f.toString());
+        o.logout();
+        
+    }
     
     @Test
     @Ignore
