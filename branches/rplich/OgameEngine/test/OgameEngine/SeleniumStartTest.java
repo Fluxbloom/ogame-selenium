@@ -70,17 +70,23 @@ public class SeleniumStartTest {
         }
         o.logout();
     }
+    
     @Test
     @Ignore
     public void TrySendingFleet(){
         o.login(uni, nick, pass);
         Fleet f = new Fleet();
-        f.add(Ships.SOND, 2);
-        o.sendFleet(f, new Cords("2","243","6"), Speed.S70 ,Mission.MISSION_SPY,Resources.NO_RESOURCES);
-        o.logout();
+        f.add(Ships.SOND, 1);
+        try {
+            o.sendFleet(f, new Cords("2","244","6"), Speed.S90 ,Mission.MISSION_SPY,Resources.NO_RESOURCES);
+        } catch (OgameException ex) {
+            System.err.println(ex.getMessage());
+        }
+        //o.logout();
     }
+    
     @Test
-    //@Ignore
+    @Ignore
     public void BuildMM(){
         o.login(uni, nick, pass);
         o.build(Buildings.KOPALNIA_METALU);

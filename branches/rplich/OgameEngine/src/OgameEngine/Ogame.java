@@ -270,7 +270,7 @@ public class Ogame extends SeleneseTestCase {
         this.stop();
     }
 
-    public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) {
+    public void sendFleet(Fleet f, Cords c, Speed speed, Mission m, Resources r) throws OgameException {
         // TODO ta metoda musi jeszcze skontrolować misje oraz uzupełnić ataki na księżyc oraz loty na PZ
         // TODO odrębną sprawą do zrobienia jest misja stacjonuj
         
@@ -285,7 +285,7 @@ public class Ogame extends SeleneseTestCase {
         System.out.println(" [DONE]");
         if (selenium.isElementPresent(mappings.getFleetSend_errorscreen1())) {
             System.err.println("Couldnt send fleet - screen 1");
-            return;
+            throw new OgameException("Błąd przy pierwszym ekranie");
         } //TODO error tutaj
         clickAndWait(mappings.getFleetSend_okscreen1());
         this.sendFleetSetCords(c);
@@ -352,11 +352,11 @@ public class Ogame extends SeleneseTestCase {
             this.clickAndWait(mappings.getStudyOK());
     }
     
-    public void defence(Defence d, int i){
+    public void defence (Defence d, int i){
         defence(d,Integer.toString(i));
     }
     
-    public void defence(Defence d,String count){
+        public void defence(Defence d, String ile){
             this.clickObrona();
             selenium.click(defenceMap.get(d));
             try {
@@ -365,7 +365,7 @@ public class Ogame extends SeleneseTestCase {
                 Logger.getLogger(Ogame.class.getName()).log(Level.SEVERE, null, ex);
             }
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
-            selenium.type(mappings.getDefence_number(), count);
+            selenium.type(mappings.getDefence_number(), ile);
             if (selenium.isElementPresent(mappings.getDefenceNEG())){
                 return; // TODO some error here
             }
