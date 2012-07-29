@@ -4,6 +4,7 @@
  */
 package OgameEngine;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,4 +34,6 @@ public interface IOgame {
     abstract public List<Flights> getEventList() throws OgameException;
     abstract public Resources getResources();
     abstract public Fleet getPlanetFleet();
+    abstract public HashMap<Study,Integer> getPlanetStudy();
+    
 }

@@ -219,6 +219,23 @@ class MappingProperties {
     private String hm_skol;//=button208
     private String hm_rec;//=button209
     private String hm_ss;//=button210
+    //Poziomy Badan
+    private String hm_te;//=//div[@class="research113"]/div/a/span/span
+    private String hm_tl;//=//div[@class="research120"]/div/a/span/span
+    private String hm_tj;//=//div[@class="research121"]/div/a/span/span
+    private String hm_tn;//=//div[@class="research114"]/div/a/span/span
+    private String hm_tp;//=//div[@class="research122"]/div/a/span/span
+    private String hm_ns;//=//div[@class="research115"]/div/a/span/span
+    private String hm_ni;//=//div[@class="research117"]/div/a/span/span
+    private String hm_nn;//=//div[@class="research118"]/div/a/span/span
+    private String hm_ts;//=//div[@class="research106"]/div/a/span/span
+    private String hm_tk;//=//div[@class="research108"]/div/a/span/span
+    private String hm_af;//=//div[@class="research124"]/div/a/span/span
+    private String hm_ms;//=//div[@class="research123"]/div/a/span/span
+    private String hm_rg;//=//div[@class="research199"]/div/a/span/span
+    private String hm_tb;//=//div[@class="research109"]/div/a/span/span
+    private String hm_to;//=//div[@class="research110"]/div/a/span/span
+    private String hm_op;//=//div[@class="research111"]/div/a/span/span
 
         
 
@@ -442,11 +459,93 @@ class MappingProperties {
         hm_rec = properties.getProperty("hm_rec");
         hm_ss = properties.getProperty("hm_ss");
         
+        //Study Details
+        
+        hm_te = properties.getProperty("hm_te");
+        hm_tl = properties.getProperty("hm_tl");
+        hm_tj = properties.getProperty("hm_tj");
+        hm_tn = properties.getProperty("hm_tn");
+        hm_tp = properties.getProperty("hm_tp");
+        hm_ns = properties.getProperty("hm_ns");
+        hm_ni = properties.getProperty("hm_ni");
+        hm_nn = properties.getProperty("hm_nn");
+        hm_ts = properties.getProperty("hm_ts");
+        hm_tk = properties.getProperty("hm_tk");
+        hm_af = properties.getProperty("hm_af");
+        hm_ms = properties.getProperty("hm_ms");
+        hm_rg = properties.getProperty("hm_rg");
+        hm_tb = properties.getProperty("hm_tb");
+        hm_to = properties.getProperty("hm_to");
+        hm_op = properties.getProperty("hm_op");
         
         
-
     }
 
+    public String getHm_af() {
+        return hm_af;
+    }
+
+    public String getHm_ms() {
+        return hm_ms;
+    }
+
+    public String getHm_ni() {
+        return hm_ni;
+    }
+
+    public String getHm_nn() {
+        return hm_nn;
+    }
+
+    public String getHm_ns() {
+        return hm_ns;
+    }
+
+    public String getHm_op() {
+        return hm_op;
+    }
+
+    public String getHm_rg() {
+        return hm_rg;
+    }
+
+    public String getHm_tb() {
+        return hm_tb;
+    }
+
+    public String getHm_te() {
+        return hm_te;
+    }
+
+    public String getHm_tj() {
+        return hm_tj;
+    }
+
+    public String getHm_tk() {
+        return hm_tk;
+    }
+
+    public String getHm_tl() {
+        return hm_tl;
+    }
+
+    public String getHm_tn() {
+        return hm_tn;
+    }
+
+    public String getHm_to() {
+        return hm_to;
+    }
+
+    public String getHm_tp() {
+        return hm_tp;
+    }
+
+    public String getHm_ts() {
+        return hm_ts;
+    }
+
+    
     public String getHm_bomb() {
         return hm.replace("%s", hm_bomb);
     }
