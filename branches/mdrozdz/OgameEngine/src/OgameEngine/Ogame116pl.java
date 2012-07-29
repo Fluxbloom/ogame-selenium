@@ -34,6 +34,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Defence, String> defenceMap;
     private HashMap<StockyardShips, String> shipyardMap;
     private HashMap<Ships, String> fleetMap;
+    private HashMap<Study, String> technologyMap;
 
 
     public Ogame116pl() {
@@ -145,8 +146,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         shipyardMap.put(Ships.SOND, mappings.getShipyard_ss());
         shipyardMap.put(Ships.SAT, mappings.getShipyard_sat());
         System.out.println("[DONE]");
-        
-        System.out.print("Creating Mission Map");
+        System.out.print("Creating Fleet Map");
         fleetMap = new HashMap<Ships, String>();
         fleetMap.put(Ships.BOMB, mappings.getHm_bomb());//1
         fleetMap.put(Ships.CM, mappings.getHm_cm());//2
@@ -161,8 +161,27 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         fleetMap.put(Ships.PAN, mappings.getHm_panc());//11
         fleetMap.put(Ships.REC, mappings.getHm_rec());//12
         fleetMap.put(Ships.SOND, mappings.getHm_ss());//13
-       
         System.out.println("[DONE]");
+        System.out.print("Creating Technology Map");
+        technologyMap = new HashMap<Study, String>();
+        technologyMap.put(Study.TECHNOLOGIA_ENERGETYCZNA, mappings.getHm_te());//1
+        technologyMap.put(Study.TECHNOLOGIA_LASEROWA, mappings.getHm_tl());//2
+        technologyMap.put(Study.TECHNOLOGIA_JONOWA, mappings.getHm_tj());//3
+        technologyMap.put(Study.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getHm_tn());//4
+        technologyMap.put(Study.TECHNOLOGIA_PLAZMOWA, mappings.getHm_tp());//5
+        technologyMap.put(Study.NAPED_SPALINOWY, mappings.getHm_ns());//6
+        technologyMap.put(Study.NAPED_IMPULSOWY, mappings.getHm_ni());//7
+        technologyMap.put(Study.NAPED_NADPRZESTRZENNY, mappings.getHm_nn());//8
+        technologyMap.put(Study.TECHNOLOGIA_SZPIEGOWSKA, mappings.getHm_ts());//9
+        technologyMap.put(Study.TECHNOLOGIA_KOMPUTEROWA, mappings.getHm_tk());//10
+        technologyMap.put(Study.ASTROFIZYKA, mappings.getHm_af());//11
+        technologyMap.put(Study.SIEC_BADAN, mappings.getHm_ms());//12
+        technologyMap.put(Study.ROZWOJ_GRAWITONOW, mappings.getHm_rg());//13
+        technologyMap.put(Study.TECHNOLOGIA_BOJOWA, mappings.getHm_tb());//13
+        technologyMap.put(Study.TECHNOLOGIA_OCHRONNA, mappings.getHm_to());//13
+        technologyMap.put(Study.OPANCERZENIE, mappings.getHm_op());//13
+        System.out.println("[DONE]");
+        
         System.out.print("Inititializing Selenium instance ");
         try {
             selenium = new DefaultSelenium("0.0.0.0", 4444, mappings.getBrowser(), mappings.getUrl()) {
@@ -692,5 +711,22 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
                 selenium.type(shipsMap.get(temp2), ((Integer) fleet.get(temp2)).toString());
             }
      */
+
+    @Override
+    public HashMap<Study, Integer> getPlanetStudy() {
+        this.clickBadania();
+        HashMap<Study,Integer> result = new HashMap<Study,Integer>();
+        Set set = technologyMap.entrySet();
+        Iterator it = set.iterator();
+        Study temp;
+        Map.Entry<Study,String> temp2;
+        
+        
+        return result;
+        
+    }
+
+  
+    
     
 }
