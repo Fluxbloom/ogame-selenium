@@ -714,14 +714,22 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
 
     @Override
     public HashMap<Study, Integer> getPlanetStudy() {
-        this.clickBadania();
         HashMap<Study,Integer> result = new HashMap<Study,Integer>();
-        Set set = technologyMap.entrySet();
+        this.clickBadania();
+        Set set = this.technologyMap.entrySet(); // to jest pobranie listy wszystkich par technologia-xpath
         Iterator it = set.iterator();
         Study temp;
         Map.Entry<Study,String> temp2;
-        
-        
+        String temp3;
+        int i;
+        while (it.hasNext()){
+            temp2 = (Map.Entry<Study,String>)it.next();
+            temp = temp2.getKey();
+            temp3 = selenium.getText(temp2.getValue());
+            i = Integer.parseInt(temp3);
+            if (i >0)
+                result.put(temp, new Integer(temp3));
+        }
         return result;
         
     }
