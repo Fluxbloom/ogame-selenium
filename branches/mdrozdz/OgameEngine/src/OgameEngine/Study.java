@@ -9,8 +9,7 @@ package OgameEngine;
  * @author plich
  */
 public class Study {
- 
-    private String name;
+   private String name;
     public static final Study TECHNOLOGIA_ENERGETYCZNA = new Study("TECHNOLOGIA_ENERGETYCZNA");
     public static final Study TECHNOLOGIA_LASEROWA = new Study("TECHNOLOGIA_LASEROWA");
     public static final Study TECHNOLOGIA_JONOWA = new Study("TECHNOLOGIA_JONOWA");
@@ -36,10 +35,5 @@ public class Study {
     public String toString() {
         return "Study{" + "name=" + name + '}';
     }
-
-    
-
-    
-    
     
 }

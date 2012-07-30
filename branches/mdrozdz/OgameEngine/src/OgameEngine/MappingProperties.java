@@ -6,12 +6,8 @@ package OgameEngine;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import java.util.Properties;
-import java.util.Set;
 
 /**
  *
@@ -104,29 +100,30 @@ class MappingProperties {
     private String fleetSend_okscreen3;//=//a[@class="on" and @id="start"]
     private String fleetSend_errorscreen3;//=//a[@class="off" and @id="start"]
     // building
-    private String building_km;//=xpath=(//a[@id='details'])[1]
-    private String building_kc;//=xpath=(//a[@id='details'])[2]
-    private String building_ed;//=xpath=(//a[@id='details'])[3]
-    private String building_es;//=xpath=(//a[@id='details'])[4]
-    private String building_ef;//=xpath=(//a[@id='details'])[5]
-    private String building_ss;//=xpath=(//a[@id='details'])[6]
-    private String building_mm;//=xpath=(//a[@id='details'])[7]
-    private String building_mc;//=xpath=(//a[@id='details'])[8]
-    private String building_md;//=xpath=(//a[@id='details'])[9]
-    private String building_sm;//=xpath=(//a[@id='details'])[10]
-    private String building_sc;//=xpath=(//a[@id='details'])[11]
-    private String building_sd;//=xpath=(//a[@id='details'])[12]
-    private String building_resourcesNEG;//=//a[@class='build-it_disabled']
-    private String building_resourcesOK;//=//a[@class='build-it']
-    private String building_fr;//=id=details14
-    private String building_st;//=id=details21
-    private String building_lb;//=id=details31
-    private String building_ds;//=id=details34
-    private String building_sr;//=id=details44
-    private String building_fn;//=id=details15
-    private String building_te;//=id=details33
-    private String building_stationNEG;//=//a[@class='build-it_disabled']
-    private String building_stationOK;//=//a[@class='build-it']
+    private String buildBuilding_metal;//=xpath=(//a[@id='details'])[1]
+    private String buildBuilding_crystal;//=xpath=(//a[@id='details'])[2]
+    private String buildBuilding_deuterium;//=xpath=(//a[@id='details'])[3]
+    private String buildBuilding_solar;//=xpath=(//a[@id='details'])[4]
+    private String buildBuilding_fussion;//=xpath=(//a[@id='details'])[5]
+    private String buildBuilding_solerSatellite;//=xpath=(//a[@id='details'])[6]
+    private String buildBuilding_metalStorage;//=xpath=(//a[@id='details'])[7]
+    private String buildBuilding_crystalStorage;//=xpath=(//a[@id='details'])[8]
+    private String buildBuilding_deuteriumStorage;//=xpath=(//a[@id='details'])[9]
+    private String buildBuilding_metalHideout;//=xpath=(//a[@id='details'])[10]
+    private String buildBuilding_crystalHideout;//=xpath=(//a[@id='details'])[11]
+    private String buildBuilding_deuteriumHideout;//=xpath=(//a[@id='details'])[12]
+    private String buildBuilding_resourcesButtonDisabled;//=//a[@class='build-it_disabled']
+    private String buildBuilding_resourcesButtonEnabled;//=//a[@class='build-it']
+    private String buildBuilding_robots;//=id=details14
+    private String buildBuilding_shipyard;//=id=details21
+    private String buildBuilding_laboratory;//=id=details31
+    private String buildBuilding_depositeStation;//=id=details34
+    private String buildBuilding_missileSilo;//=id=details44
+    private String buildBuilding_nanitas;//=id=details15
+    private String buildBuilding_terraformer;//=id=details33
+    // TODO missina moon building option
+    private String buildBuilding_buildButtonDisabled;//=//a[@class='build-it_disabled']
+    private String buildButtonEnabled;//=//a[@class='build-it']
     // STUDIES 
     private String study_te;//=id=details113
     private String study_tl;//=id=details120
@@ -200,15 +197,22 @@ class MappingProperties {
     private String event_list_time_parser_hour;//=g
     private String event_list_time_parser_minute;//=min.
     private String event_list_time_parser_second;//=sek.
-    //Resources
-    private String resources_m;//=id=resources_metal
-    private String resources_k;//=id=resources_crystal
-    private String resources_d;//=id=resources_deuterium
+   
+    //Performance
+    private String performance_m;//=name=last1
+    private String performance_k;//=name=last2
+    private String performance_d;//=name=last3
+    private String performance_es;//=name=last4
+    private String performance_ef;//=name=last12
+    private String performance_ss;//=name=last212
+    private String performance_ok;//=//span[@class="factorbutton"/input
+    private String performance_select;
+    
     //Shipyard count
-    private String hm;//li[@id="%s"]/div/a@title
-    private String hm_lm;//=button204
-    private String hm_cm;//=button205
-    private String hm_kraz;//=button206
+    private String shipyardCountXpath;//li[@id="%s"]/div/a@title
+    private String shipyardCountLM;//=button204
+    private String shipyardCountCM;//=button205
+    private String shipyardCountKRK;//=button206
     private String hm_ow;//=button207
     private String hm_panc;//=button215
     private String hm_bomb;//=button211
@@ -247,9 +251,7 @@ class MappingProperties {
     private String hm_dp;//=//div[@class="defense408"]/div/a/span/span
     private String hm_pr;//=//div[@class="defense502"]/div/a/span/span
     private String hm_rm;//=//div[@class="defense503"]/div/a/span/span
-        
-
-    //parametry testowe
+    
 
     MappingProperties() throws IOException {
         Properties defaultPath = new Properties();
@@ -344,29 +346,29 @@ class MappingProperties {
         fleetSend_errorscreen3 = properties.getProperty("fleetSend_errorscreen3");
 
         //build properties
-        building_km = properties.getProperty("building_km");
-        building_kc = properties.getProperty("building_kc");
-        building_ed = properties.getProperty("building_ed");
-        building_es = properties.getProperty("building_es");
-        building_ef = properties.getProperty("building_ef");
-        building_ss = properties.getProperty("building_ss");
-        building_mm = properties.getProperty("building_mm");
-        building_mc = properties.getProperty("building_mc");
-        building_md = properties.getProperty("building_md");
-        building_sm = properties.getProperty("building_sm");
-        building_sc = properties.getProperty("building_sc");
-        building_sd = properties.getProperty("building_sd");
-        building_resourcesNEG = properties.getProperty("building_resourcesNEG");
-        building_resourcesOK = properties.getProperty("building_resourcesOK");
-        building_fr = properties.getProperty("building_fr");
-        building_st = properties.getProperty("building_st");
-        building_lb = properties.getProperty("building_lb");
-        building_ds = properties.getProperty("building_ds");
-        building_sr = properties.getProperty("building_sr");
-        building_fn = properties.getProperty("building_fn");
-        building_te = properties.getProperty("building_te");
-        building_stationNEG = properties.getProperty("building_stationNEG");
-        building_stationOK = properties.getProperty("building_stationOK");
+        buildBuilding_metal = properties.getProperty("building_km");
+        buildBuilding_crystal = properties.getProperty("building_kc");
+        buildBuilding_deuterium = properties.getProperty("building_ed");
+        buildBuilding_solar = properties.getProperty("building_es");
+        buildBuilding_fussion = properties.getProperty("building_ef");
+        buildBuilding_solerSatellite = properties.getProperty("building_ss");
+        buildBuilding_metalStorage = properties.getProperty("building_mm");
+        buildBuilding_crystalStorage = properties.getProperty("building_mc");
+        buildBuilding_deuteriumStorage = properties.getProperty("building_md");
+        buildBuilding_metalHideout = properties.getProperty("building_sm");
+        buildBuilding_crystalHideout = properties.getProperty("building_sc");
+        buildBuilding_deuteriumHideout = properties.getProperty("building_sd");
+        buildBuilding_resourcesButtonDisabled = properties.getProperty("building_resourcesNEG");
+        buildBuilding_resourcesButtonEnabled = properties.getProperty("building_resourcesOK");
+        buildBuilding_robots = properties.getProperty("building_fr");
+        buildBuilding_shipyard = properties.getProperty("building_st");
+        buildBuilding_laboratory = properties.getProperty("building_lb");
+        buildBuilding_depositeStation = properties.getProperty("building_ds");
+        buildBuilding_missileSilo = properties.getProperty("building_sr");
+        buildBuilding_nanitas = properties.getProperty("building_fn");
+        buildBuilding_terraformer = properties.getProperty("building_te");
+        buildBuilding_buildButtonDisabled = properties.getProperty("building_stationNEG");
+        buildButtonEnabled = properties.getProperty("building_stationOK");
 
         //study properties
         study_te = properties.getProperty("study_te");
@@ -445,19 +447,23 @@ class MappingProperties {
         event_list_time_parser_hour = properties.getProperty("event_list_time_parser_hour");
         event_list_time_parser_minute = properties.getProperty("event_list_time_parser_minute");
         event_list_time_parser_second = properties.getProperty("event_list_time_parser_second");
-        
-        //Resources
-        
-        resources_m = properties.getProperty("resources_m");//=id=resources_metal
-        resources_k = properties.getProperty("resources_k");//=id=resources
-        resources_d = properties.getProperty("resources_d");//=id=resources_metal
+
+         //Performance
+    performance_m=properties.getProperty("performance_m");//=name=last1
+    performance_k=properties.getProperty("performance_k");//=name=last1
+    performance_d=properties.getProperty("performance_d");//=name=last1
+    performance_es=properties.getProperty("performance_es");//=name=last1
+    performance_ef=properties.getProperty("performance_ef");//=name=last1
+    performance_ss=properties.getProperty("performance_ss");//=name=last1
+    performance_ok=properties.getProperty("performance_ok");//=name=last1
+    performance_select=properties.getProperty("performance_select");
         
         //Shipyard Details
         
-        hm = properties.getProperty("hm");
-        hm_lm = properties.getProperty("hm_lm");
-        hm_cm = properties.getProperty("hm_cm");
-        hm_kraz = properties.getProperty("hm_kraz");
+        shipyardCountXpath = properties.getProperty("hm");
+        shipyardCountLM = properties.getProperty("hm_lm");
+        shipyardCountCM = properties.getProperty("hm_cm");
+        shipyardCountKRK= properties.getProperty("hm_kraz");
         hm_ow = properties.getProperty("hm_ow");
         hm_panc = properties.getProperty("hm_panc");
         hm_bomb = properties.getProperty("hm_bomb");
@@ -500,8 +506,41 @@ class MappingProperties {
         hm_dp= properties.getProperty("hm_dp");
         hm_pr= properties.getProperty("hm_pr");
         hm_rm= properties.getProperty("hm_rm");
+        
+    }
+    
+    public String getPerformance_d() {
+        return performance_d;
     }
 
+    public String getPerformance_ef() {
+        return performance_ef;
+    }
+
+    public String getPerformance_es() {
+        return performance_es;
+    }
+
+    public String getPerformance_k() {
+        return performance_k;
+    }
+
+    public String getPerformance_m() {
+        return performance_m;
+    }
+
+    public String getPerformance_ok() {
+        return performance_ok;
+    }
+
+    public String getPerformance_ss() {
+        return performance_ss;
+    }
+    
+     public String getPerformance_select() {
+        return performance_select;
+    }
+    
     public String getHm_cl() {
         return hm_cl;
     }
@@ -608,69 +647,57 @@ class MappingProperties {
 
     
     public String getHm_bomb() {
-        return hm.replace("%s", hm_bomb);
+        return shipyardCountXpath.replace("%s", hm_bomb);
     }
 
     public String getHm_cm() {
-        return hm.replace("%s", hm_cm);
+        return shipyardCountXpath.replace("%s", shipyardCountCM);
     }
 
     public String getHm_dt() {
-        return hm.replace("%s", hm_dt);    
+        return shipyardCountXpath.replace("%s", hm_dt);    
     }
 
     public String getHm_gs() {
-        return hm.replace("%s", hm_gs);
+        return shipyardCountXpath.replace("%s", hm_gs);
     }
 
     public String getHm_kraz() {
-        return hm.replace("%s", hm_kraz);
+        return shipyardCountXpath.replace("%s", shipyardCountKRK);
     }
 
     public String getHm_lm() {
-        return hm.replace("%s", hm_lm);
+        return shipyardCountXpath.replace("%s", shipyardCountLM);
     }
 
     public String getHm_mt() {
-        return hm.replace("%s", hm_mt);
+        return shipyardCountXpath.replace("%s", hm_mt);
     }
 
     public String getHm_nisc() {
-        return hm.replace("%s", hm_nisc);
+        return shipyardCountXpath.replace("%s", hm_nisc);
     }
 
     public String getHm_ow() {
-        return hm.replace("%s", hm_ow);
+        return shipyardCountXpath.replace("%s", hm_ow);
     }
 
     public String getHm_panc() {
-        return hm.replace("%s", hm_panc);
+        return shipyardCountXpath.replace("%s", hm_panc);
     }
 
     public String getHm_rec() {
-        return hm.replace("%s", hm_rec);
+        return shipyardCountXpath.replace("%s", hm_rec);
     }
 
     public String getHm_skol() {
-        return hm.replace("%s", hm_skol);
+        return shipyardCountXpath.replace("%s", hm_skol);
     }
 
     public String getHm_ss() {
-        return hm.replace("%s", hm_ss);
+        return shipyardCountXpath.replace("%s", hm_ss);
     }
     
-
-    public String getResources_d() {
-        return resources_d;
-    }
-
-    public String getResources_k() {
-        return resources_k;
-    }
-
-    public String getResources_m() {
-        return resources_m;
-    }
 
     public String getEvent_list_time_parser_day() {
         return event_list_time_parser_day;
@@ -1057,95 +1084,95 @@ class MappingProperties {
     }
 
     public String getBuilding_ds() {
-        return building_ds;
+        return buildBuilding_depositeStation;
     }
 
     public String getBuilding_ed() {
-        return building_ed;
+        return buildBuilding_deuterium;
     }
 
     public String getBuilding_ef() {
-        return building_ef;
+        return buildBuilding_fussion;
     }
 
     public String getBuilding_es() {
-        return building_es;
+        return buildBuilding_solar;
     }
 
     public String getBuilding_fn() {
-        return building_fn;
+        return buildBuilding_nanitas;
     }
 
     public String getBuilding_fr() {
-        return building_fr;
+        return buildBuilding_robots;
     }
 
     public String getBuilding_kc() {
-        return building_kc;
+        return buildBuilding_crystal;
     }
 
     public String getBuilding_km() {
-        return building_km;
+        return buildBuilding_metal;
     }
 
     public String getBuilding_lb() {
-        return building_lb;
+        return buildBuilding_laboratory;
     }
 
     public String getBuilding_mc() {
-        return building_mc;
+        return buildBuilding_crystalStorage;
     }
 
     public String getBuilding_md() {
-        return building_md;
+        return buildBuilding_deuteriumStorage;
     }
 
     public String getBuilding_mm() {
-        return building_mm;
+        return buildBuilding_metalStorage;
     }
 
     public String getBuilding_resourcesNEG() {
-        return building_resourcesNEG;
+        return buildBuilding_resourcesButtonDisabled;
     }
 
     public String getBuilding_resourcesOK() {
-        return building_resourcesOK;
+        return buildBuilding_resourcesButtonEnabled;
     }
 
     public String getBuilding_sc() {
-        return building_sc;
+        return buildBuilding_crystalHideout;
     }
 
     public String getBuilding_sd() {
-        return building_sd;
+        return buildBuilding_deuteriumHideout;
     }
 
     public String getBuilding_sm() {
-        return building_sm;
+        return buildBuilding_metalHideout;
     }
 
     public String getBuilding_sr() {
-        return building_sr;
+        return buildBuilding_missileSilo;
     }
 
     public String getBuilding_ss() {
-        return building_ss;
+        return buildBuilding_solerSatellite;
     }
 
     public String getBuilding_st() {
-        return building_st;
+        return buildBuilding_shipyard;
     }
 
     public String getBuilding_stationNEG() {
-        return building_stationNEG;
+        return buildBuilding_buildButtonDisabled;
     }
 
     public String getBuilding_stationOK() {
-        return building_stationOK;
+        return buildButtonEnabled;
     }
 
     public String getBuilding_te() {
-        return building_te;
+        return buildBuilding_terraformer;
     }
 
     public String getBrowser() {
