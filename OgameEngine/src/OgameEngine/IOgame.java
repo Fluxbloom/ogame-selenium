@@ -5,7 +5,7 @@
 package OgameEngine;
 
 import OgameEngine.Coords.StartDestination;
-import OgameEngine.Fleet.StockyardShips;
+import OgameEngine.Fleet.ShipyardShips;
 import OgameEngine.Performance.Production;
 import OgameEngine.Performance.ResourceField;
 import java.util.HashMap;
@@ -33,12 +33,36 @@ public interface IOgame {
     abstract public void study(Study s)throws OgameException;
     abstract public void buildDefence(Defence d, int i)throws OgameException;
     abstract public void buildDefence(Defence d, String count)throws OgameException;
-    abstract public void buildShip(StockyardShips s, int i)throws OgameException;
-    abstract public void buildShip(StockyardShips s, String count)throws OgameException;
+    abstract public void buildShip(ShipyardShips s, int i)throws OgameException;
+    abstract public void buildShip(ShipyardShips s, String count)throws OgameException;
     abstract public List<Flights> getEventList() throws OgameException;
     abstract public Fleet getPlanetFleet()throws OgameException;
     abstract public HashMap<Study,Integer> getPlanetStudy()throws OgameException;
     abstract public HashMap<Defence,Integer> getPlanetDefence()throws OgameException;
     abstract public void setResourcesSettings(ResourceField r, Production p)throws OgameException;
     abstract public void setResourcesSettings(Performance p)throws OgameException;
+    // TODO
+    abstract public HashMap<Buildings,Integer> getPlanetBuildings() throws OgameException;
+    abstract public Resources getBuildCost(Buildings b) throws OgameException;
+    abstract public Resources getStudyCost(Study s) throws OgameException;
+    abstract public Resources getShipyardCost(ShipyardShips s) throws OgameException;
+    abstract public Resources getDefenceCost(Defence d) throws OgameException;
+    /**
+     * 
+     * @param b Obiekt budynku
+     * @return czas w sekundach
+     * @throws OgameException 
+     */
+    abstract public long getBuildTime(Buildings b) throws OgameException;
+    abstract public long getStudyTime(Study s) throws OgameException;
+    abstract public long getShipyardTime(ShipyardShips s) throws OgameException;
+    abstract public long getDefenceTime(Defence d) throws OgameException;
+    
+    abstract public boolean isBuildQueueEmpty() throws OgameException;
+    abstract public boolean isLabQueueEmpty() throws OgameException;
+    
+    abstract public List<Flights> getSlots() throws OgameException; // moja :-)
+    abstract public void turnBackFlight(Flights f) throws OgameException; //moja :-)
+    
+    abstract public Resources getPlanetHourlyProduction() throws OgameException;
 }

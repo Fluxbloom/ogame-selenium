@@ -43,7 +43,7 @@ public class Fleet {
     public static final Fleet WHOLE_FLEET = new Fleet();
 
     
-    public final static class Ships extends StockyardShips {
+    public final static class Ships extends ShipyardShips {
     
     private Ships(String name){
         super(name);
@@ -63,12 +63,12 @@ public class Fleet {
     public static final Ships SOND = new Ships("SS");//13
 }
     
-    public static class  StockyardShips {
+    public static class  ShipyardShips {
     private String name;
-    protected StockyardShips(String name){this.name=name;}
+    protected ShipyardShips(String name){this.name=name;}
     
 
-    public static final StockyardShips SAT = new StockyardShips("SAT");
+    public static final ShipyardShips SAT = new ShipyardShips("SAT");
     
 }
 }

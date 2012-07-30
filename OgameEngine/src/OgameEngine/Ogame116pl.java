@@ -8,7 +8,7 @@ import OgameEngine.Coords.Destination;
 import OgameEngine.Coords.Planet;
 import OgameEngine.Coords.StartDestination;
 import OgameEngine.Fleet.Ships;
-import OgameEngine.Fleet.StockyardShips;
+import OgameEngine.Fleet.ShipyardShips;
 import OgameEngine.Flights.FriendOrFoe;
 import OgameEngine.Flights.Multiplicity;
 import OgameEngine.Performance.Production;
@@ -39,7 +39,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Buildings, String> buildingMap;
     private HashMap<Study, String> studyMap;
     private HashMap<Defence, String> defenceMap;
-    private HashMap<StockyardShips, String> shipyardMap;
+    private HashMap<ShipyardShips, String> shipyardMap;
     private HashMap<Performance.ResourceField, String> performanceMap;
     private HashMap<Ships, String> fleetMap;
     private HashMap<Study, String> technologyMap;
@@ -137,7 +137,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         defenceMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getDefence_wr());
         System.out.println("[DONE]");
         System.out.print("Creating Shipyard Map");
-        shipyardMap = new HashMap<StockyardShips, String>();
+        shipyardMap = new HashMap<ShipyardShips, String>();
         shipyardMap.put(Ships.BOMB, mappings.getShipyard_bomb());
         shipyardMap.put(Ships.CM, mappings.getShipyard_cm());
         shipyardMap.put(Ships.DT, mappings.getShipyard_dt());
@@ -542,12 +542,12 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public void buildShip(StockyardShips s, int i)  throws OgameException {
+    public void buildShip(ShipyardShips s, int i)  throws OgameException {
         buildShip(s, Integer.toString(i));
     }
 
     @Override
-    public void buildShip(StockyardShips s, String count)  throws OgameException{
+    public void buildShip(ShipyardShips s, String count)  throws OgameException{
         this.clickStocznia();
         selenium.click(shipyardMap.get(s));
         try {
@@ -767,6 +767,76 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
         }
         return result;
         
+    }
+
+    @Override
+    public HashMap<Buildings, Integer> getPlanetBuildings() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resources getBuildCost(Buildings b) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resources getStudyCost(Study s) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resources getShipyardCost(ShipyardShips s) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resources getDefenceCost(Defence d) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long getBuildTime(Buildings b) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long getStudyTime(Study s) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long getShipyardTime(ShipyardShips s) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long getDefenceTime(Defence d) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isBuildQueueEmpty() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isLabQueueEmpty() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Flights> getSlots() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void turnBackFlight(Flights f) throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resources getPlanetHourlyProduction() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
   
