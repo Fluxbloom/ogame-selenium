@@ -29,6 +29,12 @@ public class Resources {
     public String getMetal() {
         return metal;
     }
+
+    @Override
+    public String toString() {
+        return "Resources{" + "metal=" + metal + ", crystal=" + crystal + ", deuter=" + deuter + '}';
+    }
+    
     
     
     public static final Resources NO_RESOURCES = new Resources("0","0","0");
