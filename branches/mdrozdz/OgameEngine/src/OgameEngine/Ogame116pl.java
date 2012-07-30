@@ -725,10 +725,12 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
         while (it.hasNext()){
             temp2 = (Map.Entry<Study,String>)it.next();
             temp = temp2.getKey();
-            temp3 = selenium.getText(temp2.getValue());
+            temp3 = selenium.getText(temp2.getValue()); 
+            temp3= temp3.replace( selenium.getText(temp2.getValue()+"/span"),"").replace.(" ","");
+            System.err.println("temp3 = "+temp3);
             i = Integer.parseInt(temp3);
             if (i >0)
-                result.put(temp, new Integer(temp3));
+            result.put(temp, new Integer(temp3));
         }
         return result;
         

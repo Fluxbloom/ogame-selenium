@@ -5,6 +5,7 @@
 package OgameEngine;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -143,12 +144,22 @@ public class SeleniumStartTest {
     } 
     
     @Test
+    @Ignore
     public void PobierzS(){
         o.login(uni, nick, pass);
         Fleet f = o.getPlanetFleet();
         System.out.println(f.toString());
         o.logout();
         
+    }
+    
+    @Test
+    
+    public void PobierzB(){
+        o.login(uni, nick, pass);
+        HashMap<Study,Integer> s = o.getPlanetStudy();
+        System.out.println(s.toString());
+        o.logout();
     }
     
     @Test
