@@ -4,6 +4,8 @@
  */
 package OgameEngine;
 
+import OgameEngine.Coords.Destination;
+import OgameEngine.Fleet.Ships;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -61,7 +63,7 @@ public class SeleniumStartTest {
 
     @Test
     @Ignore
-    public void SeleniumStartTest() {
+    public void SeleniumStartTest() throws OgameException {
 
         o.login(uni, nick, pass);
         try {
@@ -78,13 +80,13 @@ public class SeleniumStartTest {
         o.login(uni, nick, pass);
         Fleet f = new Fleet();
         f.add(Ships.SOND, 2);
-        o.sendFleet(f, new Cords("2", "243", "6"), Speed.S70, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "243", "6"), Speed.S70, Mission.MISSION_SPY, Resources.NO_RESOURCES);
         o.logout();
     }
 
     @Test
     @Ignore
-    public void BuildMM() {
+    public void BuildMM() throws OgameException {
         o.login(uni, nick, pass);
         o.build(Buildings.MAGAZYN_METALU);
         o.wait(10);
@@ -92,7 +94,7 @@ public class SeleniumStartTest {
 
     @Test
     @Ignore
-    public void wykrycieListyPlanet() {
+    public void wykrycieListyPlanet() throws OgameException {
        o.login(uni, nick, pass);
        List<String> planety = o.getPlanetNames();
        Iterator<String> it = planety.iterator();
@@ -108,7 +110,6 @@ public class SeleniumStartTest {
     }
     
     @Test
-    @Ignore
     public void eventList()throws OgameException{
         try{
         o.login(uni, nick, pass);
@@ -137,22 +138,22 @@ public class SeleniumStartTest {
         Fleet recki = new Fleet();
         recki.add(Ships.REC, 2);
         Fleet fs = Fleet.WHOLE_FLEET;
-        Cords[] pz = new Cords[]{
-        new Cords(2,100,4,Destination.PZ),
-        new Cords(2,102,10,Destination.PZ),
-        new Cords(2,107,8,Destination.PZ),
-        new Cords(2,108,8,Destination.PZ),
-        new Cords(2,108,12,Destination.PZ)
+        Coords[] pz = new Coords[]{
+        new Coords(2,100,4,Destination.PZ),
+        new Coords(2,102,10,Destination.PZ),
+        new Coords(2,107,8,Destination.PZ),
+        new Coords(2,108,8,Destination.PZ),
+        new Coords(2,108,12,Destination.PZ)
         };
-        Cords[] farms = new Cords[]{
-        new Cords(2,114,8),
-        new Cords(2,112,8),
-        new Cords(2,110,6),
-        new Cords(2,109,10),
-        new Cords(2,109,8)
+        Coords[] farms = new Coords[]{
+        new Coords(2,114,8),
+        new Coords(2,112,8),
+        new Coords(2,110,6),
+        new Coords(2,109,10),
+        new Coords(2,109,8)
         };
-        Cords[] hinataFarms = new Cords[]{
-        new Cords(2,107,8)
+        Coords[] hinataFarms = new Coords[]{
+        new Coords(2,107,8)
         };
         
         int aisha_fleets = 4;
@@ -178,21 +179,5 @@ public class SeleniumStartTest {
         }
         o.sendFleet(fs, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
         o.logout();
-    }
-    @Test
-    @Ignore
-        public void zmienCos() {
-       o.login(uni, nick, pass);
-       o.setResoursesSetting(Performance.METAL, Performance.P30);
-       o.wait(10);
-       o.logout();
-    }
-    @Test
-    //@Ignore
-        public void zmienCos2() {
-       o.login(uni, nick, pass);
-       o.setResoursesSett(new Performance(Performance.P10, Performance.P20, Performance.P30, Performance.P40, Performance.P50, Performance.P60));
-       o.wait(10);
-       o.logout();
     }
 }
