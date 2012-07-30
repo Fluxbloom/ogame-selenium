@@ -4,6 +4,7 @@
  */
 package OgameEngine;
 
+import OgameEngine.Coords.Planet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
