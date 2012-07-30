@@ -35,6 +35,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<StockyardShips, String> shipyardMap;
     private HashMap<Ships, String> fleetMap;
     private HashMap<Study, String> technologyMap;
+    private HashMap<Defence, String> defcountMap;
 
 
     public Ogame116pl() {
@@ -180,6 +181,19 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         technologyMap.put(Study.TECHNOLOGIA_BOJOWA, mappings.getHm_tb());//13
         technologyMap.put(Study.TECHNOLOGIA_OCHRONNA, mappings.getHm_to());//13
         technologyMap.put(Study.OPANCERZENIE, mappings.getHm_op());//13
+        System.out.println("[DONE]");
+        System.out.print("Inititializing defcountMap");
+        defcountMap = new HashMap<Defence, String>();
+        defcountMap.put(Defence.DUZA_POWLOKA, mappings.getHm_dp());
+        defcountMap.put(Defence.DUZY_LASER, mappings.getHm_cl());
+        defcountMap.put(Defence.DZIALO_GAUSSA, mappings.getHm_dg());
+        defcountMap.put(Defence.DZIALO_JONOWE, mappings.getHm_dj());
+        defcountMap.put(Defence.MALA_POWLOKA, mappings.getHm_mp());
+        defcountMap.put(Defence.MALY_LASER, mappings.getHm_ll());
+        defcountMap.put(Defence.PRZECIWRAKIETA, mappings.getHm_pr());
+        defcountMap.put(Defence.RAKITA_MIEDZYPLANETARNA, mappings.getHm_rm());
+        defcountMap.put(Defence.WYRZUTNIA_PLAZMY, mappings.getHm_wp());
+        defcountMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getHm_wr());
         System.out.println("[DONE]");
         
         System.out.print("Inititializing Selenium instance ");
@@ -722,7 +736,33 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
         
     }
 
+    @Override
+    public HashMap<Defence, Integer> getPlanetDefence() {
+        HashMap<Defence,Integer> result = new HashMap<Defence,Integer>();
+        this.clickObrona();
+        Set set = this.defcountMap.entrySet(); // to jest pobranie listy wszystkich par technologia-xpath
+        Iterator it = set.iterator();
+        Defence temp;
+        Map.Entry<Defence,String> temp2;
+        String temp3;
+        int i;
+        while (it.hasNext()){
+            temp2 = (Map.Entry<Defence,String>)it.next();
+            temp = temp2.getKey();
+            temp3 = selenium.getText(temp2.getValue()); 
+            temp3= temp3.replace( selenium.getText(temp2.getValue()+"/span"),"").replace(" ",""); //usuwanie wewnetrznego spana i spacji.
+            i = Integer.parseInt(temp3);
+            if (i >0)
+            result.put(temp, new Integer(temp3));
+        }
+        return result;
+        
+    }
+
   
     
     
+
+
+
 }

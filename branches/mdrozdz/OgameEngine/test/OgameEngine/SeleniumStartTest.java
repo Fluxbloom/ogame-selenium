@@ -154,11 +154,21 @@ public class SeleniumStartTest {
     }
     
     @Test
+    @Ignore
     
     public void PobierzB(){
         o.login(uni, nick, pass);
         HashMap<Study,Integer> s = o.getPlanetStudy();
         System.out.println(s.toString());
+        o.logout();
+    }
+    
+    @Test
+        
+    public void PobierzD(){
+        o.login(uni, nick, pass);
+        HashMap<Defence,Integer> d = o.getPlanetDefence();
+        System.out.println(d.toString());
         o.logout();
     }
     

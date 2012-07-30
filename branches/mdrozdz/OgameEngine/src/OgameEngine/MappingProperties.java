@@ -200,11 +200,11 @@ class MappingProperties {
     private String event_list_time_parser_hour;//=g
     private String event_list_time_parser_minute;//=min.
     private String event_list_time_parser_second;//=sek.
-    //Zasoby
+    //Resources
     private String resources_m;//=id=resources_metal
     private String resources_k;//=id=resources_crystal
     private String resources_d;//=id=resources_deuterium
-    //Ilosc statkow w stoczni
+    //Shipyard count
     private String hm;//li[@id="%s"]/div/a@title
     private String hm_lm;//=button204
     private String hm_cm;//=button205
@@ -219,7 +219,7 @@ class MappingProperties {
     private String hm_skol;//=button208
     private String hm_rec;//=button209
     private String hm_ss;//=button210
-    //Poziomy Badan
+    //Study levels
     private String hm_te;//=//div[@class="research113"]/div/a/span/span
     private String hm_tl;//=//div[@class="research120"]/div/a/span/span
     private String hm_tj;//=//div[@class="research121"]/div/a/span/span
@@ -236,7 +236,17 @@ class MappingProperties {
     private String hm_tb;//=//div[@class="research109"]/div/a/span/span
     private String hm_to;//=//div[@class="research110"]/div/a/span/span
     private String hm_op;//=//div[@class="research111"]/div/a/span/span
-
+    //Defence levels
+    private String hm_wr;//=//div[@class="defense401"]/div/a/span/span
+    private String hm_ll;//=//div[@class="defense402"]/div/a/span/span
+    private String hm_cl;//=//div[@class="defense403"]/div/a/span/span
+    private String hm_dg;//=//div[@class="defense404"]/div/a/span/span
+    private String hm_dj;//=//div[@class="defense405"]/div/a/span/span
+    private String hm_wp;//=//div[@class="defense406"]/div/a/span/span
+    private String hm_mp;//=//div[@class="defense407"]/div/a/span/span
+    private String hm_dp;//=//div[@class="defense408"]/div/a/span/span
+    private String hm_pr;//=//div[@class="defense502"]/div/a/span/span
+    private String hm_rm;//=//div[@class="defense503"]/div/a/span/span
         
 
     //parametry testowe
@@ -478,7 +488,58 @@ class MappingProperties {
         hm_to = properties.getProperty("hm_to");
         hm_op = properties.getProperty("hm_op");
         
+        //Defence Details
         
+        hm_wr= properties.getProperty("hm_wr");
+        hm_ll= properties.getProperty("hm_ll");
+        hm_cl= properties.getProperty("hm_cl");
+        hm_dg= properties.getProperty("hm_dg");
+        hm_dj= properties.getProperty("hm_dj");
+        hm_wp= properties.getProperty("hm_wp");
+        hm_mp= properties.getProperty("hm_mp");
+        hm_dp= properties.getProperty("hm_dp");
+        hm_pr= properties.getProperty("hm_pr");
+        hm_rm= properties.getProperty("hm_rm");
+    }
+
+    public String getHm_cl() {
+        return hm_cl;
+    }
+
+    public String getHm_dg() {
+        return hm_dg;
+    }
+
+    public String getHm_dj() {
+        return hm_dj;
+    }
+
+    public String getHm_dp() {
+        return hm_dp;
+    }
+
+    public String getHm_ll() {
+        return hm_ll;
+    }
+
+    public String getHm_mp() {
+        return hm_mp;
+    }
+
+    public String getHm_pr() {
+        return hm_pr;
+    }
+
+    public String getHm_rm() {
+        return hm_rm;
+    }
+
+    public String getHm_wp() {
+        return hm_wp;
+    }
+
+    public String getHm_wr() {
+        return hm_wr;
     }
 
     public String getHm_af() {

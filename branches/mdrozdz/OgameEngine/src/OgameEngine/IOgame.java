@@ -35,5 +35,6 @@ public interface IOgame {
     abstract public Resources getResources();
     abstract public Fleet getPlanetFleet();
     abstract public HashMap<Study,Integer> getPlanetStudy();
+    abstract public HashMap<Defence,Integer> getPlanetDefence();
     
 }
