@@ -698,20 +698,7 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
         }
         return result;
     }
-    /*
-     * HashMap<Ships, Integer> fleet 
-     * = f.getFleet();
-            Set set = fleet.entrySet();
-            Iterator it = set.iterator();
-            Ships temp2;
-            Map.Entry<Ships, Integer> temp;
-            while (it.hasNext()) {
-                temp = (Map.Entry<Ships, Integer>) it.next();
-                temp2 = temp.getKey();
-                selenium.type(shipsMap.get(temp2), ((Integer) fleet.get(temp2)).toString());
-            }
-     */
-
+    
     @Override
     public HashMap<Study, Integer> getPlanetStudy() {
         HashMap<Study,Integer> result = new HashMap<Study,Integer>();
@@ -726,8 +713,7 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
             temp2 = (Map.Entry<Study,String>)it.next();
             temp = temp2.getKey();
             temp3 = selenium.getText(temp2.getValue()); 
-            temp3= temp3.replace( selenium.getText(temp2.getValue()+"/span"),"").replace.(" ","");
-            System.err.println("temp3 = "+temp3);
+            temp3= temp3.replace( selenium.getText(temp2.getValue()+"/span"),"").replace(" ",""); //usuwanie wewnetrznego spana i spacji.
             i = Integer.parseInt(temp3);
             if (i >0)
             result.put(temp, new Integer(temp3));
