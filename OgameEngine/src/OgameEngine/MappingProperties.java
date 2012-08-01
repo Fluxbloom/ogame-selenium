@@ -6,8 +6,12 @@ package OgameEngine;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import java.util.Properties;
+import java.util.Set;
 
 /**
  *
@@ -255,16 +259,18 @@ class MappingProperties {
     private String slots_maxExp;//=//div[@class="fleetStatus"]/span[@class="expSlots"]/span[@class="all"]
     private String slots_fleet_by_number;//=//div[contains(@id,"fleet")]
     private String slots_fleet_by_id;//=//div[contains(@id,"%i")]
+    private String slots_fleetId_remove;
     private String slots_fleetId_suffix;//=@id
     private String slots_fleetArrival_suffix;//=/span[contains(@id,"timer_")]
     private String slots_fleetMission_suffix;//=/span[contains(@class,"mission")]
     private String slots_fleetAllianceName_suffix;//=/span[contains(@class,"allianceName")]
     private String slots_fleetOriginPlanet_suffix;//=/span[@class="originData"]//a
-    private String slots_fleetReversal_suffic;//=/span[contains(@class,"reversal")]
+    private String slots_fleetReversal_suffix;//=/span[contains(@class,"reversal")]
     private String slots_fleetReversal_titleAtribute_suffix;//=/span[contains(@class,"reversal")]@title
     private String slots_fleetTargetPlanet_suffix;//=/span[@class="destinationData"]//a
     private String slots_fleetComeBack_suffix;//=/span[contains(@id,"timerNext_")]
     private String slots_fleetComeBack_titleAtribute_suffix;//=/span[contains(@id,"timerNext_")]@title
+    private HashMap<String, String> slots_missionMap;
 
     MappingProperties() throws IOException {
         Properties defaultPath = new Properties();
@@ -526,16 +532,48 @@ class MappingProperties {
         slots_maxExp = properties.getProperty("slots_maxExp");////div[@class="fleetStatus"]/span[@class="expSlots"]/span[@class="all"]
         slots_fleet_by_number = properties.getProperty("slots_fleet_by_number");////div[contains(@id,"fleet")]
         slots_fleet_by_id = properties.getProperty("slots_fleet_by_id");////div[contains(@id,"%i")]
+        slots_fleetId_remove = properties.getProperty("slots_fleetId_remove");
         slots_fleetId_suffix = properties.getProperty("slots_fleetId_suffix");//@id
         slots_fleetArrival_suffix = properties.getProperty("slots_fleetArrival_suffix");///span[contains(@id,"timer_")]
         slots_fleetMission_suffix = properties.getProperty("slots_fleetMission_suffix");///span[contains(@class,"mission")]
         slots_fleetAllianceName_suffix = properties.getProperty("slots_fleetAllianceName_suffix");///span[contains(@class,"allianceName")]
         slots_fleetOriginPlanet_suffix = properties.getProperty("slots_fleetOriginPlanet_suffix");///span[@class="originData"]//a
-        slots_fleetReversal_suffic = properties.getProperty("slots_fleetReversal_suffic");///span[contains(@class,"reversal")]
+        slots_fleetReversal_suffix = properties.getProperty("slots_fleetReversal_suffix");///span[contains(@class,"reversal")]
         slots_fleetReversal_titleAtribute_suffix = properties.getProperty("slots_fleetReversal_titleAtribute_suffix");///span[contains(@class,"reversal")]@title
         slots_fleetTargetPlanet_suffix = properties.getProperty("slots_fleetTargetPlanet_suffix");///span[@class="destinationData"]//a
         slots_fleetComeBack_suffix = properties.getProperty("slots_fleetComeBack_suffix");///span[contains(@id,"timerNext_")]
         slots_fleetComeBack_titleAtribute_suffix = properties.getProperty("slots_fleetComeBack_titleAtribute_suffix");///span[contains(@id,"timerNext_")]@title
+        {//odczytanie mapowania misji
+            slots_missionMap =new HashMap<>();
+            String[] temp = properties.getProperty("slots_missionMap").split("!");
+            String[] t;
+            for (int i = 0; i < temp.length; i++) {
+                t=temp[i].split(";");
+                slots_missionMap.put(t[0], t.length<2?"":t[1].replace(" ", ""));
+            }
+        }
+    }
+
+    public String getSlotMissionID(String missionType) {
+        String result ="";
+        Set set = slots_missionMap.entrySet();
+        Entry<String,String> temp;
+        Iterator<Entry<String,String>> it = set.iterator();
+        while(it.hasNext()){
+            temp=it.next();
+            if(temp.getKey().compareTo(missionType)==0){
+                result = temp.getValue();
+                break;
+            }
+        }
+        return result;
+    }
+    public String getSlotMissionID(Mission m){
+        return getSlotMissionID(m.getName());
+    }
+
+    public String getSlots_fleetId_remove() {
+        return slots_fleetId_remove;
     }
 
     public String getSlots_fleet_by_id(int i) {
@@ -574,8 +612,8 @@ class MappingProperties {
         return slots_fleetOriginPlanet_suffix;
     }
 
-    public String getSlots_fleetReversal_suffic() {
-        return slots_fleetReversal_suffic;
+    public String getSlots_fleetReversal_suffix() {
+        return slots_fleetReversal_suffix;
     }
 
     public String getSlots_fleetReversal_titleAtribute_suffix() {
@@ -601,8 +639,6 @@ class MappingProperties {
     public String getSlots_usedFleets() {
         return slots_usedFleets;
     }
-    
-    
 
     public String getPerformance_d() {
         return performance_d;
