@@ -41,7 +41,7 @@ public interface IOgame {
     abstract public HashMap<Defence,Integer> getPlanetDefence()throws OgameException;
     abstract public void setResourcesSettings(ResourceField r, Production p)throws OgameException;
     abstract public void setResourcesSettings(Performance p)throws OgameException;
-    // TODO
+    // TODO fill in this methods
     abstract public HashMap<Buildings,Integer> getPlanetBuildings() throws OgameException;
     abstract public Resources getBuildCost(Buildings b) throws OgameException;
     abstract public Resources getStudyCost(Study s) throws OgameException;
@@ -61,8 +61,12 @@ public interface IOgame {
     abstract public boolean isBuildQueueEmpty() throws OgameException;
     abstract public boolean isLabQueueEmpty() throws OgameException;
     
-    abstract public List<Flights> getSlots() throws OgameException; // moja :-)
-    abstract public void turnBackFlight(Flights f) throws OgameException; //moja :-)
+    abstract public List<Slots> getSlots() throws OgameException; // moja :-)
+    abstract public void turnBackFlight(Slots f) throws OgameException; //moja :-)
+    abstract public int getSlotsTotal() throws OgameException;
+    abstract public int getSlotsOccupied() throws OgameException;
+    abstract public int getExpeditionsTotal() throws OgameException;
+    abstract public int getExpeditionsOccupied() throws OgameException;
     
     abstract public Resources getPlanetHourlyProduction() throws OgameException;
 }
