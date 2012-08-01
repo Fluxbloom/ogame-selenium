@@ -267,10 +267,14 @@ class MappingProperties {
     private String slots_fleetOriginPlanet_suffix;//=/span[@class="originData"]//a
     private String slots_fleetReversal_suffix;//=/span[contains(@class,"reversal")]
     private String slots_fleetReversal_titleAtribute_suffix;//=/span[contains(@class,"reversal")]@title
+    private String slots_fleetReversal_button_suffix;
     private String slots_fleetTargetPlanet_suffix;//=/span[@class="destinationData"]//a
     private String slots_fleetComeBack_suffix;//=/span[contains(@id,"timerNext_")]
     private String slots_fleetComeBack_titleAtribute_suffix;//=/span[contains(@id,"timerNext_")]@title
     private HashMap<String, String> slots_missionMap;
+     private String slots_parseArrival;//='|'dd.MM.yyyy HH:mm:ss
+ private String slots_parseReversal;//='Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss
+ private String slots_parseReturn;//='|'dd.MM.yyyy HH:mm:ss
 
     MappingProperties() throws IOException {
         Properties defaultPath = new Properties();
@@ -540,6 +544,7 @@ class MappingProperties {
         slots_fleetOriginPlanet_suffix = properties.getProperty("slots_fleetOriginPlanet_suffix");///span[@class="originData"]//a
         slots_fleetReversal_suffix = properties.getProperty("slots_fleetReversal_suffix");///span[contains(@class,"reversal")]
         slots_fleetReversal_titleAtribute_suffix = properties.getProperty("slots_fleetReversal_titleAtribute_suffix");///span[contains(@class,"reversal")]@title
+        slots_fleetReversal_button_suffix = properties.getProperty("slots_fleetReversal_button_suffix");
         slots_fleetTargetPlanet_suffix = properties.getProperty("slots_fleetTargetPlanet_suffix");///span[@class="destinationData"]//a
         slots_fleetComeBack_suffix = properties.getProperty("slots_fleetComeBack_suffix");///span[contains(@id,"timerNext_")]
         slots_fleetComeBack_titleAtribute_suffix = properties.getProperty("slots_fleetComeBack_titleAtribute_suffix");///span[contains(@id,"timerNext_")]@title
@@ -552,6 +557,25 @@ class MappingProperties {
                 slots_missionMap.put(t[0], t.length<2?"":t[1].replace(" ", ""));
             }
         }
+        slots_parseArrival=properties.getProperty("slots_parseArrival");// '|'dd.MM.yyyy HH:mm:ss
+slots_parseReversal=properties.getProperty("slots_parseReversal");//'Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss
+slots_parseReturn=properties.getProperty("slots_parseReturn");//'|'dd.MM.yyyy HH:mm:ss
+    }
+
+    public String getSlots_parseArrival() {
+        return slots_parseArrival;
+    }
+
+    public String getSlots_parseReturn() {
+        return slots_parseReturn;
+    }
+
+    public String getSlots_parseReversal() {
+        return slots_parseReversal;
+    }
+
+    public String getSlots_fleetReversal_button_suffix() {
+        return slots_fleetReversal_button_suffix;
     }
 
     public String getSlotMissionID(String missionType) {
