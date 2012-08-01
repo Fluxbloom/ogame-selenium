@@ -458,6 +458,16 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         clickAndWait(mappings.getChangeplanetbyName(name));
     }
 
+    
+    // TODO Wymaga kolejnych popraw
+    /*
+     * 1. brak obsługi błędu braku floty na planecie
+     * 2. Może jednak zmontować ten ACS
+     * 3. można poprawić stacjonowanie
+     * 4. Czy misja określa cel planety
+     * 5. blokada celow przy esploracji
+     * 6. Same sondy nie mogą nic prócz szpiegowania i stacjonowana
+     */
     @Override
     public void sendFleet(Fleet f, StartDestination d, Coords c, Speed speed, Mission m, Resources r) throws OgameException {
         // sprawdzamy czy flota ma dostępną misję
@@ -615,7 +625,8 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
         return list;
     }
-private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss");
+    
     private Calendar parseArrivalTime(String countDownTime, String arrivalTime)  throws OgameException {
         int[] countDownList = new int[4];
         String day = mappings.getEvent_list_time_parser_day();
@@ -680,7 +691,7 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
                     mappings.getEvent_list_class_atribute_enemy_alliance()) == 0) {
                 mp = Flights.ACS_FLEET;
             } else {
-                throw new OgameException("Error cannot recognized is fleet is single od ACS");
+                throw new OgameException("Error cannot recognized is fleet a single or ACS");
             }
             // sprawdźmy nastawienie floty
             if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_friendly())) {
@@ -699,7 +710,11 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
             arrival = this.parseArrivalTime(
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()), 
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_arrival_time()));
-            origin = Planet.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_originCoords())) ;
+            if (mp==Flights.SINGLE_FLEET){
+            origin = Planet.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_originCoords()));
+            } else {
+                origin=null;
+            }
             target = Planet.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_destCoords()));
             size = Integer.parseInt(selenium.getText(flightXPath + mappings.getEvent_list_atribute_detailsFleet()));
             
