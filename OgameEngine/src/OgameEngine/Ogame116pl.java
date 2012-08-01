@@ -47,6 +47,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Study, String> technologyMap;
     private HashMap<Defence, String> defcountMap;
     private HashMap<String,Mission> slotMissionMap;
+    private SimpleDateFormat slotParse;
+    private SimpleDateFormat reversalParse;
+    private SimpleDateFormat comeBackParse;
 
     public Ogame116pl() {
         System.out.print("Reading static mappings");
@@ -213,7 +216,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         defcountMap.put(Defence.WYRZUTNIA_PLAZMY, mappings.getHm_wp());
         defcountMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getHm_wr());
         System.out.println("[DONE]");
-        System.out.println("Initilizing Slot Mission Map");
+        System.out.print("Initilizing Slot Mission Map");
         slotMissionMap = new HashMap<>();
         slotMissionMap.put(mappings.getSlotMissionID(Mission.MISSION_ACS), Mission.MISSION_ACS);
         slotMissionMap.put(mappings.getSlotMissionID(Mission.MISSION_ATTACK), Mission.MISSION_ATTACK);
@@ -225,6 +228,13 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         slotMissionMap.put(mappings.getSlotMissionID(Mission.MISSION_STATION), Mission.MISSION_STATION);
         slotMissionMap.put(mappings.getSlotMissionID(Mission.MISSION_STAY), Mission.MISSION_STAY);
         slotMissionMap.put(mappings.getSlotMissionID(Mission.MISSION_TRANSPORT), Mission.MISSION_TRANSPORT);
+        System.out.println("[DONE]");
+        
+        
+        System.out.print("Initializing parsers");
+        this.slotParse = new SimpleDateFormat(mappings.getSlots_parseArrival());
+        this.reversalParse = new SimpleDateFormat(mappings.getSlots_parseReversal());
+        this.comeBackParse = new SimpleDateFormat(mappings.getSlots_parseReturn());
         System.out.println("[DONE]");
         System.out.print("Inititializing Selenium instance ");
         try {
@@ -843,9 +853,7 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    SimpleDateFormat slotParse = new SimpleDateFormat("'|'dd.MM.yyyy HH:mm:ss");
-    SimpleDateFormat reversalParse = new SimpleDateFormat("'Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss");
-    SimpleDateFormat comeBackParse = new SimpleDateFormat("'|'dd.MM.yyyy HH:mm:ss");
+
     
     @Override
     public List<Slots> getSlots() throws OgameException {
@@ -945,7 +953,14 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
 
     @Override
     public void turnBackFlight(Slots f) throws OgameException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.clickMovements();
+        String xpath = mappings.getSlots_fleet_by_id(f.getId());
+        if (selenium.isElementPresent(xpath)) {
+        selenium.click(xpath+mappings.getSlots_fleetReversal_button_suffix());
+        wait(1);
+        } else {
+            throw new OgameException("No fleet of following ID number");
+        }
     }
 
     @Override
