@@ -110,9 +110,9 @@ public class SeleniumStartTest {
     }
 
     @Test
-    @Ignore
     public void eventList() throws OgameException {
         try {
+            o.wait(5);
             o.login(uni, nick, pass);
             List<Flights> lista = o.getEventList();
             Iterator<Flights> it = lista.iterator();
@@ -131,6 +131,7 @@ public class SeleniumStartTest {
     @Test
     public void obtainSlots() throws OgameException {
         try {
+            o.wait(5);
             o.login(uni, nick, pass);
             System.out.println("Slots " + o.getSlotsOccupied() + '/' + o.getSlotsTotal());
             List<Slots> list = o.getSlots();

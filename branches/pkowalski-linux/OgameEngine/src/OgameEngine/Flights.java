@@ -17,6 +17,9 @@ public class Flights {
     private FriendOrFoe type;
     private Multiplicity attackType;
     private Calendar arrivalTime;
+    /**
+     * Uwaga, floty ACS w ataku nie posiadają pola origin
+     */
     private Planet origin;
     private int fleetSize;
     private Planet dest;
@@ -35,7 +38,8 @@ public class Flights {
     public String toString() {
         
         return "Flights{" + "type=" + type.toString() + ", attackType=" + attackType.toString() +
-                ", arrivalTime=" + sdf.format(arrivalTime.getTime()) + ", origin=" + origin.toString() + 
+                ", arrivalTime=" + sdf.format(arrivalTime.getTime()) + ", origin=" +
+                (origin==null?"ACS COORDS":origin.toString()) + 
                 ", fleetSize=" + Integer.toString(fleetSize) + ", dest=" + dest.toString() + '}';
     }
     
