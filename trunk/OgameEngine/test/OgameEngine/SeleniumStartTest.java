@@ -107,6 +107,7 @@ public class SeleniumStartTest {
     }
     
     @Test
+    @Ignore
     public void eventList()throws OgameException{
         try{
         o.login(uni, nick, pass);
@@ -177,4 +178,6 @@ public class SeleniumStartTest {
         o.sendFleet(fs, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
         o.logout();
     }
+    
+    
 }
