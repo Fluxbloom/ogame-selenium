@@ -4,7 +4,7 @@
  */
 package OgameEngine;
 
-import OgameEngine.Coords.Planet;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -13,63 +13,81 @@ import java.util.Calendar;
  * @author dyschemist
  */
 public class Slots {
-    private String id;
+    private int id;
     private Calendar targetTime;
-    private Planet cel;
+    private Coords cel;
     private Calendar returnTime;
-    private Planet powrot;
+    private Calendar reversalTime;
+    private Coords baza;
     private String allianceName;
+    private Mission mission;
 
-    public Slots(String id, Calendar targetTime, Planet cel, Calendar returnTime, Planet powrot, String allianceName) {
+    public Slots(int id, Calendar targetTime, Coords cel, Calendar returnTime, Calendar reversalTime, Coords baza, String allianceName, Mission mission) {
         this.id = id;
         this.targetTime = targetTime;
         this.cel = cel;
         this.returnTime = returnTime;
-        this.powrot = powrot;
+        this.reversalTime = reversalTime;
+        this.baza = baza;
         this.allianceName = allianceName;
+        this.mission = mission;
     }
 
-    public Slots(String id, Calendar targetTime, Planet cel, Calendar returnTime, Planet powrot) {
+    public Slots(int id, Calendar targetTime, Coords cel, Coords baza, String allianceName, Mission mission) {
+        this.id = id;
+        this.targetTime = targetTime;
+        this.cel = cel;
+        this.baza = baza;
+        this.allianceName = allianceName;
+        this.mission = mission;
+    }
+
+    public Slots(int id, Calendar targetTime, Coords cel, Calendar returnTime, Calendar reversalTime, Coords baza, Mission mission) {
         this.id = id;
         this.targetTime = targetTime;
         this.cel = cel;
         this.returnTime = returnTime;
-        this.powrot = powrot;
-        this.allianceName = "";
+        this.reversalTime = reversalTime;
+        this.baza = baza;
+        this.mission = mission;
     }
 
-    public Slots(String id, Calendar targetTime, Planet cel, String allianceName) {
+    public Slots(int id, Calendar targetTime, Coords cel, Coords baza, Mission mission) {
         this.id = id;
         this.targetTime = targetTime;
         this.cel = cel;
-        this.allianceName = allianceName;
-        this.returnTime = null;
-        this.powrot = null;
+        this.baza = baza;
+        this.mission = mission;
     }
 
-    public Slots(String id, Calendar targetTime, Planet cel) {
-        this.id = id;
-        this.targetTime = targetTime;
-        this.cel = cel;
-        this.returnTime = null;
-        this.powrot = null;
-        this.allianceName = "";
+    
+    
+    
+    public Mission getMission() {
+        return mission;
     }
+
+    public Calendar getReversalTime() {
+        return reversalTime;
+    }
+
+    
+    
 
     public String getAllianceName() {
         return allianceName;
     }
 
-    public Planet getCel() {
+    public Coords getCel() {
         return cel;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public Planet getPowrot() {
-        return powrot;
+    public Coords getBaza() {
+        return baza;
     }
 
     public Calendar getReturnTime() {
@@ -78,6 +96,17 @@ public class Slots {
 
     public Calendar getTargetTime() {
         return targetTime;
+    }
+    SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+    public String toString() {
+        return "Slots{" + "id=" + id + 
+                ", targetTime=" + sdf.format(targetTime.getTime()) + 
+                ", cel=" + cel + 
+                ", returnTime=" + (returnTime==null?"X":sdf.format(returnTime.getTime())) + 
+                ", reversalTime=" + (reversalTime==null?"X":sdf.format(reversalTime.getTime())) + 
+                ", baza=" + baza + 
+                ", allianceName=" + (allianceName==null?"X":allianceName) + 
+                ", mission=" + mission + '}';
     }
     
     
