@@ -55,12 +55,14 @@ public class SeleniumStartTest {
     }
 
     @Test
+    @Ignore
     public void PropertiesTest() {
         System.out.println("Properties test");
         System.out.println(prop.toString());
     }
 
     @Test
+    @Ignore
     public void SeleniumStartTest() throws OgameException {
 
         o.login(uni, nick, pass);
@@ -91,6 +93,7 @@ public class SeleniumStartTest {
     }
 
     @Test
+    @Ignore
     public void wykrycieListyPlanet() throws OgameException {
        o.login(uni, nick, pass);
        List<String> planety = o.getPlanetNames();
@@ -107,7 +110,6 @@ public class SeleniumStartTest {
     }
     
     @Test
-    @Ignore
     public void eventList()throws OgameException{
         try{
         o.login(uni, nick, pass);
@@ -178,6 +180,4 @@ public class SeleniumStartTest {
         o.sendFleet(fs, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
         o.logout();
     }
-    
-    
 }

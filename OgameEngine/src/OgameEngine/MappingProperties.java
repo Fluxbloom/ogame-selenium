@@ -121,7 +121,7 @@ class MappingProperties {
     private String buildBuilding_missileSilo;//=id=details44
     private String buildBuilding_nanitas;//=id=details15
     private String buildBuilding_terraformer;//=id=details33
-    // TODO missina moon building option
+    // TODO missing moon building option
     private String buildBuilding_buildButtonDisabled;//=//a[@class='build-it_disabled']
     private String buildButtonEnabled;//=//a[@class='build-it']
     // STUDIES 
@@ -197,7 +197,6 @@ class MappingProperties {
     private String event_list_time_parser_hour;//=g
     private String event_list_time_parser_minute;//=min.
     private String event_list_time_parser_second;//=sek.
-   
     //Performance
     private String performance_m;//=name=last1
     private String performance_k;//=name=last2
@@ -207,7 +206,6 @@ class MappingProperties {
     private String performance_ss;//=name=last212
     private String performance_ok;//=//span[@class="factorbutton"/input
     private String performance_select;
-    
     //Shipyard count
     private String shipyardCountXpath;//li[@id="%s"]/div/a@title
     private String shipyardCountLM;//=button204
@@ -251,7 +249,22 @@ class MappingProperties {
     private String hm_dp;//=//div[@class="defense408"]/div/a/span/span
     private String hm_pr;//=//div[@class="defense502"]/div/a/span/span
     private String hm_rm;//=//div[@class="defense503"]/div/a/span/span
-    
+    private String slots_usedFleets;//=//div[@class="fleetStatus"]/span[@class="fleetSlots"]/span[@class="current"]
+    private String slots_maxFleets;//=//div[@class="fleetStatus"]/span[@class="fleetSlots"]/span[@class="all"]
+    private String slots_useExp;//=//div[@class="fleetStatus"]/span[@class="expSlots"]/span[@class="current"]
+    private String slots_maxExp;//=//div[@class="fleetStatus"]/span[@class="expSlots"]/span[@class="all"]
+    private String slots_fleet_by_number;//=//div[contains(@id,"fleet")]
+    private String slots_fleet_by_id;//=//div[contains(@id,"%i")]
+    private String slots_fleetId_suffix;//=@id
+    private String slots_fleetArrival_suffix;//=/span[contains(@id,"timer_")]
+    private String slots_fleetMission_suffix;//=/span[contains(@class,"mission")]
+    private String slots_fleetAllianceName_suffix;//=/span[contains(@class,"allianceName")]
+    private String slots_fleetOriginPlanet_suffix;//=/span[@class="originData"]//a
+    private String slots_fleetReversal_suffic;//=/span[contains(@class,"reversal")]
+    private String slots_fleetReversal_titleAtribute_suffix;//=/span[contains(@class,"reversal")]@title
+    private String slots_fleetTargetPlanet_suffix;//=/span[@class="destinationData"]//a
+    private String slots_fleetComeBack_suffix;//=/span[contains(@id,"timerNext_")]
+    private String slots_fleetComeBack_titleAtribute_suffix;//=/span[contains(@id,"timerNext_")]@title
 
     MappingProperties() throws IOException {
         Properties defaultPath = new Properties();
@@ -448,22 +461,22 @@ class MappingProperties {
         event_list_time_parser_minute = properties.getProperty("event_list_time_parser_minute");
         event_list_time_parser_second = properties.getProperty("event_list_time_parser_second");
 
-         //Performance
-    performance_m=properties.getProperty("performance_m");//=name=last1
-    performance_k=properties.getProperty("performance_k");//=name=last1
-    performance_d=properties.getProperty("performance_d");//=name=last1
-    performance_es=properties.getProperty("performance_es");//=name=last1
-    performance_ef=properties.getProperty("performance_ef");//=name=last1
-    performance_ss=properties.getProperty("performance_ss");//=name=last1
-    performance_ok=properties.getProperty("performance_ok");//=name=last1
-    performance_select=properties.getProperty("performance_select");
-        
+        //Performance
+        performance_m = properties.getProperty("performance_m");//=name=last1
+        performance_k = properties.getProperty("performance_k");//=name=last1
+        performance_d = properties.getProperty("performance_d");//=name=last1
+        performance_es = properties.getProperty("performance_es");//=name=last1
+        performance_ef = properties.getProperty("performance_ef");//=name=last1
+        performance_ss = properties.getProperty("performance_ss");//=name=last1
+        performance_ok = properties.getProperty("performance_ok");//=name=last1
+        performance_select = properties.getProperty("performance_select");
+
         //Shipyard Details
-        
+
         shipyardCountXpath = properties.getProperty("hm");
         shipyardCountLM = properties.getProperty("hm_lm");
         shipyardCountCM = properties.getProperty("hm_cm");
-        shipyardCountKRK= properties.getProperty("hm_kraz");
+        shipyardCountKRK = properties.getProperty("hm_kraz");
         hm_ow = properties.getProperty("hm_ow");
         hm_panc = properties.getProperty("hm_panc");
         hm_bomb = properties.getProperty("hm_bomb");
@@ -474,9 +487,9 @@ class MappingProperties {
         hm_skol = properties.getProperty("hm_skol");
         hm_rec = properties.getProperty("hm_rec");
         hm_ss = properties.getProperty("hm_ss");
-        
+
         //Study Details
-        
+
         hm_te = properties.getProperty("hm_te");
         hm_tl = properties.getProperty("hm_tl");
         hm_tj = properties.getProperty("hm_tj");
@@ -493,22 +506,104 @@ class MappingProperties {
         hm_tb = properties.getProperty("hm_tb");
         hm_to = properties.getProperty("hm_to");
         hm_op = properties.getProperty("hm_op");
-        
+
         //Defence Details
-        
-        hm_wr= properties.getProperty("hm_wr");
-        hm_ll= properties.getProperty("hm_ll");
-        hm_cl= properties.getProperty("hm_cl");
-        hm_dg= properties.getProperty("hm_dg");
-        hm_dj= properties.getProperty("hm_dj");
-        hm_wp= properties.getProperty("hm_wp");
-        hm_mp= properties.getProperty("hm_mp");
-        hm_dp= properties.getProperty("hm_dp");
-        hm_pr= properties.getProperty("hm_pr");
-        hm_rm= properties.getProperty("hm_rm");
-        
+
+        hm_wr = properties.getProperty("hm_wr");
+        hm_ll = properties.getProperty("hm_ll");
+        hm_cl = properties.getProperty("hm_cl");
+        hm_dg = properties.getProperty("hm_dg");
+        hm_dj = properties.getProperty("hm_dj");
+        hm_wp = properties.getProperty("hm_wp");
+        hm_mp = properties.getProperty("hm_mp");
+        hm_dp = properties.getProperty("hm_dp");
+        hm_pr = properties.getProperty("hm_pr");
+        hm_rm = properties.getProperty("hm_rm");
+        // sloty
+        slots_usedFleets = properties.getProperty("slots_usedFleets");////div[@class="fleetStatus"]/span[@class="fleetSlots"]/span[@class="current"]
+        slots_maxFleets = properties.getProperty("slots_maxFleets");////div[@class="fleetStatus"]/span[@class="fleetSlots"]/span[@class="all"]
+        slots_useExp = properties.getProperty("slots_useExp");////div[@class="fleetStatus"]/span[@class="expSlots"]/span[@class="current"]
+        slots_maxExp = properties.getProperty("slots_maxExp");////div[@class="fleetStatus"]/span[@class="expSlots"]/span[@class="all"]
+        slots_fleet_by_number = properties.getProperty("slots_fleet_by_number");////div[contains(@id,"fleet")]
+        slots_fleet_by_id = properties.getProperty("slots_fleet_by_id");////div[contains(@id,"%i")]
+        slots_fleetId_suffix = properties.getProperty("slots_fleetId_suffix");//@id
+        slots_fleetArrival_suffix = properties.getProperty("slots_fleetArrival_suffix");///span[contains(@id,"timer_")]
+        slots_fleetMission_suffix = properties.getProperty("slots_fleetMission_suffix");///span[contains(@class,"mission")]
+        slots_fleetAllianceName_suffix = properties.getProperty("slots_fleetAllianceName_suffix");///span[contains(@class,"allianceName")]
+        slots_fleetOriginPlanet_suffix = properties.getProperty("slots_fleetOriginPlanet_suffix");///span[@class="originData"]//a
+        slots_fleetReversal_suffic = properties.getProperty("slots_fleetReversal_suffic");///span[contains(@class,"reversal")]
+        slots_fleetReversal_titleAtribute_suffix = properties.getProperty("slots_fleetReversal_titleAtribute_suffix");///span[contains(@class,"reversal")]@title
+        slots_fleetTargetPlanet_suffix = properties.getProperty("slots_fleetTargetPlanet_suffix");///span[@class="destinationData"]//a
+        slots_fleetComeBack_suffix = properties.getProperty("slots_fleetComeBack_suffix");///span[contains(@id,"timerNext_")]
+        slots_fleetComeBack_titleAtribute_suffix = properties.getProperty("slots_fleetComeBack_titleAtribute_suffix");///span[contains(@id,"timerNext_")]@title
+    }
+
+    public String getSlots_fleet_by_id(int i) {
+        return slots_fleet_by_id.replace("%i", Integer.toString(i));
+    }
+
+    public String getSlots_fleet_by_number(int i) {
+        return slots_fleet_by_number.replace("%i", Integer.toString(i));
+    }
+
+    public String getSlots_fleetAllianceName_suffix() {
+        return slots_fleetAllianceName_suffix;
+    }
+
+    public String getSlots_fleetArrival_suffix() {
+        return slots_fleetArrival_suffix;
+    }
+
+    public String getSlots_fleetComeBack_suffix() {
+        return slots_fleetComeBack_suffix;
+    }
+
+    public String getSlots_fleetComeBack_titleAtribute_suffix() {
+        return slots_fleetComeBack_titleAtribute_suffix;
+    }
+
+    public String getSlots_fleetId_suffix() {
+        return slots_fleetId_suffix;
+    }
+
+    public String getSlots_fleetMission_suffix() {
+        return slots_fleetMission_suffix;
+    }
+
+    public String getSlots_fleetOriginPlanet_suffix() {
+        return slots_fleetOriginPlanet_suffix;
+    }
+
+    public String getSlots_fleetReversal_suffic() {
+        return slots_fleetReversal_suffic;
+    }
+
+    public String getSlots_fleetReversal_titleAtribute_suffix() {
+        return slots_fleetReversal_titleAtribute_suffix;
+    }
+
+    public String getSlots_fleetTargetPlanet_suffix() {
+        return slots_fleetTargetPlanet_suffix;
+    }
+
+    public String getSlots_maxExp() {
+        return slots_maxExp;
+    }
+
+    public String getSlots_maxFleets() {
+        return slots_maxFleets;
+    }
+
+    public String getSlots_useExp() {
+        return slots_useExp;
+    }
+
+    public String getSlots_usedFleets() {
+        return slots_usedFleets;
     }
     
+    
+
     public String getPerformance_d() {
         return performance_d;
     }
@@ -536,11 +631,11 @@ class MappingProperties {
     public String getPerformance_ss() {
         return performance_ss;
     }
-    
-     public String getPerformance_select() {
+
+    public String getPerformance_select() {
         return performance_select;
     }
-    
+
     public String getHm_cl() {
         return hm_cl;
     }
@@ -645,7 +740,6 @@ class MappingProperties {
         return hm_ts;
     }
 
-    
     public String getHm_bomb() {
         return shipyardCountXpath.replace("%s", hm_bomb);
     }
@@ -655,7 +749,7 @@ class MappingProperties {
     }
 
     public String getHm_dt() {
-        return shipyardCountXpath.replace("%s", hm_dt);    
+        return shipyardCountXpath.replace("%s", hm_dt);
     }
 
     public String getHm_gs() {
@@ -697,7 +791,6 @@ class MappingProperties {
     public String getHm_ss() {
         return shipyardCountXpath.replace("%s", hm_ss);
     }
-    
 
     public String getEvent_list_time_parser_day() {
         return event_list_time_parser_day;

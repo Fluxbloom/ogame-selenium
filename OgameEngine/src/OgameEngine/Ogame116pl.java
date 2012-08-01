@@ -256,6 +256,8 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         selenium.waitForPageToLoad(mappings.getTimeout());
     }
 
+    // TODO gdy nie widoczny lewy panel powinno się przelogować ponownie
+    
     private void clickPrzeglad() {
         clickAndWait(mappings.getLeftButtonPrzegladaj());
     }
@@ -825,17 +827,37 @@ private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh
     }
 
     @Override
-    public List<Flights> getSlots() throws OgameException {
+    public List<Slots> getSlots() throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void turnBackFlight(Flights f) throws OgameException {
+    public void turnBackFlight(Slots f) throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Resources getPlanetHourlyProduction() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getSlotsTotal() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getSlotsOccupied() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getExpeditionsTotal() throws OgameException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getExpeditionsOccupied() throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
