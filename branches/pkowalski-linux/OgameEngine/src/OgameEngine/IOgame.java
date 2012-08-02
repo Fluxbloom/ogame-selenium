@@ -21,6 +21,7 @@ public interface IOgame {
     abstract public void wait(int hour, int minute, int seconds);
     abstract public void login(String uni, String user, String pass) throws OgameException;
     abstract public void logout()throws OgameException;
+    abstract public void close();
     abstract public int getPlanetCount()throws OgameException;
     abstract public void changePlanet(int planetNumber)throws OgameException;
     abstract public void changePlanetByName(String name)throws OgameException;

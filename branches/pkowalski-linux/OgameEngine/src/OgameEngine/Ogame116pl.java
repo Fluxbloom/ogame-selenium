@@ -268,7 +268,6 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         try {
             selenium.close();
             selenium.stop();
-            super.tearDown();
         } catch (Exception ex) {
             System.err.println("[FAIL]");
         }
@@ -441,6 +440,13 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         clickAndWait(mappings.getLogout_button());
         this.stop();
     }
+
+    @Override
+    public void close() {
+        this.stop();
+    }
+    
+    
 
     @Override
     public int getPlanetCount()  throws OgameException{
@@ -921,6 +927,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
                 
                 
                 //baza, cel
+                // TODO czy planeta?
                 baza = Coords.parse(selenium.getText(xpath+mappings.getSlots_fleetOriginPlanet_suffix()));
                 cel = Coords.parse(selenium.getText(xpath+mappings.getSlots_fleetTargetPlanet_suffix())); 
                 //misja
