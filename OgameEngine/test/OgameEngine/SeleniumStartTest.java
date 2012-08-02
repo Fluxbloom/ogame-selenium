@@ -117,7 +117,7 @@ public class SeleniumStartTest {
             List<Flights> lista = o.getEventList();
             Iterator<Flights> it = lista.iterator();
             while (it.hasNext()) {
-                System.err.println(it.next().toString());
+                System.out.println(it.next().toString());
             }
         } catch (OgameException ex) {
             System.err.println(ex.getMessage());

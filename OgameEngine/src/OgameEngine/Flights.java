@@ -33,14 +33,32 @@ public class Flights {
         this.fleetSize = fleetSize;
         this.dest = dest;
     }
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
     @Override
     public String toString() {
         
-        return "Flights{" + "type=" + type.toString() + ", attackType=" + attackType.toString() +
-                ", arrivalTime=" + sdf.format(arrivalTime.getTime()) + ", origin=" +
-                (origin==null?"ACS COORDS":origin.toString()) + 
-                ", fleetSize=" + Integer.toString(fleetSize) + ", dest=" + dest.toString() + '}';
+        return "Flights{" + "type=" + type.toString() + 
+                ", attackType=" + attackType.toString() +
+                ", arrivalTime=" + sdf.format(arrivalTime.getTime()) + 
+                ", origin=" + (origin==null?"ACS COORDS":origin.toString()) + 
+                ", fleetSize=" + Integer.toString(fleetSize) + 
+                ", dest=" + dest.toString() + '}';
+    }
+
+    public Calendar getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public Planet getDest() {
+        return dest;
+    }
+
+    public Planet getOrigin() {
+        return origin;
+    }
+
+    public FriendOrFoe getType() {
+        return type;
     }
     
     
