@@ -36,6 +36,7 @@ class MappingProperties {
     private String login_isLoggedIn_xpath;
     private String login_isLoggedIn_xpath_atribute;
     private String login_isLoggedIn_response;
+    private String login_wrongPassword;
     // LEFT MENU
     private String leftButtonPrzegladaj;
     private String leftButtonSurowce;
@@ -308,6 +309,7 @@ class MappingProperties {
         login_isLoggedIn_xpath=properties.getProperty("login_isLoggedIn_xpath");//meta[@name="ogame-universe"]@content
         login_isLoggedIn_xpath_atribute=properties.getProperty("login_isLoggedIn_xpath_atribute");//meta[@name="ogame-universe"]@content
         login_isLoggedIn_response=properties.getProperty("login_isLoggedIn_response");//uni116.ogame.pl
+        login_wrongPassword = properties.getProperty("login_wrongPassword"); 
         // LEFT MENU PROPERTIES
         this.leftButtonPrzegladaj = properties.getProperty("leftButtonPrzegladaj");
         this.leftButtonSurowce = properties.getProperty("leftButtonSurowce");
@@ -567,6 +569,10 @@ class MappingProperties {
         slots_parseArrival=properties.getProperty("slots_parseArrival");// '|'dd.MM.yyyy HH:mm:ss
 slots_parseReversal=properties.getProperty("slots_parseReversal");//'Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss
 slots_parseReturn=properties.getProperty("slots_parseReturn");//'|'dd.MM.yyyy HH:mm:ss
+    }
+
+    public String getLogin_wrongPassword() {
+        return login_wrongPassword;
     }
 
     public String getLogin_isLoggedIn_xpath_atribute() {

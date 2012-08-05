@@ -438,12 +438,15 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             System.err.println("Inner Error "+ex.getMessage());
             if (ex.getMessage().compareTo("ERROR: Current window or frame is closed!")==0) {
                 throw OgameException.LOGIN_BROWSER_CLOSED;
-            } else if (ex.getMessage().compareTo("Timed out after 30000ms")==0){
+            } else if (ex.getMessage().contains("Timed out after ")){
                 throw OgameException.LOGIN_NO_INTERNET_CONNECTION;
             }
             
         }catch (Exception ex){
             System.err.println(ex.getMessage());
+        }
+        if (selenium.isTextPresent(mappings.getLogin_wrongPassword())){
+            throw OgameException.LOGIN_WRONG_PASSWORD;
         }
     }
 

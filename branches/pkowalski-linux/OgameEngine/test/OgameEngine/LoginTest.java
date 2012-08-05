@@ -5,6 +5,7 @@
 package OgameEngine;
 
 import java.io.IOException;
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -52,7 +53,6 @@ public class LoginTest {
     //
 
     @Test
-    @Ignore
     public void noInternetConnection() throws OgameException {
         try {
             o.login(uni, nick, pass);
@@ -77,5 +77,22 @@ public class LoginTest {
         } finally {
             o.close();
         }
+    }
+    
+    @Test
+    public void wrongPasswordTest() {
+       try {
+            o.login(uni, nick, "wrongpassword");
+            Assert.fail("Expected error wrong password");
+            
+        } catch (OgameException ex){
+            if (ex==OgameException.LOGIN_WRONG_PASSWORD){
+                System.out.println("Obtained expected error");
+            } else 
+            System.err.println("Ogame Exception "+ex.getMessage());
+        }
+        finally {
+            ((Ogame116pl) o).stop();
+        } 
     }
 }
