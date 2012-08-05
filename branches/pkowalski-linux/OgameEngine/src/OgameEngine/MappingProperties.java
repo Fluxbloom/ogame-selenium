@@ -33,6 +33,9 @@ class MappingProperties {
     private String login_nick_target;//=name=login
     private String login_pass_target;//=name=pass
     private String login_login_with_pass_button;//=id=loginSubmit
+    private String login_isLoggedIn_xpath;
+    private String login_isLoggedIn_xpath_atribute;
+    private String login_isLoggedIn_response;
     // LEFT MENU
     private String leftButtonPrzegladaj;
     private String leftButtonSurowce;
@@ -299,8 +302,12 @@ class MappingProperties {
         leftButtonEventList = properties.getProperty("leftButtonEventList");
         leftButtonResourceSettings = properties.getProperty("leftButtonResourceSettings");
         leftButtonFlightsList = properties.getProperty("leftButtonFlightsList");
-
+        
         logout_button = properties.getProperty("logout_button");//=id=loginSubmit
+        
+        login_isLoggedIn_xpath=properties.getProperty("login_isLoggedIn_xpath");//meta[@name="ogame-universe"]@content
+        login_isLoggedIn_xpath_atribute=properties.getProperty("login_isLoggedIn_xpath_atribute");//meta[@name="ogame-universe"]@content
+        login_isLoggedIn_response=properties.getProperty("login_isLoggedIn_response");//uni116.ogame.pl
         // LEFT MENU PROPERTIES
         this.leftButtonPrzegladaj = properties.getProperty("leftButtonPrzegladaj");
         this.leftButtonSurowce = properties.getProperty("leftButtonSurowce");
@@ -560,6 +567,18 @@ class MappingProperties {
         slots_parseArrival=properties.getProperty("slots_parseArrival");// '|'dd.MM.yyyy HH:mm:ss
 slots_parseReversal=properties.getProperty("slots_parseReversal");//'Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss
 slots_parseReturn=properties.getProperty("slots_parseReturn");//'|'dd.MM.yyyy HH:mm:ss
+    }
+
+    public String getLogin_isLoggedIn_xpath_atribute() {
+        return login_isLoggedIn_xpath_atribute;
+    }
+
+    public String getLogin_isLoggedIn_response() {
+        return login_isLoggedIn_response;
+    }
+
+    public String getLogin_isLoggedIn_xpath() {
+        return login_isLoggedIn_xpath;
     }
 
     public String getSlots_parseArrival() {

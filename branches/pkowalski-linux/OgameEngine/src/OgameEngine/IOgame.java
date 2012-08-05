@@ -20,6 +20,8 @@ public interface IOgame {
     abstract public void wait(int minute, int seconds);
     abstract public void wait(int hour, int minute, int seconds);
     abstract public void login(String uni, String user, String pass) throws OgameException;
+    abstract public void relogin(String uni, String user, String pass) throws OgameException;
+    abstract public boolean isLogged() throws OgameException;
     abstract public void logout()throws OgameException;
     abstract public void close();
     abstract public int getPlanetCount()throws OgameException;
