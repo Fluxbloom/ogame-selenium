@@ -92,58 +92,11 @@ public class SeleniumStartTest {
         o.wait(10);
     }
 
-    @Test
-    @Ignore
-    public void wykrycieListyPlanet() throws OgameException {
-        o.login(uni, nick, pass);
-        List<String> planety = o.getPlanetNames();
-        Iterator<String> it = planety.iterator();
-        while (it.hasNext()) {
-            System.out.println("Planeta " + it.next());
-        }
-        planety = o.getPlanetCoords();
-        it = planety.iterator();
-        while (it.hasNext()) {
-            System.out.println("Planeta " + it.next());
-        }
-        o.logout();
-    }
+    
 
-    @Test
-    public void eventList() throws OgameException {
-        try {
-            o.wait(5);
-            o.login(uni, nick, pass);
-            List<Flights> lista = o.getEventList();
-            Iterator<Flights> it = lista.iterator();
-            while (it.hasNext()) {
-                System.out.println(it.next().toString());
-            }
-        } catch (OgameException ex) {
-            System.err.println(ex.getMessage());
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        } finally {
-            o.logout();
-        }
-    }
+    
 
-    @Test
-    public void obtainSlots() throws OgameException {
-        try {
-            o.wait(5);
-            o.login(uni, nick, pass);
-            System.out.println("Slots " + o.getSlotsOccupied() + '/' + o.getSlotsTotal());
-            List<Slots> list = o.getSlots();
-            Iterator<Slots> it = list.iterator();
-            while (it.hasNext()){
-                System.out.println(it.next().toString());
-            }
-        } finally {
-            o.logout();
-        }
-    }
-
+    
     @Test
     @Ignore
     public void farming() throws OgameException {

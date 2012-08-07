@@ -42,6 +42,9 @@ public class Fleet {
     
     public static final Fleet WHOLE_FLEET = new Fleet();
 
+    public boolean isEmpty(){
+        return fleet.isEmpty();
+    }
     
     public final static class Ships extends ShipyardShips {
     

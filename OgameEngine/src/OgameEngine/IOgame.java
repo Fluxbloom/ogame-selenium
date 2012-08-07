@@ -27,6 +27,7 @@ public interface IOgame {
     abstract public int getPlanetCount()throws OgameException;
     abstract public void changePlanet(int planetNumber)throws OgameException;
     abstract public void changePlanetByName(String name)throws OgameException;
+    abstract public void changePlanetByCoords(Coords c) throws OgameException;
     abstract public List<String> getPlanetNames()throws OgameException;
     abstract public List<String> getPlanetCoords()throws OgameException;
     abstract public void sendFleet(Fleet f,StartDestination d, Coords c, Speed speed, Mission m, Resources r) throws OgameException;
