@@ -46,6 +46,7 @@ class MappingProperties {
     private String leftButtonObrona;
     private String leftButtonFlota;
     private String leftButtonEventList;
+    private String leftButtonEventList_empty;
     private String leftButtonResourceSettings;
     private String leftButtonFlightsList;
     private String logout_button;
@@ -55,6 +56,7 @@ class MappingProperties {
     private int countplanet_result_pos;//=1
     private String changeplanetbyid;//=]
     private String changeplanetbyName;//=")]
+    private String changeplanetbyCoords;
     private String changeplanetgetName;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
     private String changeplanetgetCoords;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
     // FLEET SEND MENU
@@ -301,6 +303,7 @@ class MappingProperties {
         login_pass_target = properties.getProperty("login_pass_target");//=name=pass
         login_login_with_pass_button = properties.getProperty("login_login_with_pass_button");//=id=loginSubmit
         leftButtonEventList = properties.getProperty("leftButtonEventList");
+        leftButtonEventList_empty = properties.getProperty("leftButtonEventList_empty");
         leftButtonResourceSettings = properties.getProperty("leftButtonResourceSettings");
         leftButtonFlightsList = properties.getProperty("leftButtonFlightsList");
         
@@ -324,6 +327,7 @@ class MappingProperties {
         countplanet_result_pos = Integer.parseInt(properties.getProperty("countplanet_result_pos"));//=1
         changeplanetbyid = properties.getProperty("changeplanetbyid");//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
         changeplanetbyName = properties.getProperty("changeplanetbyName");//=")]
+        changeplanetbyCoords= properties.getProperty("changeplanetbyCoords");
         changeplanetgetName = properties.getProperty("changeplanetgetName");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
         changeplanetgetCoords = properties.getProperty("changeplanetgetCoords");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
         // FLEET SEND MENU
@@ -569,6 +573,14 @@ class MappingProperties {
         slots_parseArrival=properties.getProperty("slots_parseArrival");// '|'dd.MM.yyyy HH:mm:ss
 slots_parseReversal=properties.getProperty("slots_parseReversal");//'Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss
 slots_parseReturn=properties.getProperty("slots_parseReturn");//'|'dd.MM.yyyy HH:mm:ss
+    }
+
+    public String getLeftButtonEventList_empty() {
+        return leftButtonEventList_empty;
+    }
+
+    public String getChangeplanetbyCoords(Coords c) {
+        return changeplanetbyCoords.replace("%i", c.shortPrint());
     }
 
     public String getLogin_wrongPassword() {

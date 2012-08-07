@@ -282,6 +282,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     // TODO gdy nie widoczny lewy panel powinno się przelogować ponownie
     private void clickPrzeglad() {
+        wait(1);
         clickAndWait(mappings.getLeftButtonPrzegladaj());
         wait(1);
     }
@@ -317,8 +318,11 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     private void clickEventList() {
         this.clickPrzeglad();
-        selenium.click(mappings.getLeftButtonEventList());
         wait(1);
+        if (!selenium.isTextPresent(mappings.getLeftButtonEventList_empty())){
+            selenium.click(mappings.getLeftButtonEventList());
+            wait(1);
+        }
     }
 
     private void clickResourceSettings() {
@@ -459,7 +463,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
              return selenium.getAttribute(mappings.getLogin_isLoggedIn_xpath_atribute()).compareTo(mappings.getLogin_isLoggedIn_response())==0;
             } else
                 return false;
-        } catch (SeleniumException | Exception ex) {
+        } catch (SeleniumException ex) {
+            System.err.println(ex.getMessage());
+            return false;
+        } catch ( Exception ex) {
             System.err.println(ex.getMessage());
             return false;
         }
@@ -511,6 +518,13 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public void changePlanetByName(String name) throws OgameException {
         clickAndWait(mappings.getChangeplanetbyName(name));
+        wait(1);
+    }
+    
+    @Override
+    public void changePlanetByCoords(Coords c) throws OgameException {
+        String xpath = mappings.getChangeplanetbyCoords(c);
+        clickAndWait(xpath);
         wait(1);
     }
 
@@ -723,6 +737,8 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public List<Flights> getEventList() throws OgameException {
         // najpierw ilosc pozycji
         this.clickEventList();
+        if (selenium.isTextPresent(mappings.getLeftButtonEventList_empty()))
+            return new ArrayList<>();
         int iloscFlot = selenium.getXpathCount(mappings.getEvent_list_root()).intValue();
         String flightXPath;
 
@@ -762,6 +778,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             } else {
                 throw new OgameException("Error cannot recognized whether the fleet is friend or foe");
             }
+            if (selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()).compareTo("wykonano")==0) continue;
             arrival = this.parseArrivalTime(
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()),
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_arrival_time()));
@@ -1063,4 +1080,6 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         this.clickMovements();
         return Integer.parseInt(selenium.getText(mappings.getSlots_useExp()));
     }
+
+
 }

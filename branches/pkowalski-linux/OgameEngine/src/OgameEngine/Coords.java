@@ -107,7 +107,10 @@ public class Coords {
     public String toString() {
         return "Coords{" + "universe=" + universe + ", system=" + system + ", position=" + position + ", dest=" + dest + '}';
     }
-
+    
+    public String shortPrint(){
+        return "["+this.universe+":"+this.system+":"+this.position+"]";
+    }
     public static class Destination {
         private String name;
     protected Destination(String name){this.name=name;}
@@ -151,7 +154,9 @@ public class Coords {
     public String toString() {
         return "Planet{" + "uni=" + uni + ", sys=" + sys + ", pos=" + pos + '}';
     }
-
+    public String shortPrint(){
+        return "["+this.uni+":"+this.sys+":"+this.pos+"]";
+    }
         public int getPos() {
             return pos;
         }

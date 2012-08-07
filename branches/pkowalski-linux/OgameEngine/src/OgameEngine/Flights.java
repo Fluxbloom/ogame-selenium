@@ -20,7 +20,7 @@ public class Flights {
     /**
      * Uwaga, floty ACS w ataku nie posiadają pola origin
      */
-    private Planet origin;
+    private Planet origin; //TODO zmienic planety na coords
     private int fleetSize;
     private Planet dest;
 
@@ -44,6 +44,7 @@ public class Flights {
                 ", fleetSize=" + Integer.toString(fleetSize) + 
                 ", dest=" + dest.toString() + '}';
     }
+   
 
     public Calendar getArrivalTime() {
         return arrivalTime;
@@ -79,6 +80,10 @@ public class Flights {
         @Override
         public String toString() {
             return "FriendOrFoe{" + "name=" + name + '}';
+        }
+
+        public String getName() {
+            return name;
         }
         
     }
