@@ -511,10 +511,17 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public List<Planet> getPlanetList() throws OgameException {
         int size = this.getPlanetCount();
+        List<Planet> result = new ArrayList<Planet>();
+        Planet temp;
+        String name;
+        Coords coords;
         for (int i=1;i<size+1;i++){
-            // TODO dokończyć pobieranie listy planet
+            name = selenium.getText(mappings.getChangeplanetgetName(i));
+            coords = Coords.parse(selenium.getText(mappings.getChangeplanetgetCoords(i)));
+            temp = new Planet(coords,name);
+            result.add(temp);
         }
-        return null;
+        return result;
     }
 
     @Override
@@ -755,6 +762,8 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         Calendar arrival;
         Coords origin;
         Coords target;
+        String contentLink;
+        Map<String,String> content; 
         int size;
         List<Events> lista = new ArrayList<>();
 
@@ -789,7 +798,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             } else {
                 throw new OgameException("Error cannot recognized whether the fleet is friend or foe");
             }
-            if (selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()).compareTo("wykonano")==0) continue;
+            if (selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()).compareTo(mappings.getEvent_list_time_parser_ingore())==0) continue;
             arrival = this.parseArrivalTime(
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()),
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_arrival_time()));
@@ -800,7 +809,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             }
             target = Coords.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_destCoords()));
             size = Integer.parseInt(selenium.getText(flightXPath + mappings.getEvent_list_atribute_detailsFleet()));
-
+            // parsowanie składu floty
+            contentLink=selenium.getAttribute(flightXPath+mappings.getEvent_list_atribute_icon_movement());
+            System.err.println("Cutting content");
+            content = getContent(contentLink);
             lista.add(new Events(id,nastawienie, mp, arrival, origin, size, target));
 
         }
@@ -1092,5 +1104,29 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return Integer.parseInt(selenium.getText(mappings.getSlots_useExp()));
     }
 
+    private Map<String, String> getContent(String contentLink) {
+        Map<String,String> result = new HashMap<>();
+        selenium.openWindow(contentLink,"temp");
+        wait(1);
+        selenium.selectWindow("temp");
+        int count = selenium.getXpathCount("//tr").intValue();
+        for (int i=1; i<count+1; i++){
+            if (selenium.isElementPresent("//tr[i]/td[2]".replace("i", Integer.toString(i)))){
+                result.put(
+                        selenium.getText("//tr[i]/td[1]".replace("i", Integer.toString(i))),
+                        selenium.getText("//tr[i]/td[2]".replace("i", Integer.toString(i))));
+            }
+        }
+        selenium.close();
+        selenium.selectWindow(null);
+        Set set = result.entrySet();
+        System.err.println("Obtained content");
+        Iterator<Entry<String,String>> it = set.iterator();
+        for (Entry<String,String> temp; it.hasNext();){
+            temp = it.next();
+            System.err.println(temp.getKey()+"->"+temp.getValue());
+        }
+        return result;
+    }
 
 }

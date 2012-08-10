@@ -205,10 +205,12 @@ class MappingProperties {
     private String event_list_atribute_detailsFleet;//=/td[@class="detailsFleet"]/span
     private String event_list_atribute_destFleet;//=/td[@class="destFleet"]
     private String event_list_atribute_destCoords;//=/td[@class="destCoords"]/a
+    private String event_list_atribute_icon_movement;
     private String event_list_time_parser_day;//=c
     private String event_list_time_parser_hour;//=g
     private String event_list_time_parser_minute;//=min.
     private String event_list_time_parser_second;//=sek.
+    private String event_list_time_parser_ingore;
     //Performance
     private String performance_m;//=name=last1
     private String performance_k;//=name=last2
@@ -482,11 +484,14 @@ event_list_id_atribute_prefix=properties.getProperty("event_list_id_atribute_pre
         event_list_atribute_detailsFleet = properties.getProperty("event_list_atribute_detailsFleet");///td[@class="detailsFleet"]/span
         event_list_atribute_destFleet = properties.getProperty("event_list_atribute_destFleet");///td[@class="destFleet"]
         event_list_atribute_destCoords = properties.getProperty("event_list_atribute_destCoords");///td[@class="destCoords"]/a
-
+        event_list_atribute_icon_movement = properties.getProperty("event_list_atribute_icon_movement");
+        
+        
         event_list_time_parser_day = properties.getProperty("event_list_time_parser_day");
         event_list_time_parser_hour = properties.getProperty("event_list_time_parser_hour");
         event_list_time_parser_minute = properties.getProperty("event_list_time_parser_minute");
         event_list_time_parser_second = properties.getProperty("event_list_time_parser_second");
+        event_list_time_parser_ingore = properties.getProperty("event_list_time_parser_ingore"); 
 
         //Performance
         performance_m = properties.getProperty("performance_m");//=name=last1
@@ -893,6 +898,16 @@ slots_parseReturn=properties.getProperty("slots_parseReturn");//'|'dd.MM.yyyy HH
         return shipyardCountXpath.replace("%s", hm_ss);
     }
 
+    public String getEvent_list_atribute_icon_movement() {
+        return event_list_atribute_icon_movement;
+    }
+
+    public String getEvent_list_time_parser_ingore() {
+        return event_list_time_parser_ingore;
+    }
+
+    
+    
     public String getEvent_list_time_parser_day() {
         return event_list_time_parser_day;
     }

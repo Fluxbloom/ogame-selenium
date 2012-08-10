@@ -23,6 +23,7 @@ public class Events {
     private Coords origin; //TODO zmienic planety na coords
     private int fleetSize;
     private Coords dest;
+    // TODO dodać obsluge floty i zapasy
 
     public Events(FriendOrFoe type, Multiplicity attackType, Calendar arrivalTime,
             Coords origin, int fleetSize, Coords dest) {
