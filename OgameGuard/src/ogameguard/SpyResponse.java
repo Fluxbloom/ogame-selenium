@@ -4,7 +4,7 @@
  */
 package ogameguard;
 
-import OgameEngine.Flights;
+import OgameEngine.Events;
 import OgameEngine.Ogame;
 import OgameEngine.Slots;
 import java.util.List;
@@ -14,5 +14,5 @@ import java.util.List;
  * @author dyschemist
  */
 public interface SpyResponse {
-    abstract void response(Ogame o,List<Flights> list, List<Slots> sloty);
+    abstract void response(Ogame o,List<Events> list, List<Slots> sloty);
 }

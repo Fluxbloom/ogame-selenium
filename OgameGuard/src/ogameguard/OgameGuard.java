@@ -4,7 +4,7 @@
  */
 package ogameguard;
 
-import OgameEngine.Flights;
+import OgameEngine.Events;
 import OgameEngine.Ogame;
 import OgameEngine.OgameException;
 import OgameEngine.Slots;
@@ -30,7 +30,7 @@ public class OgameGuard {
 
     static final Logger logger = Logger.getLogger(OgameGuard.class.getName());
     Ogame o;
-    List<Flights> eventList;
+    List<Events> eventList;
     List<Slots> autoFleet;
     static GuardProperties properties;
     SpyResponse spyResponse;
@@ -122,7 +122,7 @@ public class OgameGuard {
             this.checkIfLogin();
             eventList = o.getEventList();
             logEventList();
-            List<Flights> spyActions = checkIfSpied();
+            List<Events> spyActions = checkIfSpied();
             spyResponse.response(o, spyActions, autoFleet);
             //List<Flights> attackActions = checkIfAttacked();
             //attackResponse.response(o,attackActions, autoFleet);
@@ -156,30 +156,55 @@ public class OgameGuard {
         }
     }
 
-    private List<Flights> checkIfSpied() {
-        List<Flights> spies = new ArrayList<Flights>();
-        Iterator<Flights> it = eventList.iterator();
-        for (Flights temp = it.next(); it.hasNext(); ) {
+    private List<Events> checkIfSpied() {
+        List<Events> spies = new ArrayList<Events>();
+        Iterator<Events> it = eventList.iterator();
+        for (Events temp = it.next(); it.hasNext(); ) {
             temp = it.next();
-            if (temp.getType() == Flights.SPY) {
+            if (temp.getType() == Events.SPY) {
                 spies.add(temp);
             }
         }
         return spies;
     }
 
-    private List<Flights> checkIfAttacked() {
-        List<Flights> attacks = new ArrayList<Flights>();
-        Iterator<Flights> it = eventList.iterator();
-        for (Flights temp; it.hasNext(); ) {
+    private List<Events> checkIfAttacked() {
+        List<Events> attacks = new ArrayList<Events>();
+        Iterator<Events> it = eventList.iterator();
+        for (Events temp; it.hasNext(); ) {
             temp = it.next();
-            if (temp.getType() == Flights.ATTACK) {
+            if (temp.getType() == Events.ATTACK) {
                 attacks.add(temp);
             }
         }
         return attacks;
     }
 
+    public void responseToAttack() {
+//        Iterator<Events> it = attackList.iterator();
+//        Calendar now = GregorianCalendar.getInstance();
+//        now.add(Calendar.MINUTE, (-1)*escapeMinutes);
+//        Coords planeta;
+//        for (Events temp = it.next(); it.hasNext(); temp=it.next()){
+//            // TODO tłumaczanie na akcje
+//            /*
+//             * 1. Trzeba sprawdzić czy czas zgodny
+//             */
+//              if (temp.getArrivalTime().after(now)){
+//                  planeta = temp.getDest();
+//                  
+//             /* 2. Czy flota na planecie
+//             * 3. Jeśli trzeba podnieść to
+//             * 4. Zapisać stan flot
+//             * 5. Podniesc flote
+//             * 6. Sprawdzić która flota się pojawiła
+//             * 7. Dorzucić flotę do automatycznych
+//             */
+//              }
+//        }
+        
+    }
+    
     private void checkAutoFleets() {
         //TODO dopisac wnetrze
         throw new UnsupportedOperationException("Not yet implemented");
@@ -187,13 +212,13 @@ public class OgameGuard {
 
     private void logEventList() {
         Calendar now = GregorianCalendar.getInstance();
-        Iterator<Flights> it = eventList.iterator();
+        Iterator<Events> it = eventList.iterator();
         logger.log(Level.INFO, "-------------------------------------------------");
         logger.log(Level.INFO, "Time: {0}", sdf.format(now.getTime()));
         if (eventList.isEmpty()) {
             logger.log(Level.INFO, "Brak wszelkich lotów");
         } else {
-            for (Flights temp; it.hasNext(); ) {
+            for (Events temp; it.hasNext(); ) {
                 temp = it.next();
                 logger.log(Level.INFO, "Fleet: {0} ->{1} on time {2} as {3}", new Object[]{(temp.getOrigin() == null ? "X" : temp.getOrigin().shortPrint()), temp.getDest().shortPrint(), sdf.format(temp.getArrivalTime().getTime()), temp.getType().getName()});
             }
