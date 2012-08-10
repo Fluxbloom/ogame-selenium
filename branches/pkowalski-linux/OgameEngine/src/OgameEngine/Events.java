@@ -4,7 +4,6 @@
  */
 package OgameEngine;
 
-import OgameEngine.Coords.Planet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -12,20 +11,21 @@ import java.util.Calendar;
  *
  * @author dyschemist
  */
-public class Flights {
+public class Events {
     
+    private int id;
     private FriendOrFoe type;
     private Multiplicity attackType;
     private Calendar arrivalTime;
     /**
      * Uwaga, floty ACS w ataku nie posiadają pola origin
      */
-    private Planet origin; //TODO zmienic planety na coords
+    private Coords origin; //TODO zmienic planety na coords
     private int fleetSize;
-    private Planet dest;
+    private Coords dest;
 
-    public Flights(FriendOrFoe type, Multiplicity attackType, Calendar arrivalTime,
-            Planet origin, int fleetSize, Planet dest) {
+    public Events(FriendOrFoe type, Multiplicity attackType, Calendar arrivalTime,
+            Coords origin, int fleetSize, Coords dest) {
         this.type = type;
         this.attackType = attackType;
         this.arrivalTime = arrivalTime;
@@ -33,11 +33,24 @@ public class Flights {
         this.fleetSize = fleetSize;
         this.dest = dest;
     }
+    
+    public Events(int id,FriendOrFoe type, Multiplicity attackType, Calendar arrivalTime,
+            Coords origin, int fleetSize, Coords dest) {
+        this.id = id;
+        this.type = type;
+        this.attackType = attackType;
+        this.arrivalTime = arrivalTime;
+        this.origin = origin;
+        this.fleetSize = fleetSize;
+        this.dest = dest;
+    }
+    
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
     @Override
     public String toString() {
         
-        return "Flights{" + "type=" + type.toString() + 
+        return "Flights{" + "id="+id+
+                ", type=" + type.toString() + 
                 ", attackType=" + attackType.toString() +
                 ", arrivalTime=" + sdf.format(arrivalTime.getTime()) + 
                 ", origin=" + (origin==null?"ACS COORDS":origin.toString()) + 
@@ -50,16 +63,20 @@ public class Flights {
         return arrivalTime;
     }
 
-    public Planet getDest() {
+    public Coords getDest() {
         return dest;
     }
 
-    public Planet getOrigin() {
+    public Coords getOrigin() {
         return origin;
     }
 
     public FriendOrFoe getType() {
         return type;
+    }
+
+    public int getId() {
+        return id;
     }
     
     

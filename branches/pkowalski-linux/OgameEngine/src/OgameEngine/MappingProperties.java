@@ -187,6 +187,8 @@ class MappingProperties {
     // event list
     private String event_list_root;//=//table[@id="eventContent"]/tbody/tr
     private String event_list_flight;//=//table[@id="eventContent"]/tbody/tr[%i]
+    private String event_list_id_atribute;//=@id
+    private String event_list_id_atribute_prefix;//=eventRow-
     private String event_list_class_atribute;//=//table[@id="eventContent"]/tbody/tr[%i]@class
     private String event_list_class_atribute_enemy_alliance;//=allianceAttack
     private String event_list_class_atribute_friendly;//=eventFleet
@@ -462,6 +464,8 @@ class MappingProperties {
         // event list
         event_list_root = properties.getProperty("event_list_root");//table[@id="eventContent"]/tbody/tr
         event_list_flight = properties.getProperty("event_list_flight");//table[@id="eventContent"]/tbody/tr[%i]
+        event_list_id_atribute=properties.getProperty("event_list_id_atribute");
+event_list_id_atribute_prefix=properties.getProperty("event_list_id_atribute_prefix");
         event_list_class_atribute = properties.getProperty("event_list_class_atribute");//table[@id="eventContent"]/tbody/tr[%i]@class
         event_list_class_atribute_enemy_alliance = properties.getProperty("event_list_class_atribute_enemy_alliance");//allianceAttack
         event_list_class_atribute_friendly = properties.getProperty("event_list_class_atribute_friendly");//eventFleet
@@ -967,6 +971,14 @@ slots_parseReturn=properties.getProperty("slots_parseReturn");//'|'dd.MM.yyyy HH
 
     public String getEvent_list_class_atribute_friendly_return() {
         return event_list_class_atribute_friendly_return;
+    }
+
+    public String getEvent_list_id_atribute() {
+        return event_list_id_atribute;
+    }
+
+    public String getEvent_list_id_atribute_prefix() {
+        return event_list_id_atribute_prefix;
     }
 
     public String getEvent_list_flight(int i) {

@@ -5,12 +5,11 @@
 package OgameEngine;
 
 import OgameEngine.Coords.Destination;
-import OgameEngine.Coords.Planet;
 import OgameEngine.Coords.StartDestination;
 import OgameEngine.Fleet.Ships;
 import OgameEngine.Fleet.ShipyardShips;
-import OgameEngine.Flights.FriendOrFoe;
-import OgameEngine.Flights.Multiplicity;
+import OgameEngine.Events.FriendOrFoe;
+import OgameEngine.Events.Multiplicity;
 import OgameEngine.Performance.Production;
 import OgameEngine.Performance.ResourceField;
 import com.thoughtworks.selenium.*;
@@ -510,6 +509,15 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
+    public List<Planet> getPlanetList() throws OgameException {
+        int size = this.getPlanetCount();
+        for (int i=1;i<size+1;i++){
+            // TODO dokończyć pobieranie listy planet
+        }
+        return null;
+    }
+
+    @Override
     public void changePlanet(int planetNumber) throws OgameException {
         clickAndWait(mappings.getChangeplanetbyid(planetNumber));
         wait(1);
@@ -734,47 +742,50 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public List<Flights> getEventList() throws OgameException {
+    public List<Events> getEventList() throws OgameException {
         // najpierw ilosc pozycji
         this.clickEventList();
         if (selenium.isTextPresent(mappings.getLeftButtonEventList_empty()))
             return new ArrayList<>();
         int iloscFlot = selenium.getXpathCount(mappings.getEvent_list_root()).intValue();
         String flightXPath;
-
+        int id;
         FriendOrFoe nastawienie;
         Multiplicity mp;
         Calendar arrival;
-        Planet origin;
-        Planet target;
+        Coords origin;
+        Coords target;
         int size;
-        List<Flights> lista = new ArrayList<>();
+        List<Events> lista = new ArrayList<>();
 
         for (int i = 1; i < iloscFlot + 1; i++) {
             // konwersja na loty
             flightXPath = mappings.getEvent_list_flight(i);
+            // parsowanie id
+            id = Integer.parseInt(selenium.getAttribute(flightXPath+mappings.getEvent_list_id_atribute()).replace(mappings.getEvent_list_id_atribute_prefix(), "")); 
+            // ustalanie typu lotu
             if (selenium.getAttribute(flightXPath + mappings.getEvent_list_class_atribute()).compareTo(
                     mappings.getEvent_list_class_atribute_friendly()) == 0
                     | selenium.getAttribute(flightXPath + mappings.getEvent_list_class_atribute()).compareTo(
                     mappings.getEvent_list_class_atribute_friendly_return()) == 0) {
-                mp = Flights.SINGLE_FLEET;
+                mp = Events.SINGLE_FLEET;
             } else if (selenium.getAttribute(flightXPath + mappings.getEvent_list_class_atribute()).compareTo(
                     mappings.getEvent_list_class_atribute_enemy_alliance()) == 0) {
-                mp = Flights.ACS_FLEET;
+                mp = Events.ACS_FLEET;
             } else {
                 throw new OgameException("Error cannot recognized is fleet a single or ACS");
             }
             // sprawdźmy nastawienie floty
             if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_friendly())) {
-                nastawienie = Flights.FRIEND;
+                nastawienie = Events.FRIEND;
             } else if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_neutral())) {
-                nastawienie = Flights.NEUTRAL;
+                nastawienie = Events.NEUTRAL;
             } else if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_enemy())
                     & selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_spy())) {
-                nastawienie = Flights.SPY;
+                nastawienie = Events.SPY;
             } else if (selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_enemy())
                     & selenium.isElementPresent(flightXPath + mappings.getEvent_list_atribute_is_attack())) {
-                nastawienie = Flights.ATTACK;
+                nastawienie = Events.ATTACK;
             } else {
                 throw new OgameException("Error cannot recognized whether the fleet is friend or foe");
             }
@@ -782,15 +793,15 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             arrival = this.parseArrivalTime(
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()),
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_arrival_time()));
-            if (mp == Flights.SINGLE_FLEET) {
-                origin = Planet.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_originCoords()));
+            if (mp == Events.SINGLE_FLEET) {
+                origin = Coords.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_originCoords()));
             } else {
                 origin = null;
             }
-            target = Planet.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_destCoords()));
+            target = Coords.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_destCoords()));
             size = Integer.parseInt(selenium.getText(flightXPath + mappings.getEvent_list_atribute_detailsFleet()));
 
-            lista.add(new Flights(nastawienie, mp, arrival, origin, size, target));
+            lista.add(new Events(id,nastawienie, mp, arrival, origin, size, target));
 
         }
 
