@@ -4,7 +4,7 @@
  */
 package ogameguard;
 
-import OgameEngine.Flights;
+import OgameEngine.Events;
 import OgameEngine.Ogame;
 import OgameEngine.Slots;
 import java.util.List;
@@ -14,5 +14,5 @@ import java.util.List;
  * @author dyschemist
  */
 public interface AttackResponse {
-    abstract public void response(Ogame o,List<Flights> attackList, List<Slots> autoFleet);
+    abstract public void response(Ogame o,List<Events> attackList, List<Slots> autoFleet);
 }

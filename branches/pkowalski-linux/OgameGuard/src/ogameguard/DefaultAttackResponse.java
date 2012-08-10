@@ -4,8 +4,8 @@
  */
 package ogameguard;
 
-import OgameEngine.Coords.Planet;
-import OgameEngine.Flights;
+import OgameEngine.Coords;
+import OgameEngine.Events;
 import OgameEngine.Ogame;
 import OgameEngine.Slots;
 import java.io.IOException;
@@ -35,12 +35,12 @@ public class DefaultAttackResponse implements AttackResponse {
     }
 
     @Override
-    public void response(Ogame o,List<Flights> attackList, List<Slots> autoFleet) {
-        Iterator<Flights> it = attackList.iterator();
+    public void response(Ogame o,List<Events> attackList, List<Slots> autoFleet) {
+        Iterator<Events> it = attackList.iterator();
         Calendar now = GregorianCalendar.getInstance();
         now.add(Calendar.MINUTE, (-1)*escapeMinutes);
-        Planet planeta;
-        for (Flights temp = it.next(); it.hasNext(); temp=it.next()){
+        Coords planeta;
+        for (Events temp = it.next(); it.hasNext(); temp=it.next()){
             // TODO tłumaczanie na akcje
             /*
              * 1. Trzeba sprawdzić czy czas zgodny
