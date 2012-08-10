@@ -5,10 +5,13 @@
 package OgameEngine;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -40,7 +43,12 @@ public class ChangePlanetTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
+         o = Ogame.ogameFabric("116", "pl");
+        prop = new TestProperties();
+        uni = prop.getUniverse();
+        nick = prop.getNick();
+        pass = prop.getPass();
     }
     
     @After
@@ -50,6 +58,7 @@ public class ChangePlanetTest {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
+    @Ignore
     public void changePlanetByName() throws OgameException{
         o.login(uni, nick, pass);
         o.changePlanetByName("Videl");
@@ -61,6 +70,7 @@ public class ChangePlanetTest {
         
     }
     @Test
+    @Ignore
     public void changePlanetByCoords() throws OgameException{
         o.login(uni, nick, pass);
         o.changePlanetByCoords(new Coords(2,199,7));
@@ -71,6 +81,7 @@ public class ChangePlanetTest {
         o.logout();
     }
     @Test
+    @Ignore
     public void changePlanetById() throws OgameException{
         o.login(uni, nick, pass);
         o.changePlanet(2);
@@ -80,4 +91,17 @@ public class ChangePlanetTest {
         o.changePlanet(1);
         o.logout();
     }
+
+    @Test
+    public void getPlanetListTest() throws OgameException{
+        o.login(uni, nick, pass);
+        List<Planet> lista = o.getPlanetList();
+        Iterator<Planet> it = lista.iterator();
+        for (Planet temp; it.hasNext();){
+            temp = it.next();
+            System.out.println(temp);
+        }
+        o.logout();
+    }        
+            
 }
