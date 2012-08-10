@@ -85,20 +85,22 @@ public class Coords {
         this.dest=dest;
     }
     
-    public Coords(Planet p){
-        this(p,Destination.PLANET);
-    }
+//    public Coords(Planet p){
+//        this(p,Destination.PLANET);
+//    }
     
-    public Coords(Planet p , Destination dest){
-        this.universe = Integer.toString(p.getUni());
-        this.system = Integer.toString(p.getSys());
-        this.position = Integer.toString(p.getPos());
-        this.dest=dest;
-    }
+//    public Coords(Planet p , Destination dest){
+//        this.universe = Integer.toString(p.getUni());
+//        this.system = Integer.toString(p.getSys());
+//        this.position = Integer.toString(p.getPos());
+//        this.dest=dest;
+//    }
 
     public static Coords parse(String s){
-        return new Coords(Planet.parse(s));
+                String[] str =s.replace("[", "").replace("]", "").split(":");
+        return new Coords(str[0],str[1],str[2]);
     }
+        
     static final public Destination PLANET = Destination.PLANET;
     static final public Destination MOON = Destination.MOON;
     static final public Destination PZ = Destination.PZ;
@@ -131,45 +133,7 @@ public class Coords {
     private StartDestination(String name){super(name);}
     
 }
-    public static class Planet {
-    
-    private int uni;
-    private int sys;
-    private int pos;
 
-    public Planet(int uni, int sys, int pos) {
-        this.uni = uni;
-        this.sys = sys;
-        this.pos = pos;
-    }
-    public Planet(String uni, String sys, String pos) {
-        this(Integer.parseInt(uni),Integer.parseInt(sys),Integer.parseInt(pos));
-    }
-    public static Planet parse(String s){
-                String[] str =s.replace("[", "").replace("]", "").split(":");
-        return new Planet(str[0],str[1],str[2]);
-    }
-
-    @Override
-    public String toString() {
-        return "Planet{" + "uni=" + uni + ", sys=" + sys + ", pos=" + pos + '}';
-    }
-    public String shortPrint(){
-        return "["+this.uni+":"+this.sys+":"+this.pos+"]";
-    }
-        public int getPos() {
-            return pos;
-        }
-
-        public int getSys() {
-            return sys;
-        }
-
-        public int getUni() {
-            return uni;
-        }
-    
-}
     
  static class CoordsProperties {
     

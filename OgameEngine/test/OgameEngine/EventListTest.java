@@ -56,8 +56,8 @@ public class EventListTest {
         try {
             o.wait(5);
             o.login(uni, nick, pass);
-            List<Flights> lista = o.getEventList();
-            Iterator<Flights> it = lista.iterator();
+            List<Events> lista = o.getEventList();
+            Iterator<Events> it = lista.iterator();
             while (it.hasNext()) {
                 System.out.println(it.next().toString());
             }

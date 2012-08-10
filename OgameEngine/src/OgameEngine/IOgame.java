@@ -25,6 +25,7 @@ public interface IOgame {
     abstract public void logout()throws OgameException;
     abstract public void close();
     abstract public int getPlanetCount()throws OgameException;
+    abstract public List<Planet> getPlanetList() throws OgameException;
     abstract public void changePlanet(int planetNumber)throws OgameException;
     abstract public void changePlanetByName(String name)throws OgameException;
     abstract public void changePlanetByCoords(Coords c) throws OgameException;
@@ -39,7 +40,7 @@ public interface IOgame {
     abstract public void buildDefence(Defence d, String count)throws OgameException;
     abstract public void buildShip(ShipyardShips s, int i)throws OgameException;
     abstract public void buildShip(ShipyardShips s, String count)throws OgameException;
-    abstract public List<Flights> getEventList() throws OgameException;
+    abstract public List<Events> getEventList() throws OgameException;
     abstract public Fleet getPlanetFleet()throws OgameException;
     abstract public HashMap<Study,Integer> getPlanetStudy()throws OgameException;
     abstract public HashMap<Defence,Integer> getPlanetDefence()throws OgameException;
