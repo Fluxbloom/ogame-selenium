@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 /**
  * Klasa z wykorzystaniem Selenium do grania w ogame
+ *
  * @author dyschemist
  */
 class Ogame116pl extends Ogame {//extends SeleneseTestCase {
@@ -279,11 +280,15 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         selenium.waitForPageToLoad(mappings.getTimeout());
     }
 
-    // TODO gdy nie widoczny lewy panel powinno się przelogować ponownie
+    // TODO refactor dla tej nazwy
     private void clickPrzeglad() {
         wait(1);
         clickAndWait(mappings.getLeftButtonPrzegladaj());
         wait(1);
+    }
+
+    private boolean isPodgladClicked() {
+        return false; //TODO należy poprawić
     }
 
     private void clickSurowce() {
@@ -318,7 +323,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private void clickEventList() {
         this.clickPrzeglad();
         wait(1);
-        if (!selenium.isTextPresent(mappings.getLeftButtonEventList_empty())){
+        if (!selenium.isTextPresent(mappings.getLeftButtonEventList_empty())) {
             selenium.click(mappings.getLeftButtonEventList());
             wait(1);
         }
@@ -400,7 +405,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     /*
-     * METODY PUBLICZNE 
+     * METODY PUBLICZNE
      */
     @Override
     public void wait(int seconds) {
@@ -421,34 +426,32 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         wait(hour * 60 + minute, seconds);
     }
 
-
-
     @Override
     public void login(String uni, String user, String pass) throws OgameException {
         this.start();
         try {
-        selenium.open(mappings.getGameUrl());
-        // Jeśli zamknij widoczne to nic nie rób, jeśli 
-        if (!selenium.isTextPresent(mappings.getLogin_closed_login_frame())) {
-            // Jeśli nie obecny to
-            selenium.click(mappings.getLogin_login_button());
-        }
-        selenium.select(mappings.getLogin_uni_target(), mappings.getLogin_uni_pref() + uni);
-        selenium.type(mappings.getLogin_nick_target(), user);
-        selenium.type(mappings.getLogin_pass_target(), pass);
-        clickAndWait(mappings.getLogin_login_with_pass_button());
-        } catch (SeleniumException ex){
-            System.err.println("Inner Error "+ex.getMessage());
-            if (ex.getMessage().compareTo("ERROR: Current window or frame is closed!")==0) {
+            selenium.open(mappings.getGameUrl());
+            // Jeśli zamknij widoczne to nic nie rób, jeśli 
+            if (!selenium.isTextPresent(mappings.getLogin_closed_login_frame())) {
+                // Jeśli nie obecny to
+                selenium.click(mappings.getLogin_login_button());
+            }
+            selenium.select(mappings.getLogin_uni_target(), mappings.getLogin_uni_pref() + uni);
+            selenium.type(mappings.getLogin_nick_target(), user);
+            selenium.type(mappings.getLogin_pass_target(), pass);
+            clickAndWait(mappings.getLogin_login_with_pass_button());
+        } catch (SeleniumException ex) {
+            System.err.println("Inner Error " + ex.getMessage());
+            if (ex.getMessage().compareTo("ERROR: Current window or frame is closed!") == 0) {
                 throw OgameException.LOGIN_BROWSER_CLOSED;
-            } else if (ex.getMessage().contains("Timed out after ")){
+            } else if (ex.getMessage().contains("Timed out after ")) {
                 throw OgameException.LOGIN_NO_INTERNET_CONNECTION;
             }
-            
-        }catch (Exception ex){
+
+        } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
-        if (selenium.isTextPresent(mappings.getLogin_wrongPassword())){
+        if (selenium.isTextPresent(mappings.getLogin_wrongPassword())) {
             throw OgameException.LOGIN_WRONG_PASSWORD;
         }
     }
@@ -458,14 +461,15 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         try {
             selenium.refresh();
             this.wait(1);
-            if (selenium.isElementPresent(mappings.getLogin_isLoggedIn_xpath())){
-             return selenium.getAttribute(mappings.getLogin_isLoggedIn_xpath_atribute()).compareTo(mappings.getLogin_isLoggedIn_response())==0;
-            } else
+            if (selenium.isElementPresent(mappings.getLogin_isLoggedIn_xpath())) {
+                return selenium.getAttribute(mappings.getLogin_isLoggedIn_xpath_atribute()).compareTo(mappings.getLogin_isLoggedIn_response()) == 0;
+            } else {
                 return false;
+            }
         } catch (SeleniumException ex) {
             System.err.println(ex.getMessage());
             return false;
-        } catch ( Exception ex) {
+        } catch (Exception ex) {
             System.err.println(ex.getMessage());
             return false;
         }
@@ -491,9 +495,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public void logout() throws OgameException {
         // Wylogowanie
         try {
-        clickAndWait(mappings.getLogout_button());
+            clickAndWait(mappings.getLogout_button());
         } finally {
-        this.stop();
+            this.stop();
         }
     }
 
@@ -515,10 +519,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         Planet temp;
         String name;
         Coords coords;
-        for (int i=1;i<size+1;i++){
+        for (int i = 1; i < size + 1; i++) {
             name = selenium.getText(mappings.getChangeplanetgetName(i));
             coords = Coords.parse(selenium.getText(mappings.getChangeplanetgetCoords(i)));
-            temp = new Planet(coords,name);
+            temp = new Planet(coords, name);
             result.add(temp);
         }
         return result;
@@ -535,7 +539,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         clickAndWait(mappings.getChangeplanetbyName(name));
         wait(1);
     }
-    
+
     @Override
     public void changePlanetByCoords(Coords c) throws OgameException {
         String xpath = mappings.getChangeplanetbyCoords(c);
@@ -545,12 +549,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     // TODO Wymaga kolejnych popraw
     /*
-     * 1. brak obsługi błędu braku floty na planecie
-     * 2. Może jednak zmontować ten ACS
-     * 3. można poprawić stacjonowanie
-     * 4. Czy misja określa cel planety
-     * 5. blokada celow przy esploracji
-     * 6. Same sondy nie mogą nic prócz szpiegowania i stacjonowana
+     * 1. brak obsługi błędu braku floty na planecie 2. Może jednak zmontować
+     * ten ACS 3. można poprawić stacjonowanie 4. Czy misja określa cel planety
+     * 5. blokada celow przy esploracji 6. Same sondy nie mogą nic prócz
+     * szpiegowania i stacjonowana
      */
     @Override
     public void sendFleet(Fleet f, StartDestination d, Coords c, Speed speed, Mission m, Resources r) throws OgameException {
@@ -599,31 +601,58 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public void build(Buildings b) throws OgameException {
+        boolean buildQueue, labQueue, shipyardQueue;
+        buildQueue = this.isBuildQueueEmpty();
+        labQueue = this.isLabQueueEmpty();
+        PlanetResources available = null;// TODO dostepna na planecie i porownac z wymaganymi
+        PlanetResources needed = null;// TODO wymagane do budowy
+        shipyardQueue = this.isConstructionQueueEmpty();
         if (b == Buildings.FABRYKA_ROBOTOW || b == Buildings.STOCZNIA || b == Buildings.LABORATORIUM_BADAWCZE || b == Buildings.DEPOZYT || b == Buildings.SILOS_RAKIETOWY || b == Buildings.FABRYKA_NANITOW || b == Buildings.TERRAFORMER) {
             this.clickStacja();
             selenium.click(buildingMap.get(b));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Ogame116pl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            wait(1);
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
             if (selenium.isElementPresent(mappings.getBuilding_stationNEG())) {
-                return; // TODO some error here
+                /*
+                 * 1. brak surowcow 2. zajeta kolejka 3. stocznia pracuje 4. lab
+                 * pracuje
+                 */
+                if (!available.isSufficient(needed)) {
+                    throw new OgameException("Insufficient resources");
+                }
+                if (!buildQueue) {
+                    throw new OgameException("Bulding queue is not empty");
+                }
+                if (b == Buildings.LABORATORIUM_BADAWCZE && !labQueue) {
+                    throw new OgameException("Lab queue is not empty");
+                }
+                if (b == Buildings.STOCZNIA && !shipyardQueue) {
+                    throw new OgameException("Shipyard is working");
+                } else {
+                    throw new OgameException("Unexpected error in build Buildings");
+                }
             }
             this.clickAndWait(mappings.getBuilding_stationOK());
         } else {
             this.clickSurowce();
             selenium.click(buildingMap.get(b));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Ogame116pl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            wait(1);
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
             if (selenium.isElementPresent(mappings.getBuilding_resourcesNEG())) {
-                System.err.print("element not present");
-                return; // TODO some error here
+                /*
+                 * 1. brak surowcow 2. zajeta kolejka
+                 */
+                if (!available.isSufficient(needed)) {
+                    throw new OgameException("Insufficient resources");
+                }
+                if (!buildQueue) {
+                    throw new OgameException("Bulding queue is not empty");
+                }
+                if (b == Buildings.LABORATORIUM_BADAWCZE && !labQueue) {
+                    throw new OgameException("Bulding queue is not empty");
+                } else {
+                    throw new OgameException("Unexpected error in build Buildings");
+                }
             }
             this.clickAndWait(mappings.getBuilding_resourcesOK());
         }
@@ -752,8 +781,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public List<Events> getEventList() throws OgameException {
         // najpierw ilosc pozycji
         this.clickEventList();
-        if (selenium.isTextPresent(mappings.getLeftButtonEventList_empty()))
+        if (selenium.isTextPresent(mappings.getLeftButtonEventList_empty())) {
             return new ArrayList<>();
+        }
         int iloscFlot = selenium.getXpathCount(mappings.getEvent_list_root()).intValue();
         String flightXPath;
         int id;
@@ -763,7 +793,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         Coords origin;
         Coords target;
         String contentLink;
-        Map<String,String> content; 
+        Map<String, String> content;
         int size;
         List<Events> lista = new ArrayList<>();
 
@@ -771,7 +801,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             // konwersja na loty
             flightXPath = mappings.getEvent_list_flight(i);
             // parsowanie id
-            id = Integer.parseInt(selenium.getAttribute(flightXPath+mappings.getEvent_list_id_atribute()).replace(mappings.getEvent_list_id_atribute_prefix(), "")); 
+            id = Integer.parseInt(selenium.getAttribute(flightXPath + mappings.getEvent_list_id_atribute()).replace(mappings.getEvent_list_id_atribute_prefix(), ""));
             // ustalanie typu lotu
             if (selenium.getAttribute(flightXPath + mappings.getEvent_list_class_atribute()).compareTo(
                     mappings.getEvent_list_class_atribute_friendly()) == 0
@@ -798,7 +828,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             } else {
                 throw new OgameException("Error cannot recognized whether the fleet is friend or foe");
             }
-            if (selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()).compareTo(mappings.getEvent_list_time_parser_ingore())==0) continue;
+            if (selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()).compareTo(mappings.getEvent_list_time_parser_ingore()) == 0) {
+                continue;
+            }
             arrival = this.parseArrivalTime(
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_count_down_time()),
                     selenium.getText(flightXPath + mappings.getEvent_list_atribute_arrival_time()));
@@ -810,10 +842,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             target = Coords.parse(selenium.getText(flightXPath + mappings.getEvent_list_atribute_destCoords()));
             size = Integer.parseInt(selenium.getText(flightXPath + mappings.getEvent_list_atribute_detailsFleet()));
             // parsowanie składu floty
-            contentLink=selenium.getAttribute(flightXPath+mappings.getEvent_list_atribute_icon_movement());
+            contentLink = selenium.getAttribute(flightXPath + mappings.getEvent_list_atribute_icon_movement());
             System.err.println("Cutting content");
             content = getContent(contentLink);
-            lista.add(new Events(id,nastawienie, mp, arrival, origin, size, target));
+            lista.add(new Events(id, nastawienie, mp, arrival, origin, size, target));
 
         }
 
@@ -958,13 +990,27 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public boolean isBuildQueueEmpty() throws OgameException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean isBuildQueueEmpty() {
+        if (!this.isPodgladClicked()) {
+            this.clickPrzeglad();
+        }
+        return selenium.isTextPresent(mappings.getBuildingFree());
     }
 
     @Override
-    public boolean isLabQueueEmpty() throws OgameException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean isLabQueueEmpty() {
+        if (!this.isPodgladClicked()) {
+            this.clickPrzeglad();
+        }
+        return selenium.isTextPresent(mappings.getStudyFree());
+    }
+
+    @Override
+    public boolean isConstructionQueueEmpty() {
+        if (!this.isPodgladClicked()) {
+            this.clickPrzeglad();
+        }
+        return selenium.isTextPresent(mappings.getConstructingFree());
     }
 
     @Override
@@ -1105,13 +1151,13 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     private Map<String, String> getContent(String contentLink) {
-        Map<String,String> result = new HashMap<>();
-        selenium.openWindow(contentLink,"temp");
+        Map<String, String> result = new HashMap<>();
+        selenium.openWindow(contentLink, "temp");
         wait(1);
         selenium.selectWindow("temp");
         int count = selenium.getXpathCount("//tr").intValue();
-        for (int i=1; i<count+1; i++){
-            if (selenium.isElementPresent("//tr[i]/td[2]".replace("i", Integer.toString(i)))){
+        for (int i = 1; i < count + 1; i++) {
+            if (selenium.isElementPresent("//tr[i]/td[2]".replace("i", Integer.toString(i)))) {
                 result.put(
                         selenium.getText("//tr[i]/td[1]".replace("i", Integer.toString(i))),
                         selenium.getText("//tr[i]/td[2]".replace("i", Integer.toString(i))));
@@ -1121,12 +1167,11 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         selenium.selectWindow(null);
         Set set = result.entrySet();
         System.err.println("Obtained content");
-        Iterator<Entry<String,String>> it = set.iterator();
-        for (Entry<String,String> temp; it.hasNext();){
+        Iterator<Entry<String, String>> it = set.iterator();
+        for (Entry<String, String> temp; it.hasNext();) {
             temp = it.next();
-            System.err.println(temp.getKey()+"->"+temp.getValue());
+            System.err.println(temp.getKey() + "->" + temp.getValue());
         }
         return result;
     }
-
 }

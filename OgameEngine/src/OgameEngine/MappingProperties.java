@@ -285,7 +285,10 @@ class MappingProperties {
      private String slots_parseArrival;//='|'dd.MM.yyyy HH:mm:ss
  private String slots_parseReversal;//='Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss
  private String slots_parseReturn;//='|'dd.MM.yyyy HH:mm:ss
-
+private String buildingFree;//=Brak budynków w kolejce budowy.
+private String studyFree;//=Twoje laboratorium w tej chwili nie pracuje.
+private String constructingFree;//=Brak statków/ Obrona w budowie
+        
     MappingProperties() throws IOException {
         Properties defaultPath = new Properties();
         defaultPath.load(new FileInputStream(
@@ -582,8 +585,27 @@ event_list_id_atribute_prefix=properties.getProperty("event_list_id_atribute_pre
         slots_parseArrival=properties.getProperty("slots_parseArrival");// '|'dd.MM.yyyy HH:mm:ss
 slots_parseReversal=properties.getProperty("slots_parseReversal");//'Zawróć:|' dd.MM.yyyy'<br>'HH:mm:ss
 slots_parseReturn=properties.getProperty("slots_parseReturn");//'|'dd.MM.yyyy HH:mm:ss
+   
+        //spr czy mozna kolejkować
+    buildingFree = properties.getProperty("buildingFree");//=Brak budynków w kolejce budowy.
+    studyFree = properties.getProperty("studyFree");;//=Twoje laboratorium w tej chwili nie pracuje.
+    constructingFree = properties.getProperty("constructingFree");;//=Brak statków/ Obrona w budowie
+    
     }
 
+    public String getBuildingFree() {
+        return buildingFree;
+    }
+
+    public String getConstructingFree() {
+        return constructingFree;
+    }
+
+    public String getStudyFree() {
+        return studyFree;
+    }
+   
+    
     public String getLeftButtonEventList_empty() {
         return leftButtonEventList_empty;
     }
