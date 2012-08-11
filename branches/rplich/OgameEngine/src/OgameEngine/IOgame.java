@@ -63,8 +63,10 @@ public interface IOgame {
     abstract public long getShipyardTime(ShipyardShips s) throws OgameException;
     abstract public long getDefenceTime(Defence d) throws OgameException;
     
-    abstract public boolean isBuildQueueEmpty() throws OgameException;
-    abstract public boolean isLabQueueEmpty() throws OgameException;
+    abstract public boolean isBuildQueueEmpty();
+    abstract public boolean isLabQueueEmpty();
+    //TODO refactor this name
+    abstract public boolean isConstructionQueueEmpty();
     
     abstract public List<Slots> getSlots() throws OgameException; // moja :-)
     abstract public void turnBackFlight(Slots f) throws OgameException; //moja :-)

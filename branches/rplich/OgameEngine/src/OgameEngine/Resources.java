@@ -9,9 +9,9 @@ package OgameEngine;
  * @author dyschemist
  */
 public class Resources {
-    private String metal;
-    private String crystal;
-    private String deuter;
+    protected String metal;
+    protected String crystal;
+    protected String deuter;
     public Resources(String m, String c, String d){
         metal=m;
         crystal=c;
