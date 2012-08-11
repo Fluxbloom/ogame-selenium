@@ -5,7 +5,6 @@
 package OgameEngine;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
-import java.util.List;
 
 /**
  *
