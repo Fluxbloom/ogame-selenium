@@ -21,11 +21,17 @@ public class Mission {
     public static final Mission MISSION_STAY=new Mission("STAY");
     public static final Mission MISSION_ATTACK=new Mission("ATTACK");
     public static final Mission MISSION_ACS=new Mission("ACS");
-    public static final Mission MISSION_MOON=new Mission("MOON ATTACK");
+    public static final Mission MISSION_MOON=new Mission("MOON");
 
     @Override
     public String toString() {
         return "Mission{" + "name=" + name + '}';
     }
+
+    public String getName() {
+        return name;
+    }
+    
+    
     
 }

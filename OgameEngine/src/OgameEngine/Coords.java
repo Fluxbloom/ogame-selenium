@@ -84,8 +84,23 @@ public class Coords {
         this.position=Integer.toString(pos);
         this.dest=dest;
     }
-
     
+//    public Coords(Planet p){
+//        this(p,Destination.PLANET);
+//    }
+    
+//    public Coords(Planet p , Destination dest){
+//        this.universe = Integer.toString(p.getUni());
+//        this.system = Integer.toString(p.getSys());
+//        this.position = Integer.toString(p.getPos());
+//        this.dest=dest;
+//    }
+
+    public static Coords parse(String s){
+                String[] str =s.replace("[", "").replace("]", "").split(":");
+        return new Coords(str[0],str[1],str[2]);
+    }
+        
     static final public Destination PLANET = Destination.PLANET;
     static final public Destination MOON = Destination.MOON;
     static final public Destination PZ = Destination.PZ;
@@ -94,7 +109,10 @@ public class Coords {
     public String toString() {
         return "Coords{" + "universe=" + universe + ", system=" + system + ", position=" + position + ", dest=" + dest + '}';
     }
-
+    
+    public String shortPrint(){
+        return "["+this.universe+":"+this.system+":"+this.position+"]";
+    }
     public static class Destination {
         private String name;
     protected Destination(String name){this.name=name;}
@@ -115,26 +133,7 @@ public class Coords {
     private StartDestination(String name){super(name);}
     
 }
-    public static class Planet {
-    
-    private int uni;
-    private int sys;
-    private int pos;
 
-    public Planet(int uni, int sys, int pos) {
-        this.uni = uni;
-        this.sys = sys;
-        this.pos = pos;
-    }
-    public Planet(String uni, String sys, String pos) {
-        this(Integer.parseInt(uni),Integer.parseInt(sys),Integer.parseInt(pos));
-    }
-
-    @Override
-    public String toString() {
-        return "Planet{" + "uni=" + uni + ", sys=" + sys + ", pos=" + pos + '}';
-    }  
-}
     
  static class CoordsProperties {
     

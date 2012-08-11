@@ -55,12 +55,14 @@ public class SeleniumStartTest {
     }
 
     @Test
+    @Ignore
     public void PropertiesTest() {
         System.out.println("Properties test");
         System.out.println(prop.toString());
     }
 
     @Test
+    @Ignore
     public void SeleniumStartTest() throws OgameException {
 
         o.login(uni, nick, pass);
@@ -90,41 +92,15 @@ public class SeleniumStartTest {
         o.wait(10);
     }
 
-    @Test
-    public void wykrycieListyPlanet() throws OgameException {
-       o.login(uni, nick, pass);
-       List<String> planety = o.getPlanetNames();
-       Iterator<String> it = planety.iterator();
-       while(it.hasNext()){
-           System.out.println("Planeta "+it.next());
-       }
-       planety = o.getPlanetCoords();
-       it = planety.iterator();
-       while(it.hasNext()){
-           System.out.println("Planeta "+it.next());
-       }
-       o.logout();
-    }
     
-    @Test
-    @Ignore
-    public void eventList()throws OgameException{
-        try{
-        o.login(uni, nick, pass);
-        List<Flights> lista = o.getEventList();
-        Iterator<Flights> it = lista.iterator();
-        while(it.hasNext()){
-            System.err.println(it.next().toString());
-        }
-        } catch(OgameException ex){
-            System.err.println(ex.getMessage());
-        } catch(Exception ex){
-            System.err.println(ex.getMessage());
-        }
-        finally {
-        o.logout();
-        }
-    }
+@Test
+@Ignore
+public void startFleet() throws OgameException{
+    o.login(uni, nick, pass);
+    o.changePlanetByCoords(new Coords(2,158,7));
+    o.sendFleet(Fleet.WHOLE_FLEET, new Coords(2,158,8),Speed.S10, Mission.MISSION_TRANSPORT, Resources.ALL_RESOURCES);
+    o.logout();
+}    
 
     
     @Test
@@ -137,28 +113,28 @@ public class SeleniumStartTest {
         recki.add(Ships.REC, 2);
         Fleet fs = Fleet.WHOLE_FLEET;
         Coords[] pz = new Coords[]{
-        new Coords(2,100,4,Destination.PZ),
-        new Coords(2,102,10,Destination.PZ),
-        new Coords(2,107,8,Destination.PZ),
-        new Coords(2,108,8,Destination.PZ),
-        new Coords(2,108,12,Destination.PZ)
+            new Coords(2, 100, 4, Destination.PZ),
+            new Coords(2, 102, 10, Destination.PZ),
+            new Coords(2, 107, 8, Destination.PZ),
+            new Coords(2, 108, 8, Destination.PZ),
+            new Coords(2, 108, 12, Destination.PZ)
         };
         Coords[] farms = new Coords[]{
-        new Coords(2,114,8),
-        new Coords(2,112,8),
-        new Coords(2,110,6),
-        new Coords(2,109,10),
-        new Coords(2,109,8)
+            new Coords(2, 114, 8),
+            new Coords(2, 112, 8),
+            new Coords(2, 110, 6),
+            new Coords(2, 109, 10),
+            new Coords(2, 109, 8)
         };
         Coords[] hinataFarms = new Coords[]{
-        new Coords(2,107,8)
+            new Coords(2, 107, 8)
         };
-        
+
         int aisha_fleets = 4;
         int hinata_fleets = 1;
         int pz_fleets = 1;
         o.changePlanetByName("Aisha");
-        for (int i=0; i < pz_fleets;i++){
+        for (int i = 0; i < pz_fleets; i++) {
             try {
                 o.sendFleet(recki, pz[i], Speed.S100, Mission.MISSION_RECYCLE, Resources.NO_RESOURCES);
                 aisha_fleets--;
@@ -167,17 +143,15 @@ public class SeleniumStartTest {
             }
         }
         o.changePlanetByName("Hinata");
-        for( int i=0; i< hinata_fleets-1; i++){
+        for (int i = 0; i < hinata_fleets - 1; i++) {
             o.sendFleet(fs, hinataFarms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
         }
         o.changePlanet(1);
         int i;
-        for(i=0; i< aisha_fleets; i++){
+        for (i = 0; i < aisha_fleets; i++) {
             o.sendFleet(farmiaca, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.NO_RESOURCES);
         }
         o.sendFleet(fs, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
         o.logout();
     }
-    
-    
 }
