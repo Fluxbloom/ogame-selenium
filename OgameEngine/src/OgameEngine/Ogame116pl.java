@@ -361,19 +361,19 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     private void sendFleetSetCords(Coords c, Destination d) {
-        if (d == Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_start_planet_deselected())) {
+        if (d == Coords.PLANET && selenium.isElementPresent(mappings.getFleetSend_start_planet_deselected())) {
             selenium.click(mappings.getFleetSend_start_planet_deselected());
-        } else if (d == Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_start_moon_deselected())) {
+        } else if (d == Coords.MOON && selenium.isElementPresent(mappings.getFleetSend_start_moon_deselected())) {
             selenium.click(mappings.getFleetSend_start_moon_deselected());
         }
         selenium.type(mappings.getFleetSend_galaxy(), c.getUniverse());
         selenium.type(mappings.getFleetSend_system(), c.getSystem());
         selenium.type(mappings.getFleetSend_position(), c.getPosition());
-        if (c.getDest() == Destination.PLANET && selenium.isElementPresent(mappings.getFleetSend_target_planet_deselected())) {
+        if (c.getDest() == Coords.PLANET && selenium.isElementPresent(mappings.getFleetSend_target_planet_deselected())) {
             selenium.click(mappings.getFleetSend_target_planet_deselected());
-        } else if (c.getDest() == Destination.MOON && selenium.isElementPresent(mappings.getFleetSend_target_moon_deselected())) {
+        } else if (c.getDest() == Coords.MOON && selenium.isElementPresent(mappings.getFleetSend_target_moon_deselected())) {
             selenium.click(mappings.getFleetSend_target_moon_deselected());
-        } else if (c.getDest() == Destination.PZ && selenium.isElementPresent(mappings.getFleetSend_target_debris_deselected())) {
+        } else if (c.getDest() == Coords.PZ && selenium.isElementPresent(mappings.getFleetSend_target_debris_deselected())) {
             selenium.click(mappings.getFleetSend_target_debris_deselected());
         }
     }
@@ -500,13 +500,13 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public void sendFleet(Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException {
-        this.sendFleet(f, StartDestination.PLANET, c, speed, m, r);
+        this.sendFleet(f, Coords.PLANET, c, speed, m, r);
 
     }
 
     @Override
     public void sendFleet(Fleet f, Coords c, Mission m, Resources r) throws OgameException {
-        this.sendFleet(f, StartDestination.PLANET, c, Speed.S100, m, r);
+        this.sendFleet(f, Coords.PLANET, c, Speed.S100, m, r);
     }
 
     @Override
