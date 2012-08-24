@@ -61,11 +61,11 @@ public class ChangePlanetTest {
     @Ignore
     public void changePlanetByName() throws OgameException{
         o.login(uni, nick, pass);
-        o.changePlanetByName("Videl");
+        o.changePlanetByName("Volantis");
         o.wait(15);
-        o.changePlanetByName("Hinata");
+        o.changePlanetByName("Braavos");
         o.wait(15);
-        o.changePlanetByName("Aisha");
+        o.changePlanetByName("Pentos");
         o.logout();
         
     }
@@ -93,6 +93,7 @@ public class ChangePlanetTest {
     }
 
     @Test
+    @Ignore
     public void getPlanetListTest() throws OgameException{
         o.login(uni, nick, pass);
         List<Planet> lista = o.getPlanetList();

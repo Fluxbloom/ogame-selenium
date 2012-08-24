@@ -53,6 +53,7 @@ public class EventListTest {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
+    @Ignore
     public void eventList() throws OgameException {
         try {
             o.wait(5);

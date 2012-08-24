@@ -53,6 +53,7 @@ public class LoginTest {
     //
 
     @Test
+    @Ignore
     public void noInternetConnection() throws OgameException {
         try {
             o.login(uni, nick, pass);
@@ -69,6 +70,7 @@ public class LoginTest {
     }
 
     @Test
+    @Ignore
     public void isLoggedIn() throws OgameException {
         try {
            o.login(uni, nick, pass);
@@ -80,6 +82,7 @@ public class LoginTest {
     }
     
     @Test
+    @Ignore
     public void wrongPasswordTest() {
        try {
             o.login(uni, nick, "wrongpassword");

@@ -30,6 +30,18 @@ public class Resources {
         return metal;
     }
 
+    public void setCrystal(String crystal) {
+        this.crystal = crystal;
+    }
+
+    public void setDeuter(String deuter) {
+        this.deuter = deuter;
+    }
+
+    public void setMetal(String metal) {
+        this.metal = metal;
+    }
+
     @Override
     public String toString() {
         return "Resources{" + "metal=" + metal + ", crystal=" + crystal + ", deuter=" + deuter + '}';
