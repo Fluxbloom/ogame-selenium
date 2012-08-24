@@ -80,7 +80,7 @@ public class SeleniumStartTest {
         o.login(uni, nick, pass);
         Fleet f = new Fleet();
         f.add(Ships.SOND, 2);
-        o.sendFleet(f, new Coords("2", "243", "6"), Speed.S70, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "243", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
         o.logout();
     }
 
@@ -152,6 +152,124 @@ public void startFleet() throws OgameException{
             o.sendFleet(farmiaca, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.NO_RESOURCES);
         }
         o.sendFleet(fs, farms[i], Speed.S100, Mission.MISSION_ATTACK, Resources.ALL_RESOURCES);
+        o.logout();
+    }
+    
+    @Test
+    @Ignore
+    public void TrySpyLeftFarm() throws OgameException {
+        o.login(uni, nick, pass);
+        o.changePlanetByName("Braavos");
+        Fleet f = new Fleet();
+        f.add(Ships.SOND, 2);
+        /*
+        //Pentos
+        o.sendFleet(f, new Coords("2", "196", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "196", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "196", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "203", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "202", "7"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "196", "9"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "200", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "200", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "198", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "198", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.wait(170);
+        //Valyria
+        o.sendFleet(f, new Coords("2", "244", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "243", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "238", "5"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "237", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "234", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "233", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "233", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "233", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        //o.sendFleet(f, new Coords("2", "231", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "229", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.wait(160);
+        */
+        //Braavos
+        o.sendFleet(f, new Coords("2", "298", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "297", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "297", "5"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "296", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "295", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "294", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "294", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "293", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "293", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "292", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.wait(110);
+        //Voltanis
+        o.sendFleet(f, new Coords("2", "346", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "346", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "345", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "344", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "339", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "344", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "338", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "341", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "340", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "340", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        
+        o.logout();
+    }
+    
+    @Test
+    @Ignore
+    public void TrySpyRightFarm() throws OgameException {
+        o.login(uni, nick, pass);
+        o.changePlanetByName("Braavos");
+        Fleet f = new Fleet();
+        f.add(Ships.SOND, 2);
+        //Pentos
+        /*/o.sendFleet(f, new Coords("2", "215", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        //o.sendFleet(f, new Coords("2", "215", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        //o.sendFleet(f, new Coords("2", "210", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "208", "9"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "208", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "209", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "209", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "210", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "212", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "212", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.wait(170);
+        //Valyria
+        o.sendFleet(f, new Coords("2", "261", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "245", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "253", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "253", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "255", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "255", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+       //o.sendFleet(f, new Coords("2", "258", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "260", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "261", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "250", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.wait(160);
+        //Braavos
+        o.sendFleet(f, new Coords("2", "301", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        //o.sendFleet(f, new Coords("2", "300", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "303", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "303", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        //o.sendFleet(f, new Coords("2", "304", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "306", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "313", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "313", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        //o.sendFleet(f, new Coords("2", "313", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "314", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.wait(110);
+        //Voltanis
+        */o.sendFleet(f, new Coords("2", "350", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "350", "8"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "352", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "353", "10"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "354", "6"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "354", "9"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "352", "7"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "354", "12"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "352", "7"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        o.sendFleet(f, new Coords("2", "359", "4"), Speed.S100, Mission.MISSION_SPY, Resources.NO_RESOURCES);
+        
         o.logout();
     }
 }

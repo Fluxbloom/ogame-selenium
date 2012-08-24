@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -48,6 +49,7 @@ public class SlotMissionMapTest {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
+    @Ignore
     public void slotMissiomMapGetFromFile() {
     String[] values = new String[]{"ACS","ATTACK","COLONIZE","EXPLORE","RECYCLE",
         "TRANSPORT","STATION","SPY","STAY","MOON"}; 
