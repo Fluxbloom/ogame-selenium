@@ -2,18 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package OgameEngineUnchecked;
+package OgameEngine;
 
-import OgameEngineUnchecked.Ogame116pl;
-import OgameEngineUnchecked.OgameException;
-import OgameEngineUnchecked.Ogame;
+import OgameEngine.Exceptions.OgameException;
+import OgameEngine.Ogame;
 import java.io.IOException;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**

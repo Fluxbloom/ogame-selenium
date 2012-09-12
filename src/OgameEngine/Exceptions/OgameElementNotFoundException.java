@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package OgameEngineUnchecked;
+package OgameEngine.Exceptions;
 
 /**
  * Specjalna podklasa wyjątków obsługująca nieodnalezione przyciski
- * @author dyschemist
+ * @author Piotr Kowalski
  */
 public class OgameElementNotFoundException extends OgameException{
     /**

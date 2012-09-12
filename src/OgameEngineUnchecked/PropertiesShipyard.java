@@ -4,6 +4,8 @@
  */
 package OgameEngineUnchecked;
 
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -13,7 +15,7 @@ import java.io.IOException;
  */
 public class PropertiesShipyard extends MappingProperties{
 
-    public PropertiesShipyard() throws FileNotFoundException, IOException {
+    public PropertiesShipyard() throws OgameFileNotFoundException, OgameIOException {
         load("shipyard.properties");
         init();
     }

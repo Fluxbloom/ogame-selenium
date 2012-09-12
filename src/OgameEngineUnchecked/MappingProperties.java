@@ -4,6 +4,10 @@
  */
 package OgameEngineUnchecked;
 
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
+import OgameEngine.PropertiesBuildings;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,7 +20,7 @@ import java.util.logging.Logger;
  * Klasa nadrzędna do zarządzania odwzorowaniami do danych statycznych w plikach properties
  * @author dyschemist
  */
-class MappingProperties {
+public class MappingProperties {
       
     protected MappingProperties() { 
     }
@@ -88,47 +92,71 @@ class MappingProperties {
     /**
      * Metoda służąca do zaczytywania propertiesów z pliów
      * @param fileName nazwa pliku, bez ścieżki. Folder jest zaczytywany z pliku defaultConfFile.properties
-     * @throws FileNotFoundException Błąd braku pliku
-     * @throws IOException  Błąd odczytu z pliku
+     * @throws OgameFileNotFoundException Błąd braku pliku
+     * @throws OgameIOException  Błąd odczytu z pliku
      */
-    protected void load(String fileName) throws FileNotFoundException, IOException{
-        Properties defaultPath = new Properties();
-        defaultPath.load(new FileInputStream(System.getProperty("user.dir") + "/conf/defaultConfFile.properties"));
-        path = System.getProperty("user.dir") + 
-                "/conf/" + defaultPath.getProperty("folder") +'/'+ fileName;
-        // reading property file
+    protected void load(String name) throws OgameFileNotFoundException, OgameIOException{
         properties = new Properties();
-        properties.load(new FileInputStream(path));
+        Properties defaultPath = new Properties();
+        String defaultConfFilePath = System.getProperty("user.dir") + "/conf/defaultConfFile.properties";
+        File main = new File(defaultConfFilePath);
+        if (main.exists()) {
+            try {
+                defaultPath.load(new FileInputStream(main));
+            } catch (FileNotFoundException ex) {
+                logger.log(Level.SEVERE, "Missing file {0}", new String[]{defaultConfFilePath});
+                throw new OgameFileNotFoundException(defaultConfFilePath);
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, "Could read the source {0}", new String[]{defaultConfFilePath});
+                int tries = 0;
+                while (tries < 3) {
+                    try {
+                        defaultPath.load(new FileInputStream(main));
+                        break;
+                    } catch (IOException ex1) {
+                        tries++;
+                        logger.log(Level.SEVERE, "Could read the source {0} retry {1}",
+                                new String[]{defaultConfFilePath, Integer.toString(tries)});
+                        if (tries == 3) {
+                            throw new OgameIOException(ex1);
+                        }
+                    }
+                }
+
+            }
+        } else {
+            throw new OgameFileNotFoundException(defaultConfFilePath);
+        }
+        path = System.getProperty("user.dir") + "/conf/" + defaultPath.getProperty("folder") + "/"+name;
+        File conf = new File(path);
+        if (conf.exists()) {
+            try {
+                properties.load(new FileInputStream(conf));
+            } catch (FileNotFoundException ex) {
+                logger.log(Level.SEVERE, "Missing file {0}", new String[]{path});
+                throw new OgameFileNotFoundException(path);
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, "Could read the source {0}", new String[]{path});
+                int tries = 0;
+                while (tries < 3) {
+                    try {
+                        properties.load(new FileInputStream(conf));
+                        break;
+                    } catch (IOException ex1) {
+                        tries++;
+                        logger.log(Level.SEVERE, "Could read the source {0} retry {1}",
+                                new String[]{path, Integer.toString(tries)});
+                        if (tries == 3) {
+                            throw new OgameIOException(ex1);
+                        }
+                    }
+                }
+            }
+        } else {
+            throw new OgameFileNotFoundException(path);
+        }
     }
-    
-    
-    
 
-    
-
-   
-
-    
-
-    
-
-   
-
-   
-    
-   
-
-   
-
-    
-
-    
-
-    
-
-
-
-    
     
     /**
      * Ścieżka do plików properties
@@ -154,7 +182,9 @@ class MappingProperties {
     private PropertiesResources resources;
     private PropertiesSlots slots;
     
-        static MappingProperties mappingPropertiesFabric(){
+    private static final Logger logger = Logger.getLogger(MappingProperties.class.getName());
+    
+    public static MappingProperties mappingPropertiesFabric(){
         MappingProperties result = new MappingProperties();
         try {
                 result.selenium = new PropertiesSelenium();
@@ -168,9 +198,9 @@ class MappingProperties {
                 result.resources = new PropertiesResources();
                 result.shipyard = new PropertiesShipyard();
                 result.slots = new PropertiesSlots();
-        } catch (FileNotFoundException ex) {
+        } catch (OgameFileNotFoundException ex) {
             Logger.getLogger(MappingProperties.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (OgameIOException ex) {
             Logger.getLogger(MappingProperties.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;

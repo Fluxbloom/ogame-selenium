@@ -4,6 +4,8 @@
  */
 package OgameEngineUnchecked;
 
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -12,7 +14,7 @@ import java.io.IOException;
  * Dane te dotyczą przycisków i pól zawartych w oknie logowania do serwera oraz przycisk wylogowywania
  * @author dyschemist
  */
-class PropertiesLogin extends MappingProperties {
+public class PropertiesLogin extends MappingProperties {
 
     /**
      * Domyślny konstruktor odczytujący dane z pliku login.properties 
@@ -20,7 +22,7 @@ class PropertiesLogin extends MappingProperties {
      * @throws IOException wywołany przy błędzie odczytu pliku z dysku
      * @throws FileNotFoundException wywołany przy braku danego pliku
      */
-    public PropertiesLogin() throws FileNotFoundException, IOException {
+    public PropertiesLogin() throws OgameFileNotFoundException, OgameIOException {
         load("login.properties");
         init();
     }

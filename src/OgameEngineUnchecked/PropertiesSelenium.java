@@ -4,6 +4,8 @@
  */
 package OgameEngineUnchecked;
 
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -12,7 +14,7 @@ import java.util.logging.Logger;
  * Klasa odczytuje statyczne dane zawarte w pliku selenium.properties
  * @author dyschemist
  */
-class PropertiesSelenium extends MappingProperties {
+public class PropertiesSelenium extends MappingProperties {
 
     /**
      * Domyślny konstruktor odczytujący dane z pliku selenium.properties 
@@ -20,7 +22,7 @@ class PropertiesSelenium extends MappingProperties {
      * @throws IOException wywołany przy błędzie odczytu pliku z dysku
      * @throws FileNotFoundException wywołany przy braku danego pliku
      */
-    public PropertiesSelenium() throws FileNotFoundException, IOException {
+    public PropertiesSelenium() throws OgameFileNotFoundException, OgameIOException {
         load("selenium.properties");
         init();
     }

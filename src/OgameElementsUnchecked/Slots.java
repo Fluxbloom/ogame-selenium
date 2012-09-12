@@ -5,7 +5,7 @@
 package OgameElementsUnchecked;
 
 import OgameElementsUnchecked.Mission;
-import OgameElementsUnchecked.Coords;
+import OgameElements.Coords;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 

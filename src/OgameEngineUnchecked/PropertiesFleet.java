@@ -4,6 +4,8 @@
  */
 package OgameEngineUnchecked;
 
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -14,12 +16,14 @@ import java.io.IOException;
  */
 public class PropertiesFleet extends MappingProperties {
 
-    public PropertiesFleet() throws FileNotFoundException, IOException {
+    public PropertiesFleet() throws OgameFileNotFoundException, OgameIOException {
         load("fleet.properties");
         init();
     }
 
     private void init() {
+        no_fleet_text = properties.getProperty("no_fleet_text");
+
         fleetSend_lm = properties.getProperty("fleetSend_lm");
         fleetSend_cm = properties.getProperty("fleetSend_cm");
         fleetSend_kr = properties.getProperty("fleetSend_kr");
@@ -99,9 +103,16 @@ public class PropertiesFleet extends MappingProperties {
         fleetSend_deuter_max = properties.getProperty("fleetSend_deuter_max");
         fleetSend_allResources = properties.getProperty("fleetSend_allResources");
         fleetSend_expedition_time = properties.getProperty("fleetSend_expedition_time");//=//select[@name="expeditiontime"]
-        fleetSend_expedition_time_target_pref= properties.getProperty("fleetSend_expedition_time_target_pref");//=label=
-        fleetSend_holding_time= properties.getProperty("fleetSend_holding_time");//=//select[@name="holdingtime"]
-        fleetSend_holding_time_target_pref= properties.getProperty("fleetSend_holding_time_target_pref");//=label=
+        fleetSend_expedition_time_target_pref = properties.getProperty("fleetSend_expedition_time_target_pref");//=label=
+        fleetSend_holding_time = properties.getProperty("fleetSend_holding_time");//=//select[@name="holdingtime"]
+        fleetSend_holding_time_target_pref = properties.getProperty("fleetSend_holding_time_target_pref");//=label=
+
+        flight_period_label = properties.getProperty("flight_period_label");
+        flight_period_format = properties.getProperty("flight_period_format");
+        flight_arrival_label = properties.getProperty("flight_arrival_label");
+                flight_arrival_back_label = properties.getProperty("flight_arrival_back_label");
+        flight_arrival_format = properties.getProperty("flight_arrival_format");
+
         fleetSend_okscreen3 = properties.getProperty("fleetSend_okscreen3");
         fleetSend_errorscreen3 = properties.getProperty("fleetSend_errorscreen3");
 
@@ -122,6 +133,33 @@ public class PropertiesFleet extends MappingProperties {
 
     }
 
+    public String getNo_fleet_text() {
+        return no_fleet_text;
+    }
+
+    public String getFlight_arrival_format() {
+        return flight_arrival_format;
+    }
+
+    public String getFlight_arrival_label() {
+        return flight_arrival_label;
+    }
+
+    public String getFlight_arrival_back_label() {
+        return flight_arrival_back_label;
+    }
+
+    public String getFlight_period_format() {
+        return flight_period_format;
+    }
+
+    public String getFlight_period_label() {
+        return flight_period_label;
+    }
+
+    /* *************************************************************************
+     * ******* Nie uporządkowane gettery ***************************************
+     * *************************************************************************/
     public String getFleetSend_expedition_time() {
         return fleetSend_expedition_time;
     }
@@ -137,7 +175,7 @@ public class PropertiesFleet extends MappingProperties {
     public String getFleetSend_holding_time_target_pref() {
         return fleetSend_holding_time_target_pref;
     }
-    
+
     public String getFleetSend_allResources() {
         return fleetSend_allResources;
     }
@@ -509,6 +547,7 @@ public class PropertiesFleet extends MappingProperties {
     public String getHm_ss() {
         return shipyardCountXpath.replace("%s", hm_ss);
     }
+    private String no_fleet_text;
     private String fleetSend_lm;
     private String fleetSend_cm;
     private String fleetSend_kr;
@@ -588,9 +627,16 @@ public class PropertiesFleet extends MappingProperties {
     private String fleetSend_deuter_max;
     private String fleetSend_allResources;
     private String fleetSend_expedition_time;//=//select[@name="expeditiontime"]
-private String fleetSend_expedition_time_target_pref;//=label=
-private String fleetSend_holding_time;//=//select[@name="holdingtime"]
-private String fleetSend_holding_time_target_pref;//=label=
+    private String fleetSend_expedition_time_target_pref;//=label=
+    private String fleetSend_holding_time;//=//select[@name="holdingtime"]
+    private String fleetSend_holding_time_target_pref;//=label=
+    
+    private String flight_period_label;
+    private String flight_period_format;
+    private String flight_arrival_label;
+    private String flight_arrival_back_label;
+    private String flight_arrival_format;
+    
     private String fleetSend_okscreen3;//=//a[@class="on" and @id="start"]
     private String fleetSend_errorscreen3;//=//a[@class="off" and @id="start"]
     // get size

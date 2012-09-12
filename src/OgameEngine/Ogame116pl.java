@@ -2,8 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package OgameEngineUnchecked;
+package OgameEngine;
 
+import OgameElements.ArrivalTime;
+import OgameElements.TimePeriodParser;
+import OgameElements.Buildings;
+import OgameEngine.Exceptions.OgameCannotSendFleetException;
+import OgameEngine.Exceptions.OgameException;
+import OgameEngine.Exceptions.OgameElementNotFoundException;
 import OgameElementsUnchecked.Planet;
 import OgameElementsUnchecked.PlanetResources;
 import OgameElementsUnchecked.Resources;
@@ -12,10 +18,13 @@ import OgameElementsUnchecked.ResearchingArea;
 import OgameElementsUnchecked.Slots;
 import OgameElementsUnchecked.Mission;
 import OgameElementsUnchecked.Defence;
-import OgameElements.Buildings;
-import OgameElementsUnchecked.Coords;
-import OgameElementsUnchecked.Coords.Destination;
-import OgameElementsUnchecked.Coords.StartDestination;
+import OgameElements.BuildingsPlanet;
+import OgameElements.Destination;
+import OgameElements.Coords;
+import OgameElements.SimpleTimePeriodParser;
+import OgameElements.Time;
+import OgameElements.TimeParser;
+import OgameElements.TimePeriod;
 import OgameElementsUnchecked.Events;
 import OgameElementsUnchecked.Events.FriendOrFoe;
 import OgameElementsUnchecked.Events.Multiplicity;
@@ -25,6 +34,9 @@ import OgameElementsUnchecked.Performance.Production;
 import OgameElementsUnchecked.Performance.ResourceField;
 import OgameElementsUnchecked.Ships;
 import OgameElementsUnchecked.ShipyardShips;
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
+import OgameEngineUnchecked.MappingProperties;
 import com.thoughtworks.selenium.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,218 +55,12 @@ import java.util.logging.Logger;
 /**
  * Klasa implementująca metody Ogame dla uni166pl
  *
- * @author dyschemist
+ * @author Piotr Kowalski & Rafał Plich & Michał Dróżdż
  */
 class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     public Ogame116pl() {
-        logger.log(Level.INFO, "Reading static mappings");
-        mappings = MappingProperties.mappingPropertiesFabric();
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Mission Map");
-        missionMap = new HashMap<Mission, String>();
-        missionMap.put(Mission.ACS, mappings.getFleet().getFleetSend_missionAcs());
-        missionMap.put(Mission.ATTACK, mappings.getFleet().getFleetSend_missionAtk());
-        missionMap.put(Mission.EXPLORE, mappings.getFleet().getFleetSend_missionExp());
-        missionMap.put(Mission.KOLONIZE, mappings.getFleet().getFleetSend_missionKol());
-        missionMap.put(Mission.MOON_DESTRUCTION, mappings.getFleet().getFleetSend_missionMoon());
-        missionMap.put(Mission.RECYCLE, mappings.getFleet().getFleetSend_missionRec());
-        missionMap.put(Mission.SPY, mappings.getFleet().getFleetSend_missionSzp());
-        missionMap.put(Mission.STATION, mappings.getFleet().getFleetSend_missionSta());
-        missionMap.put(Mission.STAY, mappings.getFleet().getFleetSend_missionZat());
-        missionMap.put(Mission.TRANSPORT, mappings.getFleet().getFleetSend_missionTra());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Mission Off Map");
-        missionOffMap = new HashMap<Mission, String>();
-        missionOffMap.put(Mission.ACS, mappings.getFleet().getFleetSend_missionAcs_off());
-        missionOffMap.put(Mission.ATTACK, mappings.getFleet().getFleetSend_missionAtk_off());
-        missionOffMap.put(Mission.EXPLORE, mappings.getFleet().getFleetSend_missionExp_off());
-        missionOffMap.put(Mission.KOLONIZE, mappings.getFleet().getFleetSend_missionKol_off());
-        missionOffMap.put(Mission.MOON_DESTRUCTION, mappings.getFleet().getFleetSend_missionMoon_off());
-        missionOffMap.put(Mission.RECYCLE, mappings.getFleet().getFleetSend_missionRec_off());
-        missionOffMap.put(Mission.SPY, mappings.getFleet().getFleetSend_missionSzp_off());
-        missionOffMap.put(Mission.STATION, mappings.getFleet().getFleetSend_missionSta_off());
-        missionOffMap.put(Mission.STAY, mappings.getFleet().getFleetSend_missionZat_off());
-        missionOffMap.put(Mission.TRANSPORT, mappings.getFleet().getFleetSend_missionTra_off());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Ships Map");
-        shipsMap = new HashMap<Ships, String>();
-        shipsMap.put(Ships.BOMB, mappings.getFleet().getFleetSend_bomb());//1
-        shipsMap.put(Ships.CM, mappings.getFleet().getFleetSend_cm());//2
-        shipsMap.put(Ships.DT, mappings.getFleet().getFleetSend_dt());//3
-        shipsMap.put(Ships.GS, mappings.getFleet().getFleetSend_gs());//4
-        shipsMap.put(Ships.KOL, mappings.getFleet().getFleetSend_kol());//5
-        shipsMap.put(Ships.KR, mappings.getFleet().getFleetSend_kr());//6
-        shipsMap.put(Ships.LM, mappings.getFleet().getFleetSend_lm());//7
-        shipsMap.put(Ships.MT, mappings.getFleet().getFleetSend_mt());//8
-        shipsMap.put(Ships.NISZ, mappings.getFleet().getFleetSend_nisz());//9
-        shipsMap.put(Ships.OW, mappings.getFleet().getFleetSend_ow());//10
-        shipsMap.put(Ships.PAN, mappings.getFleet().getFleetSend_pan());//11
-        shipsMap.put(Ships.REC, mappings.getFleet().getFleetSend_rec());//12
-        shipsMap.put(Ships.SOND, mappings.getFleet().getFleetSend_sond());//13
-        shipsAllMap = new HashMap<Ships, String>();
-       shipsAllMap.put(Ships.BOMB, mappings.getFleet().getFleetSend_bomb_all());//1
-        shipsAllMap.put(Ships.CM, mappings.getFleet().getFleetSend_cm_all());//2
-        shipsAllMap.put(Ships.DT, mappings.getFleet().getFleetSend_dt_all());//3
-       shipsAllMap.put(Ships.GS, mappings.getFleet().getFleetSend_gs_all());//4
-        shipsAllMap.put(Ships.KOL, mappings.getFleet().getFleetSend_kol_all());//5
-        shipsAllMap.put(Ships.KR, mappings.getFleet().getFleetSend_kr_all());//6
-        shipsAllMap.put(Ships.LM, mappings.getFleet().getFleetSend_lm_all());//7
-        shipsAllMap.put(Ships.MT, mappings.getFleet().getFleetSend_mt_all());//8
-        shipsAllMap.put(Ships.NISZ, mappings.getFleet().getFleetSend_nisz_all());//9
-       shipsAllMap.put(Ships.OW, mappings.getFleet().getFleetSend_ow_all());//10
-        shipsAllMap.put(Ships.PAN, mappings.getFleet().getFleetSend_pan_all());//11
-        shipsAllMap.put(Ships.REC, mappings.getFleet().getFleetSend_rec_all());//12
-        shipsAllMap.put(Ships.SOND, mappings.getFleet().getFleetSend_sond_all());//13
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Building Map");
-        buildingMap = new HashMap<Buildings, String>();
-        buildingMap.put(Buildings.DEPOSITE_STATION, mappings.getBuldings().getDepositeStation());
-        buildingMap.put(Buildings.EKSTRAKTOR_DEUTERU, mappings.getBuldings().getDeuteriumExtractor());
-        buildingMap.put(Buildings.ELEKTROWNIA_FUZYJNA, mappings.getBuldings().getFussionPowerPlant());
-        buildingMap.put(Buildings.ELEKTROWNIA_SLONECZNA, mappings.getBuldings().getSolarPowerPlant());
-        buildingMap.put(Buildings.MANUFACTURE_OF_NANITAS, mappings.getBuldings().getNanitas());
-        buildingMap.put(Buildings.MANUFACTURE_OF_ROBOTS, mappings.getBuldings().getRobots());
-        buildingMap.put(Buildings.CRYSTAL_MINE, mappings.getBuldings().getCrystalMine());
-        buildingMap.put(Buildings.METAL_MINE, mappings.getBuldings().getMetalMine());
-        buildingMap.put(Buildings.LABORATORY, mappings.getBuldings().getLaboratory());
-        buildingMap.put(Buildings.DEUTERIUM_STORAGE, mappings.getBuldings().getDeuteriumStorage());
-        buildingMap.put(Buildings.CRYSTAL_STORAGE, mappings.getBuldings().getCrystalStorage());
-        buildingMap.put(Buildings.METAL_STORAGE, mappings.getBuldings().getMetalStorage());
-        buildingMap.put(Buildings.SOLAR_SATELLITE, mappings.getBuldings().getSatellites());
-        buildingMap.put(Buildings.DEUTERIUM_HIDEOUT, mappings.getBuldings().getDeuteriumHideout());
-        buildingMap.put(Buildings.CRYSTAL_HIDEOUT, mappings.getBuldings().getCrystalHideout());
-        buildingMap.put(Buildings.METAL_HIDEOUT, mappings.getBuldings().getMetalHideout());
-        buildingMap.put(Buildings.MISSILE_SILO, mappings.getBuldings().getMissileSilo());
-        buildingMap.put(Buildings.SHIPYARD, mappings.getBuldings().getShipyardBuilding());
-        buildingMap.put(Buildings.TERRAFORMER, mappings.getBuldings().getTerraformer());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Study Map");
-        studyMap = new HashMap<ResearchingArea, String>();
-        studyMap.put(ResearchingArea.ASTROFIZYKA, mappings.getLab().getStudy_af());
-        studyMap.put(ResearchingArea.NAPED_IMPULSOWY, mappings.getLab().getStudy_ni());
-        studyMap.put(ResearchingArea.NAPED_NADPRZESTRZENNY, mappings.getLab().getStudy_nn());
-        studyMap.put(ResearchingArea.NAPED_SPALINOWY, mappings.getLab().getStudy_nn());
-        studyMap.put(ResearchingArea.OPANCERZENIE, mappings.getLab().getStudy_op());
-        studyMap.put(ResearchingArea.ROZWOJ_GRAWITONOW, mappings.getLab().getStudy_rg());
-        studyMap.put(ResearchingArea.SIEC_BADAN, mappings.getLab().getStudy_sb());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_BOJOWA, mappings.getLab().getStudy_tb());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getStudy_te());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_JONOWA, mappings.getLab().getStudy_tj());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getStudy_tk());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_LASEROWA, mappings.getLab().getStudy_tl());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getStudy_tn());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_OCHRONNA, mappings.getLab().getStudy_to());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getStudy_tp());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getStudy_ts());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Defence Map");
-        defenceMap = new HashMap<Defence, String>();
-        defenceMap.put(Defence.DUZA_POWLOKA, mappings.getDefence().getDefence_dp());
-        defenceMap.put(Defence.DUZY_LASER, mappings.getDefence().getDefence_cl());
-        defenceMap.put(Defence.DZIALO_GAUSSA, mappings.getDefence().getDefence_dg());
-        defenceMap.put(Defence.DZIALO_JONOWE, mappings.getDefence().getDefence_dj());
-        defenceMap.put(Defence.MALA_POWLOKA, mappings.getDefence().getDefence_mp());
-        defenceMap.put(Defence.MALY_LASER, mappings.getDefence().getDefence_ll());
-        defenceMap.put(Defence.PRZECIWRAKIETA, mappings.getDefence().getDefence_pr());
-        defenceMap.put(Defence.RAKITA_MIEDZYPLANETARNA, mappings.getDefence().getDefence_rm());
-        defenceMap.put(Defence.WYRZUTNIA_PLAZMY, mappings.getDefence().getDefence_wp());
-        defenceMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getDefence().getDefence_wr());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Shipyard Map");
-        shipyardMap = new HashMap<ShipyardShips, String>();
-        shipyardMap.put(Ships.BOMB, mappings.getShipyard().getShipyard_bomb());
-        shipyardMap.put(Ships.CM, mappings.getShipyard().getShipyard_cm());
-        shipyardMap.put(Ships.DT, mappings.getShipyard().getShipyard_dt());
-        shipyardMap.put(Ships.GS, mappings.getShipyard().getShipyard_gs());
-        shipyardMap.put(Ships.KOL, mappings.getShipyard().getShipyard_skol());
-        shipyardMap.put(Ships.KR, mappings.getShipyard().getShipyard_kraz());
-        shipyardMap.put(Ships.LM, mappings.getShipyard().getShipyard_lm());
-        shipyardMap.put(Ships.MT, mappings.getShipyard().getShipyard_mt());
-        shipyardMap.put(Ships.NISZ, mappings.getShipyard().getShipyard_nisc());
-        shipyardMap.put(Ships.OW, mappings.getShipyard().getShipyard_ow());
-        shipyardMap.put(Ships.PAN, mappings.getShipyard().getShipyard_panc());
-        shipyardMap.put(Ships.REC, mappings.getShipyard().getShipyard_rec());
-        shipyardMap.put(Ships.SOND, mappings.getShipyard().getShipyard_ss());
-        shipyardMap.put(Ships.SAT, mappings.getShipyard().getShipyard_sat());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Performance Map");
-        performanceMap = new HashMap<Performance.ResourceField, String>();
-        performanceMap.put(Performance.METAL, mappings.getResources().getPerformance_m());
-        performanceMap.put(Performance.KRYSZTAL, mappings.getResources().getPerformance_k());
-        performanceMap.put(Performance.DEUTER, mappings.getResources().getPerformance_d());
-        performanceMap.put(Performance.EL_SLONECZNA, mappings.getResources().getPerformance_es());
-        performanceMap.put(Performance.EL_FUZYJNA, mappings.getResources().getPerformance_ef());
-        performanceMap.put(Performance.SAT_SLONECZNA, mappings.getResources().getPerformance_ss());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Fleet-Size Map");
-        fleetMap = new HashMap<Ships, String>();
-        fleetMap.put(Ships.BOMB, mappings.getFleet().getHm_bomb());//1
-        fleetMap.put(Ships.CM, mappings.getFleet().getHm_cm());//2
-        fleetMap.put(Ships.DT, mappings.getFleet().getHm_dt());//3
-        fleetMap.put(Ships.GS, mappings.getFleet().getHm_gs());//4
-        fleetMap.put(Ships.KOL, mappings.getFleet().getHm_skol());//5
-        fleetMap.put(Ships.KR, mappings.getFleet().getHm_kraz());//6
-        fleetMap.put(Ships.LM, mappings.getFleet().getHm_lm());//7
-        fleetMap.put(Ships.MT, mappings.getFleet().getHm_mt());//8
-        fleetMap.put(Ships.NISZ, mappings.getFleet().getHm_nisc());//9
-        fleetMap.put(Ships.OW, mappings.getFleet().getHm_ow());//10
-        fleetMap.put(Ships.PAN, mappings.getFleet().getHm_panc());//11
-        fleetMap.put(Ships.REC, mappings.getFleet().getHm_rec());//12
-        fleetMap.put(Ships.SOND, mappings.getFleet().getHm_ss());//13
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initializing Technology-level Map");
-        technologyMap = new HashMap<ResearchingArea, String>();
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getHm_te());//1
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_LASEROWA, mappings.getLab().getHm_tl());//2
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_JONOWA, mappings.getLab().getHm_tj());//3
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getHm_tn());//4
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getHm_tp());//5
-        technologyMap.put(ResearchingArea.NAPED_SPALINOWY, mappings.getLab().getHm_ns());//6
-        technologyMap.put(ResearchingArea.NAPED_IMPULSOWY, mappings.getLab().getHm_ni());//7
-        technologyMap.put(ResearchingArea.NAPED_NADPRZESTRZENNY, mappings.getLab().getHm_nn());//8
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getHm_ts());//9
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getHm_tk());//10
-        technologyMap.put(ResearchingArea.ASTROFIZYKA, mappings.getLab().getHm_af());//11
-        technologyMap.put(ResearchingArea.SIEC_BADAN, mappings.getLab().getHm_ms());//12
-        technologyMap.put(ResearchingArea.ROZWOJ_GRAWITONOW, mappings.getLab().getHm_rg());//13
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_BOJOWA, mappings.getLab().getHm_tb());//13
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_OCHRONNA, mappings.getLab().getHm_to());//13
-        technologyMap.put(ResearchingArea.OPANCERZENIE, mappings.getLab().getHm_op());//13
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Inititializing defcountMap");
-        defcountMap = new HashMap<Defence, String>();
-        defcountMap.put(Defence.DUZA_POWLOKA, mappings.getDefence().getHm_dp());
-        defcountMap.put(Defence.DUZY_LASER, mappings.getDefence().getHm_cl());
-        defcountMap.put(Defence.DZIALO_GAUSSA, mappings.getDefence().getHm_dg());
-        defcountMap.put(Defence.DZIALO_JONOWE, mappings.getDefence().getHm_dj());
-        defcountMap.put(Defence.MALA_POWLOKA, mappings.getDefence().getHm_mp());
-        defcountMap.put(Defence.MALY_LASER, mappings.getDefence().getHm_ll());
-        defcountMap.put(Defence.PRZECIWRAKIETA, mappings.getDefence().getHm_pr());
-        defcountMap.put(Defence.RAKITA_MIEDZYPLANETARNA, mappings.getDefence().getHm_rm());
-        defcountMap.put(Defence.WYRZUTNIA_PLAZMY, mappings.getDefence().getHm_wp());
-        defcountMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getDefence().getHm_wr());
-        logger.log(Level.INFO, "[DONE]");
-        logger.log(Level.INFO, "Initilizing Slot Mission Map");
-        slotMissionMap = new HashMap<String, Mission>();
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.ACS), Mission.ACS);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.ATTACK), Mission.ATTACK);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.EXPLORE), Mission.EXPLORE);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.KOLONIZE), Mission.KOLONIZE);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.MOON_DESTRUCTION), Mission.MOON_DESTRUCTION);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.RECYCLE), Mission.RECYCLE);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.SPY), Mission.SPY);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.STATION), Mission.STATION);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.STAY), Mission.STAY);
-        slotMissionMap.put(mappings.getSlots().getSlotMissionID(Mission.TRANSPORT), Mission.TRANSPORT);
-        logger.log(Level.INFO, "[DONE]");
-
-
-        logger.log(Level.INFO, "Initializing parsers");
-        this.slotParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseArrival());
-        this.reversalParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseReversal());
-        this.comeBackParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseReturn());
-        logger.log(Level.INFO, "[DONE]");
+        init();
         logger.log(Level.INFO, "Inititializing Selenium instance ");
         try {
             selenium =
@@ -270,16 +76,11 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             logger.log(Level.WARNING, " [FAIL]");
         }
         logger.log(Level.INFO, " [DONE]");
-
     }
 
     /**************************************************************************
      ************************** METODY CZASÓW *********************************
      **************************************************************************/
-    /**
-     * Metoda oczekiwania 
-     * @param miliseconds czas oczekiwania w milisekundach (1000 milisekund = 1 sekunda) 
-     */
     @Override
     public void waitMilisecond(int miliseconds) {
         logger.log(Level.INFO, "Will wait for {0} miliseconds", miliseconds);
@@ -290,16 +91,12 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
     }
 
-    /**
-     * Metoda oczekiwania
-     * @param seconds czas w sekundach oczekiwania
-     */
     @Override
     public void wait(int seconds) {
         Calendar now = new GregorianCalendar();
         now.add(Calendar.SECOND, seconds);
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        logger.log(Level.INFO, "Will wait for {0} seconds till {1}", new String[]{Integer.toString(seconds),sdf.format(now.getTime())});
+        logger.log(Level.INFO, "Will wait for {0} seconds till {1}", new String[]{Integer.toString(seconds), sdf.format(now.getTime())});
         try {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException ex) {
@@ -307,25 +104,23 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
     }
 
-    /**
-     * Metoda oczekiwania. Wartość minut ani sekund nie jest ograniczona z góry.
-     * @param minute minuty oczekiwania
-     * @param seconds sekundy oczekiwania
-     */
     @Override
     public void wait(int minute, int seconds) {
         wait(minute * 60 + seconds);
     }
 
-    /**
-     * Metoda oczekiwania. Wartość minut,godzin ani sekund nie jest z góry ograniczona
-     * @param hour godziny oczekiwania
-     * @param minute minuty oczekiwania
-     * @param seconds sekundy oczekiwania
-     */
     @Override
     public void wait(int hour, int minute, int seconds) {
         wait(hour * 60 + minute, seconds);
+    }
+
+    @Override
+    public void wait(TimePeriod t) {
+        int days = t.getDays(),
+                hours = t.getHours(),
+                minutes = t.getMinutes(),
+                seconds = t.getSeconds();
+        wait(days * 24 + hours, minutes, seconds);
     }
 
     /**************************************************************************
@@ -420,8 +215,77 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     /* *************************************************************************
-     * ************************* METODY PLANET *********************************
-     * *************************************************************************/
+     * ************* WIDOK OGOLNY **********************************************
+     * ************************************************************************/
+    private void clickAndWait(String s) throws OgameElementNotFoundException, OgameException {
+        click(s);
+        try {
+            selenium.waitForPageToLoad(mappings.getSelenium().getTimeout());
+        } catch (SeleniumException ex) {
+            throw OgameException.TIMEOUT;
+        }
+    }
+
+    private void clickOverview() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonPrzegladaj());
+        wait(1);
+    }
+
+    private boolean isOverviewClicked() {
+        if (isElementPresent(this.mappings.getOverview().getOverviewClickedElementPresent())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void clickResourceBuildings() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonSurowce());
+        wait(1);
+    }
+
+    private void clickStationBuildings() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonStacja());
+        wait(1);
+    }
+
+    private void clickLab() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonBadania());
+    }
+
+    private void clickDefence() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonObrona());
+        wait(1);
+    }
+
+    private void clickShipyard() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonStocznia());
+        wait(1);
+    }
+
+    private void clickFleet() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonFlota());
+        wait(1);
+    }
+
+    private void clickEventList() throws OgameElementNotFoundException, OgameException {
+        this.clickOverview();
+        if (!isTextPresent(mappings.getOverview().getLeftButtonEventListIsEmpty())) {
+            click(mappings.getOverview().getLeftButtonEventList());
+            wait(1);
+        }
+    }
+
+    private void clickResourceSettings() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonResourceSettings());
+        wait(1);
+    }
+
+    private void clickMovements() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonSlotsList());
+        wait(1);
+    }
+
     @Override
     public int getPlanetCount() throws OgameException {
         String s = getText(mappings.getOverview().getCountplanet());
@@ -429,7 +293,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         try {
             i = Integer.parseInt(s.split(mappings.getOverview().getCountplanet_separator())[mappings.getOverview().getCountplanet_result_pos() - 1]);
         } catch (Exception ex) {
-            throw OgameException.PARSING_ERROR;
+            throw OgameException.PLANET_PARSING_ERROR;
         }
         return i;
     }
@@ -459,6 +323,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         wait(1);
     }
 
+    // TODO poprawić obsługę planet powyżej 12 znaków
     @Override
     public void changePlanetByName(String name) throws OgameException {
         clickAndWait(mappings.getOverview().getChangeplanetbyName(name));
@@ -496,25 +361,204 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
         return list;
     }
-    /* ***************************************************************************
-     *  METODY DO wysyłania flot
-     * ***************************************************************************/
 
-    // TODO Wymaga kolejnych popraw
-    /*
-     * 1. brak obsługi błędu braku floty na planecie 2. Może jednak zmontować
-     * ten ACS 3. można poprawić stacjonowanie 4. Czy misja określa cel planety
-     * 5. blokada celow przy esploracji 6. Same sondy nie mogą nic prócz
-     * szpiegowania i stacjonowana
+    @Override
+    public PlanetResources getResources() throws OgameElementNotFoundException {
+        String metal = getText(mappings.getOverview().getResources_metal());
+        String krysztal = getText(mappings.getOverview().getResources_crystal());
+        String deuter = getText(mappings.getOverview().getResources_deuterium());
+        String energy = getText(mappings.getOverview().getResources_energy());
+        return new PlanetResources(metal, krysztal, deuter, energy);
+
+    }
+
+    @Override
+    public boolean isBuildQueueEmpty() throws OgameElementNotFoundException, OgameException {
+        if (!this.isOverviewClicked()) {
+            this.clickOverview();
+        }
+        return isTextPresent(mappings.getOverview().getBuildingFree());
+    }
+
+    @Override
+    public boolean isResearchQueueEmpty() throws OgameElementNotFoundException, OgameException {
+        if (!this.isOverviewClicked()) {
+            this.clickOverview();
+        }
+        return isTextPresent(mappings.getOverview().getStudyFree());
+    }
+
+    @Override
+    public boolean isConstructionQueueEmpty() throws OgameElementNotFoundException, OgameException {
+        if (!this.isOverviewClicked()) {
+            this.clickOverview();
+        }
+        return isTextPresent(mappings.getOverview().getConstructingFree());
+    }
+
+    /* *************************************************************************
+     * ***************** BUDYNKI ***********************************************
+     * *************************************************************************/
+    @Override
+    public void build(Buildings b) throws OgameElementNotFoundException, OgameException {
+        boolean buildQueue, labQueue, shipyardQueue;
+        buildQueue = this.isBuildQueueEmpty();
+        labQueue = this.isResearchQueueEmpty();
+        PlanetResources available = this.getResources();
+        PlanetResources needed = null;// TODO wymagane do budowy
+        shipyardQueue = this.isConstructionQueueEmpty();
+        if (b.isMoonBuilding()) {
+            throw OgameException.UNSUPPORTED;
+        } else if (b.isStationBuilding()) {
+            this.clickStationBuildings();
+            click(buildingMap.get(b));
+            wait(1);
+            //this.clickAndWait(buildingMap.get(b)); //selenium.click
+            if (selenium.isElementPresent(mappings.getBuldings().getStationButtonDisabled())) {
+                /*
+                 * 1. brak surowcow 2. zajeta kolejka 3. stocznia pracuje 4. lab
+                 * pracuje
+                 */
+                if (!available.isSufficient(needed)) {
+                    throw new OgameException("Insufficient resources");
+                }
+                if (!buildQueue) {
+                    throw new OgameException("Bulding queue is not empty");
+                }
+                if (b == Buildings.LABORATORY && !labQueue) {
+                    throw new OgameException("Lab queue is not empty");
+                }
+                if (b == Buildings.SHIPYARD && !shipyardQueue) {
+                    throw new OgameException("Shipyard is working");
+                } else {
+                    throw new OgameException("Unexpected error in build Buildings");
+                }
+            }
+            this.clickAndWait(mappings.getBuldings().getStationButtonEnabled());
+        } else {
+            this.clickResourceBuildings();
+            click(buildingMap.get(b));
+            wait(1);
+            //this.clickAndWait(buildingMap.get(b)); //selenium.click
+            if (isElementPresent(mappings.getBuldings().getResourcesButtonDisabled())) {
+                /*
+                 * 1. brak surowcow 2. zajeta kolejka
+                 */
+                if (!available.isSufficient(needed)) {
+                    throw new OgameException("Insufficient resources");
+                }
+                if (!buildQueue) {
+                    throw new OgameException("Bulding queue is not empty");
+                }
+                if (b == Buildings.LABORATORY && !labQueue) {
+                    throw new OgameException("Bulding queue is not empty");
+                } else {
+                    throw new OgameException("Unexpected error in build Buildings");
+                }
+            }
+            this.clickAndWait(mappings.getBuldings().getResourcesButtonEnabled());
+        }
+
+
+    }
+
+    /**
+     * Funkcja zastępuje ciągi znaków przy pobieraniu ich z zasobów
+     * @param s Ciąg pierwotny
+     * @return Ciąg oczyszczony z śmieci
      */
-    //TODO dołożyć obsługę ekspedycji czyli plus kordy i sprawdzanie czy pole ekspedycji
+    private int replaceHugeNumbers(String s) {
+        Map<String, String> map = mappings.getBuldings().getHugeNumbersNames();
+        Set<Entry<String, String>> set = map.entrySet();
+        Entry<String, String> temp;
+        int multiplyier = 1;
+        double value;
+        for (Iterator<Entry<String, String>> it = set.iterator(); it.hasNext();) {
+            temp = it.next();
+            s.replace(temp.getKey(), "");
+            multiplyier *= Integer.parseInt(temp.getValue());
+        }
+        char thousandSep = '.';
+        char fractionSep = ',';
+        value = Double.parseDouble(s.replace(thousandSep, ' ').replace(" ", "").replace(fractionSep, '.'));
+        return (int) (value * multiplyier); //trick ponieważ nie można wprost usunąć . jako regexp
+    }
+
+    @Override
+    public PlanetResources getCost(Buildings b) throws OgameElementNotFoundException, OgameException {
+        int metal = 0;
+        int cristal = 0;
+        int deuter = 0;
+        int energy = 0;
+        if (!b.isResourceBuilding()) {
+            this.clickStationBuildings();
+            click(buildingMap.get(b));
+            this.wait(1);
+            if (isElementPresent(mappings.getBuldings().getSta_metal())) {
+                metal = replaceHugeNumbers(getText(mappings.getBuldings().getSta_metal_value()));
+            }
+            if (isElementPresent(mappings.getBuldings().getSta_cristal())) {
+                cristal = replaceHugeNumbers(getText(mappings.getBuldings().getSta_cristal_value()));
+            }
+            if (isElementPresent(mappings.getBuldings().getSta_deuter())) {
+                deuter = replaceHugeNumbers(getText(mappings.getBuldings().getSta_deuter_value()));
+            }
+            if (isElementPresent(mappings.getBuldings().getSta_energy())) {
+                energy = replaceHugeNumbers(getText(mappings.getBuldings().getSta_energy_value()));
+            }
+
+        } else {
+            this.clickResourceBuildings();
+            click(buildingMap.get(b));
+            this.wait(1);
+            if (isElementPresent(mappings.getBuldings().getRes_metal())) {
+                metal = replaceHugeNumbers(getText(mappings.getBuldings().getRes_metal_value()));
+            }
+            if (isElementPresent(mappings.getBuldings().getRes_crystal())) {
+                cristal = replaceHugeNumbers(getText(mappings.getBuldings().getRes_crystal_value()));
+            }
+            if (isElementPresent(mappings.getBuldings().getRes_deuter())) {
+                deuter = replaceHugeNumbers(getText(mappings.getBuldings().getRes_deuter_value()));
+            }
+            if (isElementPresent(mappings.getBuldings().getRes_energy())) {
+                energy = replaceHugeNumbers(getText(mappings.getBuldings().getRes_energy_value()));
+            }
+
+        }
+        return new PlanetResources(metal, cristal, deuter, energy);
+    }
+
+    @Override
+    public TimePeriod getProductionTime(Buildings b) throws OgameElementNotFoundException, OgameException {
+        TimePeriod cal = null;
+        if (b.isMoonBuilding()) {
+            throw OgameException.UNSUPPORTED;
+        } else if (b.isStationBuilding()) {
+            this.clickStationBuildings();
+            click(buildingMap.get(b));
+            this.wait(1);
+            String s = getText(mappings.getBuldings().getTime_xpath());
+            cal = buildingsTimeParser.parse(s);
+        } else {
+            this.clickResourceBuildings();
+            click(buildingMap.get(b));
+            this.wait(1);
+            String s = getText(mappings.getBuldings().getTime_xpath());
+            cal = buildingsTimeParser.parse(s);
+        }
+        return cal;
+    }
+
+    /* *************************************************************************
+     * ***************** FLOTY *************************************************
+     * *************************************************************************/
     private boolean isFleetAbleToAccessMission(Fleet f, Mission m, Coords c) throws OgameException {
         boolean result = true;
         if (m == Mission.ACS) {
-            throw OgameException.UNSUPPORTED_MISSION;
+            throw OgameException.FLEET_UNSUPPORTED_MISSION;
         } else if (m == Mission.KOLONIZE && f.get(Ships.KOL) == 0) {
             result = false;
-        } else if (m == Mission.MOON_DESTRUCTION && f.get(Ships.GS) == 0 && c.getDest()!=Coords.MOON) {
+        } else if (m == Mission.MOON_DESTRUCTION && f.get(Ships.GS) == 0 && c.getDest() != Coords.MOON) {
             result = false;
         } else if (m == Mission.RECYCLE && f.get(Ships.REC) == 0) {
             result = false;
@@ -522,7 +566,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             result = false;
         } else if (m == Mission.EXPLORE && !c.isExploreable()) {
             result = false;
-        } else if (m == Mission.RECYCLE && c.getDest()!=Coords.PZ){
+        } else if (m == Mission.RECYCLE && c.getDest() != Coords.PZ) {
             result = false;
         }
         return result;
@@ -540,10 +584,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             while (it.hasNext()) {
                 temp = (Map.Entry<Ships, Integer>) it.next();
                 temp2 = temp.getKey();
-                if (fleet.get(temp2).intValue()==Ships.ALL){
+                if (fleet.get(temp2).intValue() == Ships.ALL) {
                     click(shipsAllMap.get(temp2));
                 } else {
-                type(shipsMap.get(temp2), ((Integer) fleet.get(temp2)).toString());
+                    type(shipsMap.get(temp2), ((Integer) fleet.get(temp2)).toString());
                 }
             }
         }
@@ -557,27 +601,24 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             click(mappings.getFleet().getFleetSend_target_planet_deselected());
         } else if (c.getDest() == Destination.MOON && isElementPresent(mappings.getFleet().getFleetSend_target_moon_deselected())) {
             click(mappings.getFleet().getFleetSend_target_moon_deselected());
-        } else if (c.getDest() == Destination.PZ && isElementPresent(mappings.getFleet().getFleetSend_target_debris_deselected())) {
+        } else if (c.getDest() == Destination.DEBRIS && isElementPresent(mappings.getFleet().getFleetSend_target_debris_deselected())) {
             click(mappings.getFleet().getFleetSend_target_debris_deselected());
         }
     }
 
-    private void sendFleetSetMission(Mission m) throws OgameElementNotFoundException, OgameException {
+    private void sendFleetSetMission(Mission m, String time) throws OgameElementNotFoundException, OgameException {
         if (!isElementPresent(missionOffMap.get(m))) {
             click((String) missionMap.get(m));
         } else {
-            throw OgameException.MISSION_UNAVAILABLE_FOR_FLEET;
+            throw OgameException.FLEET_MISSION_UNAVAILABLE_FOR_FLEET;
         }
-        if (m== Mission.STAY){
-            select(mappings.getFleet().getFleetSend_holding_time(),mappings.getFleet().getFleetSend_holding_time_target_pref()+m.getTime());
-        } else if (m==Mission.EXPLORE){
-            select(mappings.getFleet().getFleetSend_expedition_time(),mappings.getFleet().getFleetSend_expedition_time_target_pref()+m.getTime());
+        if (m == Mission.STAY) {
+            select(mappings.getFleet().getFleetSend_holding_time(), mappings.getFleet().getFleetSend_holding_time_target_pref() + time);
+        } else if (m == Mission.EXPLORE) {
+            select(mappings.getFleet().getFleetSend_expedition_time(), mappings.getFleet().getFleetSend_expedition_time_target_pref() + time);
         }
 
     }
-    // TODO gdy któryś resource ma wartość -1 to surowiec ładujemy maksymalnie (w kolejności deuterium, kryształ, metal)
-    // gdy ma -2 to maksymalnie w drugiej kolejności
-    // gdy ma -3 to maksymalnie w trzeciej kolejności
 
     private void sendFleetSetResources(Resources r) throws OgameElementNotFoundException {
         if (r == Resources.ALL_RESOURCES) {
@@ -628,22 +669,34 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
     }
 
+    //TODO pierwszy ekran - wczytanie ilość slotów i ekspedycji
+    //TODO drugi ekran - czytanie czasu lotu na potrzeby sendFleetAtSlowest
     @Override
-    public void sendFleet(Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException {
+    public ArrivalTime sendFleet(Fleet f, Coords c, Speed speed, Mission m, Resources r)
+            throws OgameCannotSendFleetException, OgameElementNotFoundException,
+            OgameIOException, OgameFileNotFoundException, OgameException {
         // sprawdzamy czy flota ma dostępną misję
         logger.log(Level.INFO, "Sending fleet - {0} - {1} - {2} - {3} - {4}", new String[]{
                     f.toString(), c.toString(), speed.toString(), m.toString(), r.toString()
                 });
         if (!this.isFleetAbleToAccessMission(f, m, c)) {
             logger.log(Level.WARNING, "Fleet cant go for such mission");
-            throw OgameException.MISSION_UNAVAILABLE_FOR_FLEET;
+            throw OgameException.FLEET_MISSION_UNAVAILABLE_FOR_FLEET;
         }
-        this.clickFlota();
+        this.clickFleet();
         logger.log(Level.INFO, "First screen");
+        if (isTextPresent(mappings.getFleet().getNo_fleet_text())) {
+            throw OgameException.FLEET_NO_FLEET_ON_PLANET;
+        }
         this.sendFleetSetFleet(f);
         if (isElementPresent(mappings.getFleet().getFleetSend_errorscreen1())) {
             logger.log(Level.WARNING, "Couldnt send fleet - screen 1");
             throw new OgameException("FLEET SEND FIRST SCREEN ERROR");
+            /*
+             * Możliwe przyczyny błędu
+             * - brak wolnego slota
+             * - niezaznaczono żadnych statków
+             */
         }
         clickAndWait(mappings.getFleet().getFleetSend_okscreen1());
         wait(0, 1);
@@ -662,7 +715,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
                 i++;
             }
             if (!found) {
-                throw OgameException.UNOWNED_PLANET;
+                throw OgameException.FLEET_UNOWNED_PLANET_CANNOT_STATION;
             }
         } else if (m == Mission.ACS) {
             try {
@@ -670,7 +723,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             } catch (OgameElementNotFoundException ex) {
                 throw ex;
             } catch (OgameException ex) {
-                throw OgameException.WRONG_ACS_CODE;
+                throw OgameException.FLEET_WRONG_ACS_CODE;
             }
         } else {
             this.sendFleetSetCords(c);
@@ -679,173 +732,117 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         if (isElementPresent(mappings.getFleet().getFleetSend_errorscreen2())) {
             logger.log(Level.WARNING, "Couldnt send fleet - screen 2");
             throw new OgameException("FLEET SEND SECOND SCREEN ERROR");
-        }try {
-        clickAndWait(mappings.getFleet().getFleetSend_okscreen2());
-        } catch(OgameException ex ){
-        if (isElementPresent(mappings.getFleet().getFleetSend_galaxy())){
-            logger.log(Level.WARNING, "Couldnt send fleet - screen 2 - pop up error");
-            throw new OgameException("FLEET SEND SECOND SCREEN ERROR");
-        } else throw ex;
+            /*
+             * Możliwe przyczyny błędu
+             * - brak paliwa
+             * - brak planety celu
+             * - cel ten sam co baza
+             */
         }
-        // TODO kontrola misji
-        sendFleetSetMission(m);
+        try {
+            clickAndWait(mappings.getFleet().getFleetSend_okscreen2());
+        } catch (OgameException ex) {
+            if (isElementPresent(mappings.getFleet().getFleetSend_galaxy())) {
+                logger.log(Level.WARNING, "Couldnt send fleet - screen 2 - pop up error");
+                throw new OgameException("FLEET SEND SECOND SCREEN ERROR");
+            } else {
+                throw ex;
+            }
+        }
+        String t = m.getTime();
+        sendFleetSetMission(m, t);
         sendFleetSetResources(r);
+        TimeParser tp = new TimeParser(mappings.getFleet().getFlight_arrival_format());
+        TimePeriodParser tpp = new SimpleTimePeriodParser(mappings.getFleet().getFlight_period_format());
+        Time time;
+        TimePeriod period;
+        String textTime;
+        if (Mission.STATION == m) {
+            textTime = getText(mappings.getFleet().getFlight_period_label());
+            period = tpp.parse(textTime);
+            textTime = getText(mappings.getFleet().getFlight_arrival_label());
+            for (int i = 0; i < 10 && textTime.length() != mappings.getFleet().getFlight_arrival_format().length(); i++) {
+                this.waitMilisecond(100);
+                textTime = getText(mappings.getFleet().getFlight_arrival_label());
+                System.err.println("i="+i+" "+textTime);
+            }
+            time = tp.parse(textTime);
+        } else {
+            textTime = getText(mappings.getFleet().getFlight_period_label());
+            period = tpp.parse(textTime);
+            period.doubleTimePeriod();
+            period.addHours(t);
+            textTime = getText(mappings.getFleet().getFlight_arrival_back_label());
+            for (int i = 0; i < 10 && textTime.length() != mappings.getFleet().getFlight_arrival_format().length(); i++) {
+                this.waitMilisecond(100);
+                textTime = getText(mappings.getFleet().getFlight_arrival_back_label());
+                System.err.println("i="+i+" "+textTime);
+            }
+            time = tp.parse(textTime);
+
+        }
         if (selenium.isElementPresent(mappings.getFleet().getFleetSend_errorscreen3())) {
             logger.log(Level.WARNING, "Couldnt send fleet - screen 3");
             throw new OgameException("FLEET SEND THIRD SCREEN ERROR");
+            /**
+             * Możliwe przyczyny błędu
+             * - Maksymalna ilość ekspedycji przekroczona
+             * 
+             */
         }
         clickAndWait(mappings.getFleet().getFleetSend_okscreen3());
         this.clickOverview();
+        return new ArrivalTime(time,period);
     }
 
     @Override
-    public void sendFleet(Planet p, Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException {
+    public ArrivalTime sendFleet(Planet p, Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException {
         this.changePlanet(p);
         this.waitMilisecond(400);
-        this.sendFleet(p, f, c, speed, m, r);
+        return this.sendFleet(p, f, c, speed, m, r);
     }
 
     @Override
-    public void sendFleet(Fleet f, Coords c, Mission m, Resources r) throws OgameException {
-        this.sendFleet(f, c, Speed.S100, m, r);
+    public ArrivalTime sendFleet(Fleet f, Coords c, Mission m, Resources r) throws OgameException {
+        return this.sendFleet(f, c, Speed.S100, m, r);
     }
 
     @Override
-    public void sendFleet(Fleet f, Coords c, Mission m) throws OgameException {
-        this.sendFleet(f, c, Speed.S100, m, Resources.NO_RESOURCES);
+    public ArrivalTime sendFleet(Fleet f, Coords c, Mission m) throws OgameException {
+        return this.sendFleet(f, c, Speed.S100, m, Resources.NO_RESOURCES);
     }
 
     @Override
-    public void sendFleet(Fleet f, Coords c) throws OgameException {
-        this.sendFleet(f, c, Speed.S100, Mission.ATTACK, Resources.NO_RESOURCES);
+    public ArrivalTime sendFleet(Fleet f, Coords c) throws OgameException {
+        return this.sendFleet(f, c, Speed.S100, Mission.ATTACK, Resources.NO_RESOURCES);
     }
 
     @Override
-    public void sendFSFleet(Fleet f, Coords c, Mission m) throws OgameException {
-        this.sendFleet(f, c, Speed.S100, m, Resources.ALL_RESOURCES);
+    public ArrivalTime sendFSFleet(Fleet f, Coords c, Mission m) throws OgameException {
+        return this.sendFleet(f, c, Speed.S100, m, Resources.ALL_RESOURCES);
     }
 
     @Override
-    public void sendFSFleet(Fleet f, Coords c) throws OgameException {
-        this.sendFleet(f, c, Speed.S100, Mission.ATTACK, Resources.ALL_RESOURCES);
+    public ArrivalTime sendFSFleet(Fleet f, Coords c) throws OgameException {
+        return this.sendFleet(f, c, Speed.S100, Mission.ATTACK, Resources.ALL_RESOURCES);
     }
 
     @Override
-    public void sendFSFleet(Coords c, Mission m) throws OgameException {
-       this.sendFleet(Fleet.WHOLE_FLEET, c, Speed.S100, m, Resources.ALL_RESOURCES);
+    public ArrivalTime sendFSFleet(Coords c, Mission m) throws OgameException {
+        return this.sendFleet(Fleet.WHOLE_FLEET, c, Speed.S100, m, Resources.ALL_RESOURCES);
     }
 
     @Override
-    public void sendFSFleet(Coords c) throws OgameException {
-        this.sendFleet(Fleet.WHOLE_FLEET, c, Speed.S100, Mission.ATTACK, Resources.ALL_RESOURCES);
+    public ArrivalTime sendFSFleet(Coords c) throws OgameException {
+        return this.sendFleet(Fleet.WHOLE_FLEET, c, Speed.S100, Mission.ATTACK, Resources.ALL_RESOURCES);
     }
-    
+
     /* *************************************************************************
-     * ************* WIDOK OGOLNY **********************************************
-     * ************************************************************************/
-    @Override
-    public PlanetResources getResources() {
-        String metal = selenium.getText(mappings.getOverview().getResources_metal());
-        String krysztal = selenium.getText(mappings.getOverview().getResources_crystal());
-        String deuter = selenium.getText(mappings.getOverview().getResources_deuterium());
-        String energy = selenium.getText(mappings.getOverview().getResources_energy());
-        return new PlanetResources(metal, krysztal, deuter, energy);
-
-    }
-    
-        @Override
-    public boolean isBuildQueueEmpty() throws OgameElementNotFoundException, OgameException {
-        if (!this.isOverviewClicked()) {
-            this.clickOverview();
-        }
-        return selenium.isTextPresent(mappings.getOverview().getBuildingFree());
-    }
-
-    @Override
-    public boolean isResearchQueueEmpty() throws OgameElementNotFoundException, OgameException {
-        if (!this.isOverviewClicked()) {
-            this.clickOverview();
-        }
-        return selenium.isTextPresent(mappings.getOverview().getStudyFree());
-    }
-
-    @Override
-    public boolean isConstructionQueueEmpty() throws OgameElementNotFoundException, OgameException {
-        if (!this.isOverviewClicked()) {
-            this.clickOverview();
-        }
-        return selenium.isTextPresent(mappings.getOverview().getConstructingFree());
-    }
-    
-    /* *************************************************************************
-     * ***************** BUDYNKI ***********************************************
+     * **** NIE SPRAWDZONE *****************************************************
      * *************************************************************************/
-    
-    
-    @Override
-    public void build(Buildings b) throws OgameException {
-        boolean buildQueue, labQueue, shipyardQueue;
-        buildQueue = this.isBuildQueueEmpty();
-        labQueue = this.isResearchQueueEmpty();
-        PlanetResources available = null;// TODO dostepna na planecie i porownac z wymaganymi
-        PlanetResources needed = null;// TODO wymagane do budowy
-        shipyardQueue = this.isConstructionQueueEmpty();
-        if (b == Buildings.MANUFACTURE_OF_ROBOTS || b == Buildings.SHIPYARD || b == Buildings.LABORATORY || b == Buildings.DEPOSITE_STATION || b == Buildings.MISSILE_SILO || b == Buildings.MANUFACTURE_OF_NANITAS || b == Buildings.TERRAFORMER) {
-            this.clickStacja();
-            selenium.click(buildingMap.get(b));
-            wait(1);
-            //this.clickAndWait(buildingMap.get(b)); //selenium.click
-            if (selenium.isElementPresent(mappings.getBuldings().getStationButtonDisabled())) {
-                /*
-                 * 1. brak surowcow 2. zajeta kolejka 3. stocznia pracuje 4. lab
-                 * pracuje
-                 */
-                if (!available.isSufficient(needed)) {
-                    throw new OgameException("Insufficient resources");
-                }
-                if (!buildQueue) {
-                    throw new OgameException("Bulding queue is not empty");
-                }
-                if (b == Buildings.LABORATORY && !labQueue) {
-                    throw new OgameException("Lab queue is not empty");
-                }
-                if (b == Buildings.SHIPYARD && !shipyardQueue) {
-                    throw new OgameException("Shipyard is working");
-                } else {
-                    throw new OgameException("Unexpected error in build Buildings");
-                }
-            }
-            this.clickAndWait(mappings.getBuldings().getStationBuildingEnabled());
-        } else {
-            this.clickSurowce();
-            selenium.click(buildingMap.get(b));
-            wait(1);
-            //this.clickAndWait(buildingMap.get(b)); //selenium.click
-            if (selenium.isElementPresent(mappings.getBuldings().getResourcesButtonDisabled())) {
-                /*
-                 * 1. brak surowcow 2. zajeta kolejka
-                 */
-                if (!available.isSufficient(needed)) {
-                    throw new OgameException("Insufficient resources");
-                }
-                if (!buildQueue) {
-                    throw new OgameException("Bulding queue is not empty");
-                }
-                if (b == Buildings.LABORATORY && !labQueue) {
-                    throw new OgameException("Bulding queue is not empty");
-                } else {
-                    throw new OgameException("Unexpected error in build Buildings");
-                }
-            }
-            this.clickAndWait(mappings.getBuldings().getResourcesButtonEnabled());
-        }
-
-
-    }
-
     @Override
     public void research(ResearchingArea s) throws OgameException {
-        this.clickBadania();
+        this.clickLab();
         selenium.click(studyMap.get(s));
         try {
             Thread.sleep(3000);
@@ -866,7 +863,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public void build(Defence d, String count) throws OgameException {
-        this.clickObrona();
+        this.clickDefence();
         selenium.click(defenceMap.get(d));
         try {
             Thread.sleep(3000);
@@ -888,7 +885,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public void build(ShipyardShips s, String count) throws OgameException {
-        this.clickStocznia();
+        this.clickShipyard();
         selenium.click(shipyardMap.get(s));
         try {
             Thread.sleep(1000);
@@ -1016,8 +1013,6 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     }
 
-
-
     @Override
     public void setResourcesSettings(ResourceField r, Production p) throws OgameException {
         this.clickResourceSettings();
@@ -1040,7 +1035,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public Fleet getPlanetFleet() throws OgameException {
-        this.clickFlota();
+        this.clickFleet();
         Fleet result = new Fleet();
         Set set = fleetMap.entrySet();
         Iterator it = set.iterator();
@@ -1064,7 +1059,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public HashMap<ResearchingArea, Integer> getPlanetStudy() throws OgameException {
         HashMap<ResearchingArea, Integer> result = new HashMap<ResearchingArea, Integer>();
-        this.clickBadania();
+        this.clickLab();
         Set set = this.technologyMap.entrySet(); // to jest pobranie listy wszystkich par technologia-xpath
         Iterator it = set.iterator();
         ResearchingArea temp;
@@ -1088,7 +1083,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public HashMap<Defence, Integer> getPlanetDefence() throws OgameException {
         HashMap<Defence, Integer> result = new HashMap<Defence, Integer>();
-        this.clickObrona();
+        this.clickDefence();
         Set set = this.defcountMap.entrySet(); // to jest pobranie listy wszystkich par technologia-xpath
         Iterator it = set.iterator();
         Defence temp;
@@ -1110,32 +1105,22 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public HashMap<Buildings, Integer> getPlanetBuildings() throws OgameException {
+    public HashMap<BuildingsPlanet, Integer> getPlanetBuildings() throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Resources getCost(Buildings b) throws OgameException {
+    public PlanetResources getCost(ResearchingArea s) throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Resources getCost(ResearchingArea s) throws OgameException {
+    public PlanetResources getCost(ShipyardShips s) throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Resources getCost(ShipyardShips s) throws OgameException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Resources getCost(Defence d) throws OgameException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public long getProductionTime(Buildings b) throws OgameException {
+    public PlanetResources getCost(Defence d) throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1153,8 +1138,6 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public long getProductionTime(Defence d) throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-
 
     @Override
     public List<Slots> getSlots() throws OgameException {
@@ -1212,7 +1195,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
                 cel = Coords.parse(selenium.getText(xpath + mappings.getSlots().getSlots_fleetTargetPlanet_suffix()));
                 //misja
                 {
-                    Set set = slotMissionMap.entrySet();
+                    Set set = movementsMissionStringMapMission.entrySet();
                     Entry<String, Mission> missionTemp;
                     Iterator<Entry<String, Mission>> it = set.iterator();
                     while (it.hasNext()) {
@@ -1293,98 +1276,260 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_useExp()));
     }
 
-    private Map<String, String> getContent(String contentLink) {
-        Map<String, String> result = new HashMap<String, String>();
-        selenium.openWindow(contentLink, "temp");
-        wait(1);
-        selenium.selectWindow("temp");
-        int count = selenium.getXpathCount("//tr").intValue();
-        for (int i = 1; i < count + 1; i++) {
-            if (selenium.isElementPresent("//tr[i]/td[2]".replace("i", Integer.toString(i)))) {
-                result.put(
-                        selenium.getText("//tr[i]/td[1]".replace("i", Integer.toString(i))),
-                        selenium.getText("//tr[i]/td[2]".replace("i", Integer.toString(i))));
-            }
-        }
-        selenium.close();
-        selenium.selectWindow(null);
-        Set set = result.entrySet();
-        logger.log(Level.WARNING, "Obtained content");
-        Iterator<Entry<String, String>> it = set.iterator();
-        for (Entry<String, String> temp; it.hasNext();) {
-            temp = it.next();
-            logger.log(Level.WARNING, temp.getKey() + "->" + temp.getValue());
-        }
-        return result;
-    }
-
     /**************************************************************************
      **************** METODY PRYWATNE ***************************************** 
      **************************************************************************/
-    private void clickAndWait(String s) throws OgameElementNotFoundException, OgameException {
-        click(s);
-        try {
-        selenium.waitForPageToLoad(mappings.getSelenium().getTimeout());
-        } catch(SeleniumException ex){
-            throw OgameException.TIMEOUT;
-        }
+    /* **
+     * Inicjalizacja 
+     */
+    private void init() {
+        initMappingProperties();
+        initBuilding();
+        initLab();
+        initShipyard();
+        initDefence();
+        initFleet();
+        initResources();
+        initMovements();
+
     }
 
-    // TODO refactor dla tej nazwy
-    private void clickOverview() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonPrzegladaj());
-        wait(1);
+    private void initMappingProperties() {
+        logger.log(Level.INFO, "Reading static mappings");
+        mappings = MappingProperties.mappingPropertiesFabric();
+        logger.log(Level.INFO, "[DONE]");
     }
 
-    private boolean isOverviewClicked() {
-        return false; //TODO należy poprawić
+    private void initBuilding() {
+        logger.log(Level.INFO, "Initializing Building Map to Building String");
+        buildingMap = new HashMap<Buildings, String>();
+        buildingMap.put(Buildings.DEPOSITE_STATION, mappings.getBuldings().getDepositeStation());
+        buildingMap.put(Buildings.DEUTERIUM_EXTRACTOR, mappings.getBuldings().getDeuteriumExtractor());
+        buildingMap.put(Buildings.FUSSION_POWER_PLANT, mappings.getBuldings().getFussionPowerPlant());
+        buildingMap.put(Buildings.SOLAR_POWER_PLANT, mappings.getBuldings().getSolarPowerPlant());
+        buildingMap.put(Buildings.MANUFACTURE_OF_NANITAS, mappings.getBuldings().getNanitas());
+        buildingMap.put(Buildings.MANUFACTURE_OF_ROBOTS, mappings.getBuldings().getRobots());
+        buildingMap.put(Buildings.CRYSTAL_MINE, mappings.getBuldings().getCrystalMine());
+        buildingMap.put(Buildings.METAL_MINE, mappings.getBuldings().getMetalMine());
+        buildingMap.put(Buildings.LABORATORY, mappings.getBuldings().getLaboratory());
+        buildingMap.put(Buildings.DEUTERIUM_STORAGE, mappings.getBuldings().getDeuteriumStorage());
+        buildingMap.put(Buildings.CRYSTAL_STORAGE, mappings.getBuldings().getCrystalStorage());
+        buildingMap.put(Buildings.METAL_STORAGE, mappings.getBuldings().getMetalStorage());
+        buildingMap.put(Buildings.SOLAR_SATELLITE, mappings.getBuldings().getSatellites());
+        buildingMap.put(Buildings.DEUTERIUM_HIDEOUT, mappings.getBuldings().getDeuteriumHideout());
+        buildingMap.put(Buildings.CRYSTAL_HIDEOUT, mappings.getBuldings().getCrystalHideout());
+        buildingMap.put(Buildings.METAL_HIDEOUT, mappings.getBuldings().getMetalHideout());
+        buildingMap.put(Buildings.MISSILE_SILO, mappings.getBuldings().getMissileSilo());
+        buildingMap.put(Buildings.SHIPYARD, mappings.getBuldings().getShipyardBuilding());
+        buildingMap.put(Buildings.TERRAFORMER, mappings.getBuldings().getTerraformer());
+        // TODO dopisać budynki księżycowe
+        logger.log(Level.INFO, "[DONE]");
+        buildingsTimeParser = new TimePeriodParser(
+                this.mappings.getBuldings().getTime_weeks(),
+                this.mappings.getBuldings().getTime_days(),
+                this.mappings.getBuldings().getTime_hours(),
+                this.mappings.getBuldings().getTime_minutes(),
+                this.mappings.getBuldings().getTime_seconds());
     }
 
-    private void clickSurowce() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonSurowce());
-        wait(1);
+    private void initLab() {
+        logger.log(Level.INFO, "Initializing Study Map");
+        studyMap = new HashMap<ResearchingArea, String>();
+        studyMap.put(ResearchingArea.ASTROFIZYKA, mappings.getLab().getStudy_af());
+        studyMap.put(ResearchingArea.NAPED_IMPULSOWY, mappings.getLab().getStudy_ni());
+        studyMap.put(ResearchingArea.NAPED_NADPRZESTRZENNY, mappings.getLab().getStudy_nn());
+        studyMap.put(ResearchingArea.NAPED_SPALINOWY, mappings.getLab().getStudy_nn());
+        studyMap.put(ResearchingArea.OPANCERZENIE, mappings.getLab().getStudy_op());
+        studyMap.put(ResearchingArea.ROZWOJ_GRAWITONOW, mappings.getLab().getStudy_rg());
+        studyMap.put(ResearchingArea.SIEC_BADAN, mappings.getLab().getStudy_sb());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_BOJOWA, mappings.getLab().getStudy_tb());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getStudy_te());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_JONOWA, mappings.getLab().getStudy_tj());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getStudy_tk());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_LASEROWA, mappings.getLab().getStudy_tl());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getStudy_tn());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_OCHRONNA, mappings.getLab().getStudy_to());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getStudy_tp());
+        studyMap.put(ResearchingArea.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getStudy_ts());
+        logger.log(Level.INFO, "[DONE]");
+        logger.log(Level.INFO, "Initializing Tech map to Technology-level String");
+        technologyMap = new HashMap<ResearchingArea, String>();
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getHm_te());//1
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_LASEROWA, mappings.getLab().getHm_tl());//2
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_JONOWA, mappings.getLab().getHm_tj());//3
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getHm_tn());//4
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getHm_tp());//5
+        technologyMap.put(ResearchingArea.NAPED_SPALINOWY, mappings.getLab().getHm_ns());//6
+        technologyMap.put(ResearchingArea.NAPED_IMPULSOWY, mappings.getLab().getHm_ni());//7
+        technologyMap.put(ResearchingArea.NAPED_NADPRZESTRZENNY, mappings.getLab().getHm_nn());//8
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getHm_ts());//9
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getHm_tk());//10
+        technologyMap.put(ResearchingArea.ASTROFIZYKA, mappings.getLab().getHm_af());//11
+        technologyMap.put(ResearchingArea.SIEC_BADAN, mappings.getLab().getHm_ms());//12
+        technologyMap.put(ResearchingArea.ROZWOJ_GRAWITONOW, mappings.getLab().getHm_rg());//13
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_BOJOWA, mappings.getLab().getHm_tb());//13
+        technologyMap.put(ResearchingArea.TECHNOLOGIA_OCHRONNA, mappings.getLab().getHm_to());//13
+        technologyMap.put(ResearchingArea.OPANCERZENIE, mappings.getLab().getHm_op());//13
+        logger.log(Level.INFO, "[DONE]");
     }
 
-    private void clickStacja() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonStacja());
-        wait(1);
+    private void initShipyard() {
+        logger.log(Level.INFO, "Initializing Shipyard Map");
+        shipyardMap = new HashMap<ShipyardShips, String>();
+        shipyardMap.put(Ships.BOMB, mappings.getShipyard().getShipyard_bomb());
+        shipyardMap.put(Ships.CM, mappings.getShipyard().getShipyard_cm());
+        shipyardMap.put(Ships.DT, mappings.getShipyard().getShipyard_dt());
+        shipyardMap.put(Ships.GS, mappings.getShipyard().getShipyard_gs());
+        shipyardMap.put(Ships.KOL, mappings.getShipyard().getShipyard_skol());
+        shipyardMap.put(Ships.KR, mappings.getShipyard().getShipyard_kraz());
+        shipyardMap.put(Ships.LM, mappings.getShipyard().getShipyard_lm());
+        shipyardMap.put(Ships.MT, mappings.getShipyard().getShipyard_mt());
+        shipyardMap.put(Ships.NISZ, mappings.getShipyard().getShipyard_nisc());
+        shipyardMap.put(Ships.OW, mappings.getShipyard().getShipyard_ow());
+        shipyardMap.put(Ships.PAN, mappings.getShipyard().getShipyard_panc());
+        shipyardMap.put(Ships.REC, mappings.getShipyard().getShipyard_rec());
+        shipyardMap.put(Ships.SOND, mappings.getShipyard().getShipyard_ss());
+        shipyardMap.put(Ships.SAT, mappings.getShipyard().getShipyard_sat());
+        logger.log(Level.INFO, "[DONE]");
     }
 
-    private void clickBadania() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonBadania());
+    private void initDefence() {
+        logger.log(Level.INFO, "Initializing Defence Map");
+        defenceMap = new HashMap<Defence, String>();
+        defenceMap.put(Defence.DUZA_POWLOKA, mappings.getDefence().getDefence_dp());
+        defenceMap.put(Defence.DUZY_LASER, mappings.getDefence().getDefence_cl());
+        defenceMap.put(Defence.DZIALO_GAUSSA, mappings.getDefence().getDefence_dg());
+        defenceMap.put(Defence.DZIALO_JONOWE, mappings.getDefence().getDefence_dj());
+        defenceMap.put(Defence.MALA_POWLOKA, mappings.getDefence().getDefence_mp());
+        defenceMap.put(Defence.MALY_LASER, mappings.getDefence().getDefence_ll());
+        defenceMap.put(Defence.PRZECIWRAKIETA, mappings.getDefence().getDefence_pr());
+        defenceMap.put(Defence.RAKITA_MIEDZYPLANETARNA, mappings.getDefence().getDefence_rm());
+        defenceMap.put(Defence.WYRZUTNIA_PLAZMY, mappings.getDefence().getDefence_wp());
+        defenceMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getDefence().getDefence_wr());
+        logger.log(Level.INFO, "[DONE]");
+        logger.log(Level.INFO, "Inititializing Defence map to Defence size String");
+        defcountMap = new HashMap<Defence, String>();
+        defcountMap.put(Defence.DUZA_POWLOKA, mappings.getDefence().getHm_dp());
+        defcountMap.put(Defence.DUZY_LASER, mappings.getDefence().getHm_cl());
+        defcountMap.put(Defence.DZIALO_GAUSSA, mappings.getDefence().getHm_dg());
+        defcountMap.put(Defence.DZIALO_JONOWE, mappings.getDefence().getHm_dj());
+        defcountMap.put(Defence.MALA_POWLOKA, mappings.getDefence().getHm_mp());
+        defcountMap.put(Defence.MALY_LASER, mappings.getDefence().getHm_ll());
+        defcountMap.put(Defence.PRZECIWRAKIETA, mappings.getDefence().getHm_pr());
+        defcountMap.put(Defence.RAKITA_MIEDZYPLANETARNA, mappings.getDefence().getHm_rm());
+        defcountMap.put(Defence.WYRZUTNIA_PLAZMY, mappings.getDefence().getHm_wp());
+        defcountMap.put(Defence.WYRZUTNIA_RAKIET, mappings.getDefence().getHm_wr());
+        logger.log(Level.INFO, "[DONE]");
     }
 
-    private void clickObrona() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonObrona());
-        wait(1);
+    private void initFleet() {
+        logger.log(Level.INFO, "Initializing Mission Map to Mission String");
+        missionMap = new HashMap<Mission, String>();
+        missionMap.put(Mission.ACS, mappings.getFleet().getFleetSend_missionAcs());
+        missionMap.put(Mission.ATTACK, mappings.getFleet().getFleetSend_missionAtk());
+        missionMap.put(Mission.EXPLORE, mappings.getFleet().getFleetSend_missionExp());
+        missionMap.put(Mission.KOLONIZE, mappings.getFleet().getFleetSend_missionKol());
+        missionMap.put(Mission.MOON_DESTRUCTION, mappings.getFleet().getFleetSend_missionMoon());
+        missionMap.put(Mission.RECYCLE, mappings.getFleet().getFleetSend_missionRec());
+        missionMap.put(Mission.SPY, mappings.getFleet().getFleetSend_missionSzp());
+        missionMap.put(Mission.STATION, mappings.getFleet().getFleetSend_missionSta());
+        missionMap.put(Mission.STAY, mappings.getFleet().getFleetSend_missionZat());
+        missionMap.put(Mission.TRANSPORT, mappings.getFleet().getFleetSend_missionTra());
+        logger.log(Level.INFO, "[DONE]");
+        logger.log(Level.INFO, "Initializing Mission Map To Mission is Off String");
+        missionOffMap = new HashMap<Mission, String>();
+        missionOffMap.put(Mission.ACS, mappings.getFleet().getFleetSend_missionAcs_off());
+        missionOffMap.put(Mission.ATTACK, mappings.getFleet().getFleetSend_missionAtk_off());
+        missionOffMap.put(Mission.EXPLORE, mappings.getFleet().getFleetSend_missionExp_off());
+        missionOffMap.put(Mission.KOLONIZE, mappings.getFleet().getFleetSend_missionKol_off());
+        missionOffMap.put(Mission.MOON_DESTRUCTION, mappings.getFleet().getFleetSend_missionMoon_off());
+        missionOffMap.put(Mission.RECYCLE, mappings.getFleet().getFleetSend_missionRec_off());
+        missionOffMap.put(Mission.SPY, mappings.getFleet().getFleetSend_missionSzp_off());
+        missionOffMap.put(Mission.STATION, mappings.getFleet().getFleetSend_missionSta_off());
+        missionOffMap.put(Mission.STAY, mappings.getFleet().getFleetSend_missionZat_off());
+        missionOffMap.put(Mission.TRANSPORT, mappings.getFleet().getFleetSend_missionTra_off());
+        logger.log(Level.INFO, "[DONE]");
+        logger.log(Level.INFO, "Initializing Ships Map to Ship String");
+        shipsMap = new HashMap<Ships, String>();
+        shipsMap.put(Ships.BOMB, mappings.getFleet().getFleetSend_bomb());//1
+        shipsMap.put(Ships.CM, mappings.getFleet().getFleetSend_cm());//2
+        shipsMap.put(Ships.DT, mappings.getFleet().getFleetSend_dt());//3
+        shipsMap.put(Ships.GS, mappings.getFleet().getFleetSend_gs());//4
+        shipsMap.put(Ships.KOL, mappings.getFleet().getFleetSend_kol());//5
+        shipsMap.put(Ships.KR, mappings.getFleet().getFleetSend_kr());//6
+        shipsMap.put(Ships.LM, mappings.getFleet().getFleetSend_lm());//7
+        shipsMap.put(Ships.MT, mappings.getFleet().getFleetSend_mt());//8
+        shipsMap.put(Ships.NISZ, mappings.getFleet().getFleetSend_nisz());//9
+        shipsMap.put(Ships.OW, mappings.getFleet().getFleetSend_ow());//10
+        shipsMap.put(Ships.PAN, mappings.getFleet().getFleetSend_pan());//11
+        shipsMap.put(Ships.REC, mappings.getFleet().getFleetSend_rec());//12
+        shipsMap.put(Ships.SOND, mappings.getFleet().getFleetSend_sond());//13
+        logger.log(Level.INFO, "[DONE]");
+        logger.log(Level.INFO, "Initializing Ships Map to Ship Pick All String");
+        shipsAllMap = new HashMap<Ships, String>();
+        shipsAllMap.put(Ships.BOMB, mappings.getFleet().getFleetSend_bomb_all());//1
+        shipsAllMap.put(Ships.CM, mappings.getFleet().getFleetSend_cm_all());//2
+        shipsAllMap.put(Ships.DT, mappings.getFleet().getFleetSend_dt_all());//3
+        shipsAllMap.put(Ships.GS, mappings.getFleet().getFleetSend_gs_all());//4
+        shipsAllMap.put(Ships.KOL, mappings.getFleet().getFleetSend_kol_all());//5
+        shipsAllMap.put(Ships.KR, mappings.getFleet().getFleetSend_kr_all());//6
+        shipsAllMap.put(Ships.LM, mappings.getFleet().getFleetSend_lm_all());//7
+        shipsAllMap.put(Ships.MT, mappings.getFleet().getFleetSend_mt_all());//8
+        shipsAllMap.put(Ships.NISZ, mappings.getFleet().getFleetSend_nisz_all());//9
+        shipsAllMap.put(Ships.OW, mappings.getFleet().getFleetSend_ow_all());//10
+        shipsAllMap.put(Ships.PAN, mappings.getFleet().getFleetSend_pan_all());//11
+        shipsAllMap.put(Ships.REC, mappings.getFleet().getFleetSend_rec_all());//12
+        shipsAllMap.put(Ships.SOND, mappings.getFleet().getFleetSend_sond_all());//13
+        logger.log(Level.INFO, "[DONE]");
+        logger.log(Level.INFO, "Initializing Ships map to Fleet-Size String");
+        fleetMap = new HashMap<Ships, String>();
+        fleetMap.put(Ships.BOMB, mappings.getFleet().getHm_bomb());//1
+        fleetMap.put(Ships.CM, mappings.getFleet().getHm_cm());//2
+        fleetMap.put(Ships.DT, mappings.getFleet().getHm_dt());//3
+        fleetMap.put(Ships.GS, mappings.getFleet().getHm_gs());//4
+        fleetMap.put(Ships.KOL, mappings.getFleet().getHm_skol());//5
+        fleetMap.put(Ships.KR, mappings.getFleet().getHm_kraz());//6
+        fleetMap.put(Ships.LM, mappings.getFleet().getHm_lm());//7
+        fleetMap.put(Ships.MT, mappings.getFleet().getHm_mt());//8
+        fleetMap.put(Ships.NISZ, mappings.getFleet().getHm_nisc());//9
+        fleetMap.put(Ships.OW, mappings.getFleet().getHm_ow());//10
+        fleetMap.put(Ships.PAN, mappings.getFleet().getHm_panc());//11
+        fleetMap.put(Ships.REC, mappings.getFleet().getHm_rec());//12
+        fleetMap.put(Ships.SOND, mappings.getFleet().getHm_ss());//13
+        logger.log(Level.INFO, "[DONE]");
     }
 
-    private void clickStocznia() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonStocznia());
-        wait(1);
+    private void initResources() {
+        logger.log(Level.INFO, "Initializing Performance Map");
+        performanceMap = new HashMap<Performance.ResourceField, String>();
+        performanceMap.put(Performance.METAL, mappings.getResources().getPerformance_m());
+        performanceMap.put(Performance.KRYSZTAL, mappings.getResources().getPerformance_k());
+        performanceMap.put(Performance.DEUTER, mappings.getResources().getPerformance_d());
+        performanceMap.put(Performance.EL_SLONECZNA, mappings.getResources().getPerformance_es());
+        performanceMap.put(Performance.EL_FUZYJNA, mappings.getResources().getPerformance_ef());
+        performanceMap.put(Performance.SAT_SLONECZNA, mappings.getResources().getPerformance_ss());
+        logger.log(Level.INFO, "[DONE]");
     }
 
-    private void clickFlota() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonFlota());
-        wait(1);
-    }
-
-    private void clickEventList() throws OgameElementNotFoundException, OgameException {
-        this.clickOverview();
-        if (!isTextPresent(mappings.getOverview().getLeftButtonEventListIsEmpty())) {
-            click(mappings.getOverview().getLeftButtonEventList());
-            wait(1);
-        }
-    }
-
-    private void clickResourceSettings() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonResourceSettings());
-        wait(1);
-    }
-
-    private void clickMovements() throws OgameElementNotFoundException, OgameException {
-        clickAndWait(mappings.getOverview().getLeftButtonSlotsList());
-        wait(1);
+    private void initMovements() {
+        logger.log(Level.INFO, "Initilizing String map to Mission Obj");
+        movementsMissionStringMapMission = new HashMap<String, Mission>();
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.ACS), Mission.ACS);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.ATTACK), Mission.ATTACK);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.EXPLORE), Mission.EXPLORE);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.KOLONIZE), Mission.KOLONIZE);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.MOON_DESTRUCTION), Mission.MOON_DESTRUCTION);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.RECYCLE), Mission.RECYCLE);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.SPY), Mission.SPY);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.STATION), Mission.STATION);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.STAY), Mission.STAY);
+        movementsMissionStringMapMission.put(mappings.getSlots().getSlotMissionID(Mission.TRANSPORT), Mission.TRANSPORT);
+        logger.log(Level.INFO, "[DONE]");
+        logger.log(Level.INFO, "Initializing parsers");
+        slotParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseArrival());
+        reversalParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseReversal());
+        comeBackParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseReturn());
+        logger.log(Level.INFO, "[DONE]");
     }
     /***************************************************************************
      ***************** POLA PRYWATNE ******************************************* 
@@ -1393,7 +1538,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Mission, String> missionMap;
     private HashMap<Mission, String> missionOffMap;
     private HashMap<Ships, String> shipsMap;
-    private HashMap<Ships,String> shipsAllMap;
+    private HashMap<Ships, String> shipsAllMap;
     private HashMap<Buildings, String> buildingMap;
     private HashMap<ResearchingArea, String> studyMap;
     private HashMap<Defence, String> defenceMap;
@@ -1402,10 +1547,11 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Ships, String> fleetMap;
     private HashMap<ResearchingArea, String> technologyMap;
     private HashMap<Defence, String> defcountMap;
-    private HashMap<String, Mission> slotMissionMap;
+    private HashMap<String, Mission> movementsMissionStringMapMission;
     private SimpleDateFormat slotParse;
     private SimpleDateFormat reversalParse;
     private SimpleDateFormat comeBackParse;
+    private TimePeriodParser buildingsTimeParser;
     /***************************************************************************
      ********************* POLA I METODY STATYCZNE ***************************** 
      ***************************************************************************/

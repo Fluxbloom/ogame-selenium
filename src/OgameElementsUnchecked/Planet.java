@@ -4,7 +4,7 @@
  */
 package OgameElementsUnchecked;
 
-import OgameElementsUnchecked.Coords;
+import OgameElements.Coords;
 
 /**
  *

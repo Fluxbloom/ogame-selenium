@@ -4,6 +4,8 @@
  */
 package OgameEngineUnchecked;
 
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -13,7 +15,7 @@ import java.io.IOException;
  */
 public class PropertiesResources extends MappingProperties{
 
-    public PropertiesResources() throws FileNotFoundException, IOException {
+    public PropertiesResources() throws OgameFileNotFoundException, OgameIOException {
     load("resource.properties");
     init();
     }
