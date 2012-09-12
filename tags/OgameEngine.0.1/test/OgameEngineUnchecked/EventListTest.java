@@ -4,8 +4,9 @@
  */
 package OgameEngineUnchecked;
 
-import OgameEngineUnchecked.OgameException;
-import OgameEngineUnchecked.Ogame;
+import OgameEngine.TestProperties;
+import OgameEngine.Exceptions.OgameException;
+import OgameEngine.Ogame;
 import OgameElementsUnchecked.Events;
 import java.io.IOException;
 import java.util.Iterator;

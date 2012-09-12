@@ -4,10 +4,11 @@
  */
 package OgameEngineUnchecked;
 
-import OgameEngineUnchecked.OgameException;
-import OgameEngineUnchecked.Ogame;
+import OgameEngine.TestProperties;
+import OgameEngine.Exceptions.OgameException;
+import OgameEngine.Ogame;
 import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.Coords;
+import OgameElements.Coords;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -75,7 +76,7 @@ public class ChangePlanetTest {
     }
     @Test
     @Ignore
-    public void changePlanetByCoords() throws OgameException{
+    public void changePlanetByCoords() throws OgameException, IOException{
         o.login(uni, nick, pass);
         o.changePlanetByCoords(new Coords(2,199,7));
         o.wait(15);

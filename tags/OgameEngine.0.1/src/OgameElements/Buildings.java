@@ -5,38 +5,18 @@
 package OgameElements;
 
 /**
- * Jest to klasa wszystkich budynkow, mozliwych do zbudowania na planecie, dostepnych w ogame.
- * Klasa nie pozwala na tworzenie nowych budynków i można wykorzystać jedynie te utworzone w klasie.
- * Lista dostępnych budynków:
- * <ul>
- * <li>Kopalnia metalu</li>
- * <li>Kopalnia kryształu</li>
- * <li>Ekstraktor deuteru</li>
- * <li>Elektrownia słoneczna</li>
- * <li>Elektrownia fuzyjna</li>
- * <li>Satelita słoneczna</li>
- * <li>Magazyn metalu</li>
- * <li>Magazyn kryształu</li>
- * <li>Magazyn deuteru</li>
- * <li>Schowek metalu</li>
- * <li>Schowek kryształu</li>
- * <li>Schowek deuteru</li>
- * <li>Fabryka robotów</li>
- * <li>Stocznia</li>
- * <li>Laboratorium badawcze</li>
- * <li>Depozyt sojuszniczy</li>
- * <li>Silos rakietowy</li>
- * <li>Fabryka nanitów</li>
- * <li>Terraformer</li>
- * </ul>
- * @author Rafał Plich mailto:plich@wp.eu
+ * Klasa gromadząca budynki na planecie i księżycu
+ * @author Piotr Kowalski
  */
-public class Buildings {
+abstract public class Buildings {
     /**
-     * Pole zawiera nazwę budynku
+     * Konstruktor dla klas dziedziczących
+     * @param name nazwa budynku
      */
-    private String name;
-
+    protected Buildings(String name){
+        this.name = name;
+    }
+    
     /**
      * Zwraca nazwę budynku
      *
@@ -45,88 +25,47 @@ public class Buildings {
     public String getName() {
         return name;
     }
-    /**
-     * Prywatny i jedyny konstruktor 
-     * @param name Nazwa dla budynku
-     */
-    private Buildings(String name) {this.name=name;}
-    /**
-     * Statyczny budynek odpowiadający kopalni metalu
-     */
-    public static final Buildings METAL_MINE = new Buildings("METAL MINE");
-    /**
-     * Statyczny budynek odpowiadający kopalni kryształu
-     */
-    public static final Buildings CRYSTAL_MINE = new Buildings("CRISTAL MINE");
-    /**
-     * Statyczny budynek odpowadający ekstaraktorowi deuteru
-     */
-    public static final Buildings EKSTRAKTOR_DEUTERU = new Buildings("DEUTERIUM EXTRACTOR");
-    /**  
-     * Statyczny budynek odpowadający elektrowni słonecznej
-     */
-    public static final Buildings ELEKTROWNIA_SLONECZNA = new Buildings("SOLAR POWER PLANT");
-    /**
-     * Satyczny budynek odpowiadający elektorwni fuzyjnej
-     */
-    public static final Buildings ELEKTROWNIA_FUZYJNA = new Buildings("FUSSION POWER PLANT");
-    /**
-     * Statyczny budynek odpowiadający satelicie słonecznej
-     */
-    public static final Buildings SOLAR_SATELLITE = new Buildings("SOLAR SATELLITE");
-    /**
-     * Statyczny Budynek odpowiadający magazynowi metalu
-     */
-    public static final Buildings METAL_STORAGE = new Buildings("METAL STORAGE");
-    /**
-     * Statyczny Budynek odpowiadający magazynowi kryształu
-     */
-    public static final Buildings CRYSTAL_STORAGE = new Buildings("CRYSTAL STORAGE");
-    /**
-     * Statyczny Budynek odpowiadający magazynowi deuteru
-     */
-    public static final Buildings DEUTERIUM_STORAGE = new Buildings("DEUTERIUM STORAGE");
-    /**
-     * Statyczny Budynek odpowiadający schowkowi metalu
-     */
-    public static final Buildings METAL_HIDEOUT = new Buildings("METAL HIDEOUT");
-    /**
-     * Statyczny Budynek odpowiadający schowkowi kryształu
-     */
-    public static final Buildings CRYSTAL_HIDEOUT = new Buildings("CRYSTAL HIDEOUT");
-    /**
-     * Statyczny Budynek odpowiadający schowkowi deuteru
-     */
-    public static final Buildings DEUTERIUM_HIDEOUT = new Buildings("DEUTERIUM HIDEOUT");
-    /**
-     * Statyczny Budynek odpowiadający fabryce robotów
-     */
-    public static final Buildings MANUFACTURE_OF_ROBOTS = new Buildings("MANUFACTURE OF ROBOTS");
-    /**
-     * Statyczny Budynek odpowiadający stoczni
-     */
-    public static final Buildings SHIPYARD = new Buildings("SHIPYARD");
-    /**
-     * Statyczny Budynek odpowiadający laboratorium badawczemu
-     */
-    public static final Buildings LABORATORY = new Buildings("LABORATORY");
-    /**
-     * Statyczny Budynek odpowiadający depozytowi
-     */
-    public static final Buildings DEPOSITE_STATION = new Buildings("DEPOSITE STATION");
-    /**
-     * Statyczny Budynek odpowiadający silosowi rakietowemu
-     */
-    public static final Buildings MISSILE_SILO = new Buildings("MISSILE SILO");
-    /**
-     * Statyczny Budynek odpowiadający fabryce nanitów
-     */
-    public static final Buildings MANUFACTURE_OF_NANITAS = new Buildings("MANUFACTURE OF NANITAS");
-    /**
-     * Statyczny Budynek odpowiadający terraformerowi
-     */
-    public static final Buildings TERRAFORMER = new Buildings("TERRAFORMER");
 
+    /**
+     * Sprawdza czy budynek jest księżycowy
+     * @return 
+     */
+    public boolean isMoonBuilding(){
+        if (this.getClass().getName().compareTo(BuildingsMoon.class.getName())==0){
+            return true;
+        } else
+            return false;
+    }
+    
+    /**
+     * Sprawdza czy budynek jest budynkiem zasobów
+     * @return 
+     */
+    public boolean isResourceBuilding(){
+         if (this == Buildings.CRYSTAL_HIDEOUT || this == Buildings.CRYSTAL_MINE || this == Buildings.CRYSTAL_STORAGE ||
+             this == Buildings.DEUTERIUM_EXTRACTOR|| this == Buildings.DEUTERIUM_HIDEOUT|| this == Buildings.DEUTERIUM_STORAGE || 
+             this == Buildings.METAL_HIDEOUT|| this == Buildings.METAL_MINE|| this == Buildings.METAL_STORAGE ||
+             this == Buildings.FUSSION_POWER_PLANT|| this == Buildings.SOLAR_POWER_PLANT|| this == Buildings.SOLAR_SATELLITE    ) {
+             return true;
+         }
+         else return false;
+            
+    }
+    /**
+     * Sprawdza czy budynek jest budynkiem stacji
+     * @return 
+     */
+    public boolean isStationBuilding(){
+         if (this == Buildings.MANUFACTURE_OF_ROBOTS || this == Buildings.SHIPYARD || 
+             this == Buildings.LABORATORY || this == Buildings.DEPOSITE_STATION || 
+             this == Buildings.MISSILE_SILO || this == Buildings.MANUFACTURE_OF_NANITAS || 
+             this == Buildings.TERRAFORMER) {
+             return true;
+         }
+         else return false;
+            
+    }
+    
     /**
      * wypisuje nazwe danego budynku
      * @return sformatowany string opisujący dany budynek
@@ -136,4 +75,95 @@ public class Buildings {
         return "Buildings{" + "name=" + name + '}';
     }
     
+     /**
+     * Statyczny budynek odpowiadający kopalni metalu
+     */
+    public static final BuildingsPlanet METAL_MINE = BuildingsPlanet.METAL_MINE;
+    /**
+     * Statyczny budynek odpowiadający kopalni kryształu
+     */
+    public static final BuildingsPlanet CRYSTAL_MINE =BuildingsPlanet.CRYSTAL_MINE;
+    /**
+     * Statyczny budynek odpowadający ekstaraktorowi deuteru
+     */
+    public static final BuildingsPlanet DEUTERIUM_EXTRACTOR = BuildingsPlanet.DEUTERIUM_EXTRACTOR;
+    /**  
+     * Statyczny budynek odpowadający elektrowni słonecznej
+     */
+    public static final BuildingsPlanet SOLAR_POWER_PLANT = BuildingsPlanet.SOLAR_POWER_PLANT;
+    /**
+     * Satyczny budynek odpowiadający elektorwni fuzyjnej
+     */
+    public static final BuildingsPlanet FUSSION_POWER_PLANT = BuildingsPlanet.FUSSION_POWER_PLANT;
+    /**
+     * Statyczny budynek odpowiadający satelicie słonecznej
+     */
+    public static final BuildingsPlanet SOLAR_SATELLITE = BuildingsPlanet.SOLAR_SATELLITE;
+    /**
+     * Statyczny Budynek odpowiadający magazynowi metalu
+     */
+    public static final BuildingsPlanet METAL_STORAGE = BuildingsPlanet.METAL_STORAGE;
+    /**
+     * Statyczny Budynek odpowiadający magazynowi kryształu
+     */
+    public static final BuildingsPlanet CRYSTAL_STORAGE = BuildingsPlanet.CRYSTAL_STORAGE;
+    /**
+     * Statyczny Budynek odpowiadający magazynowi deuteru
+     */
+    public static final BuildingsPlanet DEUTERIUM_STORAGE = BuildingsPlanet.DEUTERIUM_STORAGE;
+    /**
+     * Statyczny Budynek odpowiadający schowkowi metalu
+     */
+    public static final BuildingsPlanet METAL_HIDEOUT = BuildingsPlanet.METAL_HIDEOUT;
+    /**
+     * Statyczny Budynek odpowiadający schowkowi kryształu
+     */
+    public static final BuildingsPlanet CRYSTAL_HIDEOUT = BuildingsPlanet.CRYSTAL_HIDEOUT;
+    /**
+     * Statyczny Budynek odpowiadający schowkowi deuteru
+     */
+    public static final BuildingsPlanet DEUTERIUM_HIDEOUT = BuildingsPlanet.DEUTERIUM_HIDEOUT;
+    /**
+     * Statyczny Budynek odpowiadający fabryce robotów
+     */
+    public static final BuildingsPlanet MANUFACTURE_OF_ROBOTS = BuildingsPlanet.MANUFACTURE_OF_ROBOTS;
+    /**
+     * Statyczny Budynek odpowiadający stoczni
+     */
+    public static final BuildingsPlanet SHIPYARD = BuildingsPlanet.SHIPYARD;
+    /**
+     * Statyczny Budynek odpowiadający laboratorium badawczemu
+     */
+    public static final BuildingsPlanet LABORATORY = BuildingsPlanet.LABORATORY;
+    /**
+     * Statyczny Budynek odpowiadający depozytowi
+     */
+    public static final BuildingsPlanet DEPOSITE_STATION = BuildingsPlanet.DEPOSITE_STATION;
+    /**
+     * Statyczny Budynek odpowiadający silosowi rakietowemu
+     */
+    public static final BuildingsPlanet MISSILE_SILO = BuildingsPlanet.MISSILE_SILO;
+    /**
+     * Statyczny Budynek odpowiadający fabryce nanitów
+     */
+    public static final BuildingsPlanet MANUFACTURE_OF_NANITAS = BuildingsPlanet.MANUFACTURE_OF_NANITAS;
+    /**
+     * Statyczny Budynek odpowiadający terraformerowi
+     */
+    public static final BuildingsPlanet TERRAFORMER = BuildingsPlanet.TERRAFORMER;
+    
+        /**
+     * Budynek stacji księżycowej
+     */
+    public static final BuildingsMoon MOON_STATION = BuildingsMoon.MOON_STATION;
+    /**
+     * Budynek falangi ksieżycowej
+     */
+    public static final BuildingsMoon MOON_FALANG= BuildingsMoon.MOON_FALANG;
+    /**
+     * Budynek teleportera
+     */
+    public static final BuildingsMoon MOON_TELEPORTER = BuildingsMoon.MOON_TELEPORTER;
+    
+    private String name;
 }

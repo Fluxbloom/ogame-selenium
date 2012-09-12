@@ -4,6 +4,7 @@
  */
 package OgameElementsUnchecked;
 
+import OgameElements.Coords;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 

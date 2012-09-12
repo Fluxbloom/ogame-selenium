@@ -5,6 +5,8 @@
 package OgameEngineUnchecked;
 
 import OgameElementsUnchecked.Mission;
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ public class PropertiesSlots extends MappingProperties {
 
 
     
-    public PropertiesSlots() throws FileNotFoundException, IOException {
+    public PropertiesSlots() throws OgameFileNotFoundException, OgameIOException {
         load("slot.properties");
         init();
     }

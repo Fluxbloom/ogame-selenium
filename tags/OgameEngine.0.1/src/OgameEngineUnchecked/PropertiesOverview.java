@@ -4,7 +4,9 @@
  */
 package OgameEngineUnchecked;
 
-import OgameElementsUnchecked.Coords;
+import OgameElements.Coords;
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -22,7 +24,7 @@ public class PropertiesOverview extends MappingProperties {
      * @throws IOException wywołany przy błędzie odczytu pliku z dysku
      * @throws FileNotFoundException wywołany przy braku danego pliku
      */
-    public PropertiesOverview() throws FileNotFoundException, IOException {
+    public PropertiesOverview() throws OgameFileNotFoundException, OgameIOException {
         load("overview.properties");
         init();
     }
@@ -61,6 +63,7 @@ public class PropertiesOverview extends MappingProperties {
         studyFree = properties.getProperty("studyFree");//=Twoje laboratorium w tej chwili nie pracuje.
         constructingFree = properties.getProperty("constructingFree");//=Brak statków/ Obrona w budowie
 
+        overviewClickedElementPresent = properties.getProperty("overviewClickedElementPresent");
 
 
     }
@@ -164,9 +167,11 @@ public class PropertiesOverview extends MappingProperties {
     /**
      * Tworzy dynamicznego xpatha do zmiany planety na te z podanym kordynatem
      * @param c kordynat planety na ktorą ma być zmieniona 
+     * @throws OgameFileNotFoundException brak pliku konfiguracji kordynatów
+     * @throws OgameIOException brak możliwości odczytu pliku konfiguracji kordynatów
      * @return xpath do zmiany planety
      */
-    public String getChangeplanetbyCoords(Coords c) {
+    public String getChangeplanetbyCoords(Coords c) throws OgameFileNotFoundException, OgameIOException {
         return changeplanetbyCoords.replace("%i", c.shortPrint());
     }
 
@@ -282,6 +287,11 @@ public class PropertiesOverview extends MappingProperties {
     public String getStudyFree() {
         return studyFree;
     }
+
+    public String getOverviewClickedElementPresent() {
+        return overviewClickedElementPresent;
+    }
+    
     
     
     // LEFT MENU
@@ -316,4 +326,5 @@ public class PropertiesOverview extends MappingProperties {
     private String buildingFree;//=Brak budynków w kolejce budowy.
     private String studyFree;//=Twoje laboratorium w tej chwili nie pracuje.
     private String constructingFree;//=Brak statków/ Obrona w budowie
+    private String overviewClickedElementPresent;//podgląd jest widoczny
 }

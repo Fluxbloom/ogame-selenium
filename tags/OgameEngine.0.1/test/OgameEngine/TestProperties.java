@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package OgameEngineUnchecked;
+package OgameEngine;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Properties;
  *
  * @author dyschemist
  */
-class TestProperties {
+public class TestProperties {
      protected String path; 
      protected Properties properties;
      

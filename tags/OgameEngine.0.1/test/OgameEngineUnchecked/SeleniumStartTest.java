@@ -4,14 +4,15 @@
  */
 package OgameEngineUnchecked;
 
-import OgameEngineUnchecked.OgameException;
-import OgameEngineUnchecked.Ogame;
+import OgameEngine.TestProperties;
+import OgameEngine.Ogame;
+import OgameElements.Buildings;
+import OgameEngine.Exceptions.OgameException;
 import OgameElementsUnchecked.Speed;
 import OgameElementsUnchecked.Resources;
 import OgameElementsUnchecked.Mission;
-import OgameElements.Buildings;
-import OgameElementsUnchecked.Coords;
-import OgameElementsUnchecked.Coords.Destination;
+import OgameElements.Destination;
+import OgameElements.Coords;
 import OgameElementsUnchecked.Fleet;
 import OgameElementsUnchecked.Ships;
 import java.io.IOException;
@@ -82,7 +83,7 @@ public class SeleniumStartTest {
 
     @Test
     @Ignore
-    public void TrySendingFleet() throws OgameException {
+    public void TrySendingFleet() throws OgameException, IOException {
         o.login(uni, nick, pass);
         Fleet f = new Fleet();
         f.add(Ships.SOND, 2);
@@ -101,7 +102,7 @@ public class SeleniumStartTest {
     
 @Test
 @Ignore
-public void startFleet() throws OgameException{
+public void startFleet() throws OgameException, IOException{
     o.login(uni, nick, pass);
     o.changePlanetByCoords(new Coords(2,158,7));
     o.sendFleet(Fleet.WHOLE_FLEET, new Coords(2,158,8),Speed.S10, Mission.TRANSPORT, Resources.ALL_RESOURCES);
@@ -111,7 +112,7 @@ public void startFleet() throws OgameException{
     
     @Test
     @Ignore
-    public void farming() throws OgameException {
+    public void farming() throws OgameException, IOException {
         o.login(uni, nick, pass);
         Fleet farmiaca = new Fleet();
         farmiaca.add(Ships.MT, 1);
@@ -119,11 +120,11 @@ public void startFleet() throws OgameException{
         recki.add(Ships.REC, 2);
         Fleet fs = Fleet.WHOLE_FLEET;
         Coords[] pz = new Coords[]{
-            new Coords(2, 100, 4, Destination.PZ),
-            new Coords(2, 102, 10, Destination.PZ),
-            new Coords(2, 107, 8, Destination.PZ),
-            new Coords(2, 108, 8, Destination.PZ),
-            new Coords(2, 108, 12, Destination.PZ)
+            new Coords(2, 100, 4, Destination.DEBRIS),
+            new Coords(2, 102, 10, Destination.DEBRIS),
+            new Coords(2, 107, 8, Destination.DEBRIS),
+            new Coords(2, 108, 8, Destination.DEBRIS),
+            new Coords(2, 108, 12, Destination.DEBRIS)
         };
         Coords[] farms = new Coords[]{
             new Coords(2, 114, 8),

@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package OgameEngineUnchecked;
+package OgameEngine;
 
+import OgameElements.ArrivalTime;
+import OgameElements.Buildings;
+import OgameEngine.Exceptions.OgameException;
 import OgameElementsUnchecked.Planet;
 import OgameElementsUnchecked.PlanetResources;
 import OgameElementsUnchecked.Speed;
@@ -13,14 +16,15 @@ import OgameElementsUnchecked.Slots;
 import OgameElementsUnchecked.Mission;
 import OgameElementsUnchecked.Events;
 import OgameElementsUnchecked.Defence;
-import OgameElements.Buildings;
-import OgameElementsUnchecked.Coords;
-import OgameElementsUnchecked.Coords.StartDestination;
+import OgameElements.BuildingsPlanet;
+import OgameElements.Coords;
+import OgameElements.TimePeriod;
 import OgameElementsUnchecked.Fleet;
 import OgameElementsUnchecked.Performance;
 import OgameElementsUnchecked.Performance.Production;
 import OgameElementsUnchecked.Performance.ResourceField;
 import OgameElementsUnchecked.ShipyardShips;
+import OgameEngine.Exceptions.OgameElementNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,6 +66,11 @@ public interface IOgame {
      */
     abstract public void wait(int hour, int minute, int seconds);
 
+    /**
+     * Meoda oczekiwania przez czas podany w wait period
+     * @param t obiekt czasu oczekiwania
+     */
+    abstract public void wait(TimePeriod t);
     /**************************************************************************
      ************************** METODY LOGOWAN *********************************
      **************************************************************************/
@@ -98,9 +107,11 @@ public interface IOgame {
      */
     abstract public void logout() throws OgameException;
 
-    /**************************************************************************
-     ************************** METODY PLANET *********************************
-     **************************************************************************/
+    /* *************************************************************************
+     * ************* WIDOK OGOLNY **********************************************
+     * ************************************************************************/
+    
+    
     /**
      * Zwraca ilosc planet gracza
      * @return ilość planet gracza
@@ -146,10 +157,10 @@ public interface IOgame {
 
     /**
      * Zmień planetę na podaną tym obiektem
-     * // TODO ta metoda domyślnie powinna pozwolić również na przełączenie się na księżyc
      * @param p Obiekt planety na którą ma być przełączenie
      * @throws OgameException brak planety o podanych kordynatach
      */
+    // TODO ta metoda domyślnie powinna pozwolić również na przełączenie się na księżyc
     abstract public void changePlanet(Planet p) throws OgameException;
 
     /**
@@ -163,15 +174,55 @@ public interface IOgame {
     /**
      * Pobiera kordynaty wszystkich planet gracza
      * @deprecated zalecane jest pobieranie calych planet
-     * @return Lista kordynatów w postaci [X:XXX:XX]
+     * @return Lista kordynatów w postaci
      * @throws OgameException brak pól
      */
     abstract public List<String> getPlanetCoords() throws OgameException;
 
+    /**
+     * Pobiera zasoby na danej planecie
+     * @return obiekt zasobów na planecie
+     */
+    abstract public PlanetResources getResources() throws OgameElementNotFoundException;
+    
+    /**
+     * Sprawdza czy kolejka budowy na danej planecie jest pusta
+     * @return true jeśli pusta, false w p.p.
+     * @throws OgameElementNotFoundException błędny text do wyszukania
+     * @throws OgameException inny błąd timeout np, albo brak serwera Selenium
+     */
+    abstract public boolean isBuildQueueEmpty() throws OgameElementNotFoundException, OgameException;
+    /**
+     * Sprawdza czy kolejka badań na danej planecie jest pusta
+     * @return true jeśli pusta, false w p.p.
+     * @throws OgameElementNotFoundException błędny text do wyszukania
+     * @throws OgameException inny błąd timeout np, albo brak serwera Selenium
+     */
+    abstract public boolean isResearchQueueEmpty() throws OgameElementNotFoundException, OgameException;
+    /**
+     * Sprawdza czy kolejka stoczni na danej planecie jest pusta
+     * @return true jeśli pusta, false w p.p.
+     * @throws OgameElementNotFoundException błędny text do wyszukania
+     * @throws OgameException inny błąd timeout np, albo brak serwera Selenium
+     */
+    abstract public boolean isConstructionQueueEmpty() throws OgameElementNotFoundException, OgameException;
+    
     /****************************************************************************
      * METODY DO wysyłania flot
      ****************************************************************************/
-    abstract public void sendFleet(Planet p, Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException;
+
+    /**
+     * Wysyła flotę z planety p
+     * @param p planeta
+     * @param f obiekt floty
+     * @param c obiekt kordynatów
+     * @param speed obiekt prędkości
+     * @param m obiekt misji
+     * @param r obiekt zasobow
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
+     * @throws OgameException różne błedy, od braków pól do błędów nadania floty
+     */
+    abstract public ArrivalTime sendFleet(Planet p, Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException;
 
     /**
      * Wysyła flotę z danej planety
@@ -180,9 +231,10 @@ public interface IOgame {
      * @param speed obiekt prędkości
      * @param m obiekt misji
      * @param r obiekt zasobow
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFleet(Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException;
+    abstract public ArrivalTime sendFleet(Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException;
 
     /**
      * Wysyła flotę z danej planety na pełnym tempie
@@ -190,89 +242,107 @@ public interface IOgame {
      * @param c obiekt kordynatów
      * @param m obiekt misji
      * @param r obiekt zasobow
+    * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFleet(Fleet f, Coords c, Mission m, Resources r) throws OgameException;
+    abstract public ArrivalTime sendFleet(Fleet f, Coords c, Mission m, Resources r) throws OgameException;
 
     /**
      * Wysyła flotę z danej planety bez zasobów na pełnym tempie
      * @param f obiekt floty
      * @param c obiekt kordynatów
      * @param m obiekt misji
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFleet(Fleet f, Coords c, Mission m) throws OgameException;
+    abstract public ArrivalTime sendFleet(Fleet f, Coords c, Mission m) throws OgameException;
 
     /**
      * Wysyła flotę z danej planety, w pełnym tempie i bez surowców na atak
      * @param f obiekt floty
      * @param c obiekt kordynatów
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFleet(Fleet f, Coords c) throws OgameException;
+    abstract public ArrivalTime sendFleet(Fleet f, Coords c) throws OgameException;
 
     /**
      * Wysyła flotę fsa z danej planety czyli flotę z pełnymi lukami 
      * @param f obiekt floty
      * @param c obiekt kordynatów
      * @param m obiekt misji
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFSFleet(Fleet f, Coords c, Mission m) throws OgameException;
+    abstract public ArrivalTime sendFSFleet(Fleet f, Coords c, Mission m) throws OgameException;
 
     /**
      * Wysyła flotę fsa z danej planety czyli flotę z pełnymi lukami w misji atakuj
      * @param f obiekt floty
      * @param c obiekt kordynatów
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFSFleet(Fleet f, Coords c) throws OgameException;
+    abstract public ArrivalTime sendFSFleet(Fleet f, Coords c) throws OgameException;
 
     /**
      * Wysyła flotę fsa z danej planety czyli całą flotę z pełnymi lukami
      * @param c obiekt kordynatów
      * @param m obiekt misji
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFSFleet(Coords c, Mission m) throws OgameException;
+    abstract public ArrivalTime sendFSFleet(Coords c, Mission m) throws OgameException;
 
     /**
      * Wysyła flotę fsa z danej planety czyli całą flotę z pełnymi lukami na misji atakuj
      * @param c obiekt kordynatów
+     * @return Obiekt czasu powrotu (jednostronny dla stacjonuj, powrotny dla reszty misji)
      * @throws OgameException różne błedy, od braków pól do błędów nadania floty
      */
-    abstract public void sendFSFleet(Coords c) throws OgameException;
+    abstract public ArrivalTime sendFSFleet(Coords c) throws OgameException;
 
-    /* *************************************************************************
-     * ************* WIDOK OGOLNY **********************************************
-     * ************************************************************************/
-    
-    abstract public PlanetResources getResources();
-    
+    // TODO dotąd są zrobione
+    /* ***********************************************************************/
     
     /* ************************************************************************
      * ************************* BUDYNKI **************************************
      * ************************************************************************/
-    abstract public void build(Buildings b) throws OgameException;
-
-    abstract public void research(ResearchingArea s) throws OgameException;
-
-    abstract public void build(Defence d, int i) throws OgameException;
-
-    abstract public void build(Defence d, String count) throws OgameException;
-
-    abstract public void build(ShipyardShips s, int i) throws OgameException;
-
-    abstract public void build(ShipyardShips s, String count) throws OgameException;
-
-    abstract public List<Events> getEventList() throws OgameException;
-
     /**
-     * Metoda pobierająca ilość statków znadująch się w obecnej chwili w soczni.
-     * @return Metoda zwraca obiekt Fleet (tablice asocjacyjną) par - statek i jego ilość.
-     * @throws OgameException, Błąd odczytu.
+     * Metoda buduje wskazany budynek na planecie
+     * UWAGA! Metoda nie wspiera jeszcze księżyców
+     * @param b Obiekt budynku
+     * @throws OgameElementNotFoundException, nieistniejące pole
+     * @throws OgameException 
      */
-    abstract public Fleet getPlanetFleet() throws OgameException;
+    // TODO obsuga księżyców
+    abstract public void build(Buildings b) throws OgameElementNotFoundException,OgameException;
+
+     /**
+     * Metoda pobierająca ile surowców jest potrzebnych do budowy budynku na poziom wyżej.
+     * @param b Odpowiada za budynek, z którego zostaną pobrane ilości surowców potrzebne do zbudowania go na poziom wyżej.
+     * @return Metoda zwraca obiekt PlanetResources zawierający zapisane zasoby surowców potrzebnych do zbudowania danego budynku.
+     * @throws OgameElementNotFoundException, nieistniejące pole
+     * @throws OgameException, Błąd Odczytu. 
+     */
+    // TODO obsuga księżyców
+    abstract public PlanetResources getCost(Buildings b) throws OgameElementNotFoundException,OgameException;
+    
+   /**
+     * Metoda pobiera czas potrzebny do wzniesienia budynku
+     * @param b Obiekt budynku
+     * @return czas przeformatowany do obiektu kalendarza
+     * @throws OgameElementNotFoundException, nieistniejące pole
+     * @throws OgameException 
+     */
+    // TODO obsuga księżyców
+    abstract public TimePeriod getProductionTime(Buildings b) throws OgameElementNotFoundException,OgameException;
+    
+    /* ************************************************************************
+     * ************************* LABORATORIUM *********************************
+     * ************************************************************************/
+    
+    abstract public void research(ResearchingArea s) throws OgameException;
 
     /**
      * <b>Metoda pobierająca wszytkie poziomy badań na planecie</b>.
@@ -280,6 +350,49 @@ public interface IOgame {
      * @throws OgameException 
      */
     abstract public HashMap<ResearchingArea, Integer> getPlanetStudy() throws OgameException;
+    
+    /* ************************************************************************
+     * ************************* STOCZNIA     *********************************
+     * ************************************************************************/
+    
+    abstract public void build(ShipyardShips s, int i) throws OgameException;
+
+    abstract public void build(ShipyardShips s, String count) throws OgameException;
+    
+    /* ************************************************************************
+     * ************************* OBRONA  *********************************
+     * ************************************************************************/
+    
+    abstract public void build(Defence d, int i) throws OgameException;
+
+    abstract public void build(Defence d, String count) throws OgameException;
+
+    /* ************************************************************************
+     * ******************************* Floty  *********************************
+     * ************************************************************************/
+    
+    /**
+     * Metoda pobierająca ilość statków znadująch się w obecnej chwili w soczni.
+     * @return Metoda zwraca obiekt Fleet (tablice asocjacyjną) par - statek i jego ilość.
+     * @throws OgameException, Błąd odczytu.
+     */
+    abstract public Fleet getPlanetFleet() throws OgameException;
+    
+    /* ************************************************************************
+     * ************************* Lista wydarzeń  ******************************
+     * ************************************************************************/
+    /**
+     * Pobiera listę wydarzeń
+     * @return Obiekt listy wydarzeń
+     * @throws OgameException 
+     */
+    abstract public List<Events> getEventList() throws OgameException;
+
+   
+    
+    
+
+    
 
     abstract public HashMap<Defence, Integer> getPlanetDefence() throws OgameException;
 
@@ -293,17 +406,8 @@ public interface IOgame {
      * @return Metoda zwraca obiekt HashMapę (tablicę asocjacyjną) par - budynek i jego poziom.
      * @throws OgameException, Błąd Odczytu. 
      */
-    abstract public HashMap<Buildings, Integer> getPlanetBuildings() throws OgameException;
+    abstract public HashMap<BuildingsPlanet, Integer> getPlanetBuildings() throws OgameException;
 
-    
-
-    /**
-     * Metoda pobierająca ile surowców jest potrzebnych do budowy budynku na poziom wyżej.
-     * @param b Odpowiada za budynek, z którego zostaną pobrane ilości surowców potrzebne do zbudowania go na poziom wyżej.
-     * @return Metoda zwraca obiekt PlanetResources zawierający zapisane zasoby surowców potrzebnych do zbudowania danego budynku.
-     * @throws OgameException, Błąd Odczytu. 
-     */
-    abstract public Resources getCost(Buildings b) throws OgameException;
 
     /**
      * Metoda pobierająca ile surowców jest potrzebnych do zbadania danej technologii na poziom wyżej.
@@ -311,15 +415,14 @@ public interface IOgame {
      * @return Metoda zwraca obiekt PlanetResources zawierający zapisane zasoby surowców potrzebnych do zbadania danej technologii.
      * @throws OgameException, Błąd Odczytu. 
      */
-    abstract public Resources getCost(ResearchingArea s) throws OgameException;
-
+    abstract public PlanetResources getCost(ResearchingArea s) throws OgameException;
     /**
      * Metoda pobierająca ile surowców jest potrzebnych do zbudowania danego statku.
      * @param s Odpowiada za statek, z którego zostaną pobrane ilości surowców potrzebne do zbudowania go. 
      * @return Metoda zwraca obiekt Resources zawierający zapisane zasoby surowców potrzebnych do zbudowania danego statku.
      * @throws OgameException, Błąd Odczytu. 
      */
-    abstract public Resources getCost(ShipyardShips s) throws OgameException;
+    abstract public PlanetResources getCost(ShipyardShips s) throws OgameException;
 
     /**
      * Metoda pobierająca ile surowców jest potrzebnych do zbudowania danej jednostki obronnej.
@@ -327,15 +430,9 @@ public interface IOgame {
      * @return Metoda zwraca obiekt Resources zawierający zapisane zasoby surowców potrzebnych do zbudowania danej jednostki obronnej.
      * @throws OgameException, Błąd Odczytu. 
      */
-    abstract public Resources getCost(Defence d) throws OgameException;
+    abstract public PlanetResources getCost(Defence d) throws OgameException;
 
-    /**
-     * 
-     * @param b Obiekt budynku
-     * @return czas w sekundach
-     * @throws OgameException 
-     */
-    abstract public long getProductionTime(Buildings b) throws OgameException;
+    
 
     abstract public long getProductionTime(ResearchingArea s) throws OgameException;
 
@@ -343,12 +440,7 @@ public interface IOgame {
 
     abstract public long getProductionTime(Defence d) throws OgameException;
 
-    abstract public boolean isBuildQueueEmpty() throws OgameException;
 
-    abstract public boolean isResearchQueueEmpty() throws OgameException;
-    //TODO refactor this name
-
-    abstract public boolean isConstructionQueueEmpty() throws OgameException;
 
     abstract public List<Slots> getSlots() throws OgameException; // moja :-)
 
