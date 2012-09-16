@@ -1,0 +1,16 @@
+NAZWA
+	chplanet
+
+SKLADNIA
+	chplanet opcja [dane planety]
+
+
+OPIS
+	Funkcja pozwala skakac miedzy planetami
+
+OPCJE
+	-c pozwala wybrac planete za pomoca wspolrzednych
+	-l pozwala wybrac planete za pomoca jej kolejnosci na liscie
+	-n --name pozwala wybrac planeta za pomoca jej nazwy
+PRZYKLAD 
+     chplanet -c 2:102:3
