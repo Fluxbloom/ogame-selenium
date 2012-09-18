@@ -4,6 +4,8 @@
  */
 package OgameElements;
 
+import OgameElementsUnchecked.ShipyardProduct;
+import OgameElementsUnchecked.ShipyardShips;
 import java.util.logging.Logger;
 
 
@@ -67,7 +69,7 @@ public class BuildingsPlanet extends Buildings{
     /**
      * Statyczny budynek odpowiadający satelicie słonecznej
      */
-     static final BuildingsPlanet SOLAR_SATELLITE = new BuildingsPlanet("SOLAR SATELLITE");
+     static final ShipyardShips SOLAR_SATELLITE = ShipyardShips.SAT;
     /**
      * Statyczny Budynek odpowiadający magazynowi metalu
      */

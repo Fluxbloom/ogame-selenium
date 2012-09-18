@@ -43,6 +43,7 @@ public class PropertiesOverview extends MappingProperties {
         leftButtonEventListIsListVisibleText = properties.getProperty("leftButtonEventListIsListVisibleText");
         leftButtonResourceSettings = properties.getProperty("leftButtonResourceSettings");
         leftButtonSlotsList = properties.getProperty("leftButtonFlightsList");
+        leftButtonMessages=properties.getProperty("leftButtonMessages"); 
         // CHANGE PLANET
         countplanet = properties.getProperty("countplanet");//=//div[@id="countColonies"]/p/span
         countplanet_separator = properties.getProperty("countplanet_separator");//=/
@@ -164,6 +165,16 @@ public class PropertiesOverview extends MappingProperties {
         return leftButtonResourceSettings;
     }
 
+    /**
+     * Pobiera xpath do przycisku otwierającego wiadomości
+     * @return xpath do przycisku otwierającego wiadomości
+     */
+    public String getLeftButtonMessages() {
+        return leftButtonMessages;
+    }
+
+    
+    
     /**
      * Tworzy dynamicznego xpatha do zmiany planety na te z podanym kordynatem
      * @param c kordynat planety na ktorą ma być zmieniona 
@@ -307,6 +318,7 @@ public class PropertiesOverview extends MappingProperties {
     private String leftButtonEventListIsListVisibleText;
     private String leftButtonResourceSettings;
     private String leftButtonSlotsList;
+    private String leftButtonMessages;
     //CHANGE PLANET
     private String countplanet;//=//div[@id="countColonies"]/p/span
     private String countplanet_separator;//=/

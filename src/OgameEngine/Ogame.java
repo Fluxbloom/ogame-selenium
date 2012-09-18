@@ -132,6 +132,35 @@ public abstract class Ogame implements IOgame{
         }
     }
     /**
+     * Pobranie ilości pasujący elementów xpath
+     * @param xpath 
+     * @return ilość pasujących
+     * @throws OgameElementNotFoundException na wszelki wypadek
+     */
+    protected int getXpathCount(String xpath) throws OgameElementNotFoundException{
+        try {
+            return selenium.getXpathCount(xpath).intValue();
+        }catch (SeleniumException ex){
+            throw new OgameElementNotFoundException(xpath);
+        }
+    }
+    /**
+     * Pobiera kod html spod danego linka
+     * @param url link strony
+     * @return kod html
+     */
+    protected String getHTMLContent(String url){
+            String result ="";
+            selenium.openWindow(url,"temp");
+            wait(1);
+            selenium.selectWindow("temp");
+            result =selenium.getHtmlSource();
+            selenium.close();
+            selenium.selectWindow(null);
+            return result;
+    }
+    
+    /**
      * TEST otwiera link w nowym oknie a następnie wybiera pary z tabeli i zapisuje pary z pierwszej i 
      * drugiej kolumny
      * @param contentLink link do otwarcia
@@ -161,6 +190,7 @@ public abstract class Ogame implements IOgame{
         }
         return result;
     }
+    
     
 
     protected Selenium selenium;
