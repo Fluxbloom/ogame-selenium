@@ -21,6 +21,9 @@ import OgameElementsUnchecked.Defence;
 import OgameElements.BuildingsPlanet;
 import OgameElements.Destination;
 import OgameElements.Coords;
+import OgameElements.Message;
+import OgameElements.MessageType;
+import OgameElements.Report;
 import OgameElements.SimpleTimePeriodParser;
 import OgameElements.Time;
 import OgameElements.TimeParser;
@@ -286,6 +289,11 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         wait(1);
     }
 
+    private void clickMessages() throws OgameElementNotFoundException, OgameException {
+         clickAndWait(mappings.getOverview().getLeftButtonMessages());
+         wait(1);
+    }
+    
     @Override
     public int getPlanetCount() throws OgameException {
         String s = getText(mappings.getOverview().getCountplanet());
@@ -364,12 +372,11 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public PlanetResources getResources() throws OgameElementNotFoundException {
-        String metal = getText(mappings.getOverview().getResources_metal());
-        String krysztal = getText(mappings.getOverview().getResources_crystal());
-        String deuter = getText(mappings.getOverview().getResources_deuterium());
-        String energy = getText(mappings.getOverview().getResources_energy());
+        int metal = replaceHugeNumbers(getText(mappings.getOverview().getResources_metal()));
+        int krysztal = replaceHugeNumbers(getText(mappings.getOverview().getResources_crystal()));
+        int deuter = replaceHugeNumbers(getText(mappings.getOverview().getResources_deuterium()));
+        int energy = replaceHugeNumbers(getText(mappings.getOverview().getResources_energy()));
         return new PlanetResources(metal, krysztal, deuter, energy);
-
     }
 
     @Override
@@ -475,8 +482,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         double value;
         for (Iterator<Entry<String, String>> it = set.iterator(); it.hasNext();) {
             temp = it.next();
+            if (s.contains(temp.getKey())){
             s.replace(temp.getKey(), "");
             multiplyier *= Integer.parseInt(temp.getValue());
+            }
         }
         char thousandSep = '.';
         char fractionSep = ',';
@@ -837,6 +846,47 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return this.sendFleet(Fleet.WHOLE_FLEET, c, Speed.S100, Mission.ATTACK, Resources.ALL_RESOURCES);
     }
 
+    /* *************************************************************************
+     * **** Wiadomości *****************************************************
+     * *************************************************************************/
+
+    private int countReports() throws OgameElementNotFoundException{
+        return getXpathCount(mappings.getMessages().getMessageItemCount());
+    }
+    
+    private Report parseReport(String url){
+        System.err.println(getHTMLContent(url));
+        return null;
+    }
+    
+    @Override
+    public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException{
+        this.clickMessages();
+        int reports = countReports();
+        int reportParsed = 0;
+        System.err.println("Reports ="+reports);
+        String temp, xpath;
+        Map<MessageType,String> str2MessageType = mappings.getMessages().getMessageTypesMappings();
+        while (reportParsed<count){
+        for (int i=1;i<reports+1;i++){
+            xpath = mappings.getMessages().getMessageItem(i);
+            temp = getText(xpath+mappings.getMessages().getMessageTypeText());
+            if (temp.contains((String) str2MessageType.get(Message.SPY_REPORT)) ){
+                temp = xpath+mappings.getMessages().getMessageUrlAtribute();
+                temp = getAttribute(temp);
+                parseReport(temp);
+                reportParsed++;
+                if (reportParsed>=count) break;
+            }
+        }
+        this.click(mappings.getMessages().getNextPage());
+        wait(1);
+        }
+        return null;
+    }
+    
+    
+    
     /* *************************************************************************
      * **** NIE SPRAWDZONE *****************************************************
      * *************************************************************************/
@@ -1315,7 +1365,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         buildingMap.put(Buildings.DEUTERIUM_STORAGE, mappings.getBuldings().getDeuteriumStorage());
         buildingMap.put(Buildings.CRYSTAL_STORAGE, mappings.getBuldings().getCrystalStorage());
         buildingMap.put(Buildings.METAL_STORAGE, mappings.getBuldings().getMetalStorage());
-        buildingMap.put(Buildings.SOLAR_SATELLITE, mappings.getBuldings().getSatellites());
+        //buildingMap.put(Buildings.SOLAR_SATELLITE, mappings.getBuldings().getSatellites());
         buildingMap.put(Buildings.DEUTERIUM_HIDEOUT, mappings.getBuldings().getDeuteriumHideout());
         buildingMap.put(Buildings.CRYSTAL_HIDEOUT, mappings.getBuldings().getCrystalHideout());
         buildingMap.put(Buildings.METAL_HIDEOUT, mappings.getBuldings().getMetalHideout());
@@ -1531,6 +1581,8 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         comeBackParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseReturn());
         logger.log(Level.INFO, "[DONE]");
     }
+    
+
     /***************************************************************************
      ***************** POLA PRYWATNE ******************************************* 
      ***************************************************************************/

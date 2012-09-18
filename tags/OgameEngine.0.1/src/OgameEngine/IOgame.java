@@ -18,6 +18,7 @@ import OgameElementsUnchecked.Events;
 import OgameElementsUnchecked.Defence;
 import OgameElements.BuildingsPlanet;
 import OgameElements.Coords;
+import OgameElements.Report;
 import OgameElements.TimePeriod;
 import OgameElementsUnchecked.Fleet;
 import OgameElementsUnchecked.Performance;
@@ -337,6 +338,14 @@ public interface IOgame {
      */
     // TODO obsuga księżyców
     abstract public TimePeriod getProductionTime(Buildings b) throws OgameElementNotFoundException,OgameException;
+    
+    /* ************************************************************************
+     * ************************* WIADOMOSCI *********************************
+     * ************************************************************************/
+    
+    abstract public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException;
+    
+    /* ************************************************************************/
     
     /* ************************************************************************
      * ************************* LABORATORIUM *********************************

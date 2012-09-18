@@ -7,6 +7,7 @@ package OgameEngineUnchecked;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
 import OgameEngine.PropertiesBuildings;
+import OgameEngine.PropertiesMessages;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -85,6 +86,10 @@ public class MappingProperties {
 
     public PropertiesSlots getSlots() {
         return slots;
+    }
+
+    public PropertiesMessages getMessages() {
+        return messages;
     }
     
     
@@ -181,6 +186,7 @@ public class MappingProperties {
     private PropertiesEvents events;
     private PropertiesResources resources;
     private PropertiesSlots slots;
+    private PropertiesMessages messages;
     
     private static final Logger logger = Logger.getLogger(MappingProperties.class.getName());
     
@@ -198,6 +204,7 @@ public class MappingProperties {
                 result.resources = new PropertiesResources();
                 result.shipyard = new PropertiesShipyard();
                 result.slots = new PropertiesSlots();
+                result.messages = new PropertiesMessages();
         } catch (OgameFileNotFoundException ex) {
             Logger.getLogger(MappingProperties.class.getName()).log(Level.SEVERE, null, ex);
         } catch (OgameIOException ex) {

@@ -4,6 +4,8 @@
  */
 package OgameElements;
 
+import OgameElementsUnchecked.ShipyardShips;
+
 /**
  * Klasa gromadząca budynki na planecie i księżycu
  * @author Piotr Kowalski
@@ -45,7 +47,7 @@ abstract public class Buildings {
          if (this == Buildings.CRYSTAL_HIDEOUT || this == Buildings.CRYSTAL_MINE || this == Buildings.CRYSTAL_STORAGE ||
              this == Buildings.DEUTERIUM_EXTRACTOR|| this == Buildings.DEUTERIUM_HIDEOUT|| this == Buildings.DEUTERIUM_STORAGE || 
              this == Buildings.METAL_HIDEOUT|| this == Buildings.METAL_MINE|| this == Buildings.METAL_STORAGE ||
-             this == Buildings.FUSSION_POWER_PLANT|| this == Buildings.SOLAR_POWER_PLANT|| this == Buildings.SOLAR_SATELLITE    ) {
+             this == Buildings.FUSSION_POWER_PLANT|| this == Buildings.SOLAR_POWER_PLANT   ) {
              return true;
          }
          else return false;
@@ -96,9 +98,9 @@ abstract public class Buildings {
      */
     public static final BuildingsPlanet FUSSION_POWER_PLANT = BuildingsPlanet.FUSSION_POWER_PLANT;
     /**
-     * Statyczny budynek odpowiadający satelicie słonecznej
+     * Statyczny budynek odpowiadający satelicie słonecznej //szybki fix, budujemy satelitę w stoczni
      */
-    public static final BuildingsPlanet SOLAR_SATELLITE = BuildingsPlanet.SOLAR_SATELLITE;
+    public static final ShipyardShips SOLAR_SATELLITE = BuildingsPlanet.SOLAR_SATELLITE;
     /**
      * Statyczny Budynek odpowiadający magazynowi metalu
      */
