@@ -129,12 +129,15 @@ public class Farming extends OgameTest{
     @Test
     public void farm() throws OgameException, IOException {
             Coords[] cNami = Coords.parseArray(new String[]{
-        "2:46:5","2:46:6","2:47:10","2:50:6","2:54:6","2:55:6","2:55:7",
-       "2:59:11","2:65:4","2:67:9"
+         "2:45:9", "2:46:4", "2:46:5", "2:46:6", "2:46:9", "2:46:10",
+                    "2:47:4", "2:47:5", "2:50:6", "2:54:6", "2:54:7", "2:56:11", "2:56:12", 
+                    "2:61:10", "2:64:7", "2:65:4", "2:67:9"
         });
         Coords[] cAisha = Coords.parseArray(new String[]{
-        "2:105:7","2:97:12","2:90:4","2:115:7","2:115:6","2:114:10","2:114:9","2:111:8","2:107:9","2:107:8"
-        });
+ "2:91:6",  "2:97:4", "2:97:8", "2:97:9", "2:97:10", "2:97:12",
+                    "2:98:8", "2:105:7", "2:107:8","2:107:9","2:107:10",
+                    "2:111:8","2:114:8","2:114:9","2:114:10","2:115:6","2:115:7",
+                    "2:117:4", "2:119:7","2:119:12", "2:120:4"        });
     Coords[] cVidel = Coords.parseArray(new String[]{
         "2:170:7","2:169:11","2:169:9","2:169:8","2:169:7","2:165:8","2:169:12","2:173:10","2:154:10","2:153:10"
             });
@@ -160,7 +163,7 @@ public class Farming extends OgameTest{
         exp.add(Ships.DT, Ships.ALL);
         Fleet trans = new Fleet();
         trans.add(Ships.MT, 170);
-        AttackList aisha = new AttackList(2, farming, fullfs, cAisha, 
+        AttackList aisha = new AttackList(3, farming, fullfs, cAisha, 
                 new Planet(new Coords(2, 106, 6), "Aisha")),
                 videl = new AttackList(1, farming, fullfs, cVidel, 
                 new Planet(new Coords(2, 158, 7), "Videl")),
@@ -168,7 +171,7 @@ public class Farming extends OgameTest{
                 new Planet(new Coords(2, 199, 7), "Hinata")),
                 tatsuki = new AttackList(3, farming, fullfs, cTatsuki, 
                 new Planet(new Coords(2, 244, 7), "Tatsuki")),
-                nami = new AttackList(2, farming, fullfs, cNami, 
+                nami = new AttackList(3, farming, fullfs, cNami, 
                 new Planet(new Coords(2, 57, 11), "Nami"));
         o.wait(minutes, seconds);
         aisha.skip(rounds);
@@ -186,15 +189,6 @@ public class Farming extends OgameTest{
                 await = new TimePeriod(0,10,0);
                 o.start();
                 o.login(uni, nick, pass);
-//                if (ifTrans){
-//                try{
-//                   o.changePlanet(new Planet(new Coords(2, 106, 6), "Aisha")); 
-//                   Resources aishaRes = o.getResources();
-//                   aishaRes.subtract(Resources.DEUTERIUM, 3000);
-//                   o.sendFleet(trans, new Coords(2,158,7),Speed.S80, Mission.STAY, aishaRes);
-//                } catch(Exception ex){System.err.println("Brak floty transportowej na aisha");}
-//                ifTrans=false;
-//                }
                 try {
                 o.changePlanet(new Planet(new Coords(2, 106, 6), "Aisha"));
                 o.sendFleet(exp, new Coords(2, 107, 16), Mission.EXPLORE.setTime(1));

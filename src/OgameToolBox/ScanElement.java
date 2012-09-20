@@ -66,19 +66,11 @@ public class ScanElement {
         return speed;
     }
     
-    
-    
-    
-    
     private static Fleet scanningFleet = new Fleet();
     static {
         ScanElement.scanningFleet.add(Ships.SOND, 3);
     }
-    
-    
-    
-    
-    
+ 
     private Coords destination;
     private Speed speed;
     private Fleet scanFleet;

@@ -6,6 +6,9 @@ package OgameElements;
 
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.OgameTest;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,7 +34,13 @@ public class MessagesTest extends OgameTest {
     public void getReportTest() throws OgameException {
         o.start();
         o.login(uni, nick, pass);
-        o.getReports(16);
+        List<Report> list = o.getReports(6);
+        Collections.sort(list);
+        Iterator<Report> it = list.iterator();
+        for (Report temp;it.hasNext();){
+            temp = it.next();
+            System.out.println(temp.toString());
+        }
         o.wait(5);
         o.logout();
         o.stop();

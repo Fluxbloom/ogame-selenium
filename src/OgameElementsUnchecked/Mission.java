@@ -33,6 +33,10 @@ public class Mission {
         return "Mission{" + "name=" + name + '}';
     }
 
+    public String print(){
+        return this.name;
+    }
+    
     public String getName() {
         return name;
     }

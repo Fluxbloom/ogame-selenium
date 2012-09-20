@@ -5,6 +5,9 @@
 package OgameElementsUnchecked;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  *
@@ -39,6 +42,24 @@ public class Fleet {
     public HashMap<Ships, Integer> getFleet() {
         return fleet;
     }
+
+    @Override
+    public String toString() {
+        String fleetString ="Fleet{";
+        if (this==Fleet.WHOLE_FLEET) return "Fleet{Whole}";
+        Set<Entry<Ships,Integer>> set = this.fleet.entrySet();
+        Iterator<Entry<Ships,Integer>> it = set.iterator();
+        boolean first = true;
+        for (Entry<Ships,Integer> temp;it.hasNext();){
+            if (!first){ fleetString+=";";}
+            temp = it.next();
+            fleetString+=temp.getKey().name+"-"+(temp.getValue().intValue()==Ships.ALL?"All ":temp.getValue().intValue());
+        }
+        return fleetString + '}';
+    }
+    
+    
+    
     
     public static final Fleet WHOLE_FLEET = new Fleet();
 

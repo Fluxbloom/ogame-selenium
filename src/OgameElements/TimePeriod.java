@@ -208,5 +208,39 @@ public class TimePeriod implements Comparable{
         return max;
     }
     
+    /**
+     * Zwraca najkrótszy okres czasu
+     * @param p tablica okresów oczekiwań
+     * @return najkrótszy okres oczekiwania
+     */
+    static public TimePeriod min(TimePeriod[] p){
+        if (p.length==0) throw new IndexOutOfBoundsException("TimePeriods empty list");
+        TimePeriod max = p[0];
+        for (int i=1; i< p.length;i++){
+            if (max.compareTo(p[i])>0){
+                max = p[i];
+            }
+        }
+        return max;
+    }
+        /**
+     * Zwraca najkrótszy okres czasu
+     * @param p Lista dynamiczna okresów oczekiwań
+     * @return najkrótszy okres oczekiwania
+     */
+    static public TimePeriod min(List<TimePeriod> p){
+        if (p.isEmpty()) throw new IndexOutOfBoundsException("TimePeriods empty list");
+        Iterator<TimePeriod> it = p.iterator();
+        TimePeriod max = it.next();
+        for (TimePeriod temp; it.hasNext();){
+            temp=it.next();
+            if (max.compareTo(temp)>0){
+                max = temp;
+            }
+        }
+        return max;
+    }
+    
+    
     private Calendar time;
 }

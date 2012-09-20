@@ -8,10 +8,12 @@ import OgameElementsUnchecked.Fleet;
 import OgameElementsUnchecked.Mission;
 import OgameElementsUnchecked.Planet;
 import OgameElementsUnchecked.Ships;
+import OgameEngine.Exceptions.OgameElementNotFoundException;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.OgameTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -32,6 +34,7 @@ public class FleetTest extends OgameTest{
     }
     
     @Test
+    @Ignore
     public void arrivelTimeTest() throws OgameException{
         o.start();
         o.login(uni, nick, pass);
@@ -48,5 +51,18 @@ public class FleetTest extends OgameTest{
         o.logout();
         o.stop();
     }
+    @Test 
+            public void slotsCountTest() throws OgameElementNotFoundException, OgameException{
+                o.start();
+        o.login(uni, nick, pass);
+        int slotsTotal = o.getSlotsTotal(),
+            slotsOcc = o.getSlotsOccupied(),
+            expTotal = o.getExpeditionsTotal(),
+            expOcc = o.getExpeditionsOccupied();
+                o.logout();
+        o.stop();
+        System.out.println("Slots "+slotsOcc+"/"+slotsTotal+" ; "+expOcc+"/"+expTotal);
+    }
+    
     
 }

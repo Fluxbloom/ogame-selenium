@@ -152,7 +152,7 @@ public abstract class Ogame implements IOgame{
     protected String getHTMLContent(String url){
             String result ="";
             selenium.openWindow(url,"temp");
-            wait(1);
+            this.waitMilisecond(1000);
             selenium.selectWindow("temp");
             result =selenium.getHtmlSource();
             selenium.close();
@@ -169,7 +169,7 @@ public abstract class Ogame implements IOgame{
     protected Map<String, String> getContent(String contentLink) {
         Map<String, String> result = new HashMap<String, String>();
         selenium.openWindow(contentLink, "temp");
-        wait(1);
+        this.waitMilisecond(1000);
         selenium.selectWindow("temp");
         int count = selenium.getXpathCount("//tr").intValue();
         for (int i = 1; i < count + 1; i++) {

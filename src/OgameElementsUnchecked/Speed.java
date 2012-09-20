@@ -26,5 +26,10 @@ public class Speed {
     public String getS() {
         return s;
     }
+
+    @Override
+    public String toString() {
+        return "Speed{" + "s=" + s + '}';
+    }
     
 }

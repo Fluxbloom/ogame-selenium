@@ -79,7 +79,8 @@ public class Resources {
 
     @Override
     public String toString() {
-        return "Resources{" + "metal=" + metal + ", crystal=" + crystal + ", deuter=" + deuterium + '}';
+        return "Resources{" + "metal=" + (metal<0?"All":metal) + ", crystal=" + (crystal<0?"All":crystal) 
+                + ", deuterium=" + (deuterium<0?"All":deuterium) + '}';
     }
     public static final Resources NO_RESOURCES = new Resources("0", "0", "0");
     public static final Resources ALL_RESOURCES = new Resources("-1", "-1", "-1");

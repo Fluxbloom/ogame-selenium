@@ -39,6 +39,7 @@ import OgameElementsUnchecked.Ships;
 import OgameElementsUnchecked.ShipyardShips;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
+import OgameEngine.Exceptions.OgameParsingError;
 import OgameEngineUnchecked.MappingProperties;
 import com.thoughtworks.selenium.*;
 import java.text.ParseException;
@@ -86,11 +87,11 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
      **************************************************************************/
     @Override
     public void waitMilisecond(int miliseconds) {
-        logger.log(Level.INFO, "Will wait for {0} miliseconds", miliseconds);
+        //System.out.println"Will wait for {0} miliseconds", miliseconds);
         try {
             Thread.sleep(miliseconds);
         } catch (InterruptedException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            //logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -99,11 +100,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         Calendar now = new GregorianCalendar();
         now.add(Calendar.SECOND, seconds);
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        logger.log(Level.INFO, "Will wait for {0} seconds till {1}", new String[]{Integer.toString(seconds), sdf.format(now.getTime())});
+        System.out.println("Will wait for " + Integer.toString(seconds) + " seconds till " + sdf.format(now.getTime()));
         try {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException ex) {
-            logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -126,6 +126,12 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         wait(days * 24 + hours, minutes, seconds);
     }
 
+    @Override
+    public void waitTill(Time t) {
+        Time now = new Time();
+        // TODO brakuje metod zapewniających dzialanie głównie operacji substract dla Time & Time -> TimePeriod 
+    }
+
     /**************************************************************************
      ************************** METODY LOGOWAN *********************************
      **************************************************************************/
@@ -135,7 +141,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
      */
     @Override
     public void start() throws OgameException {
-        logger.log(Level.INFO, "Starting selenium instance");
+        System.out.println("Starting selenium instance");
         try {
             selenium.start();
             selenium.windowMaximize();
@@ -231,7 +237,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     private void clickOverview() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonPrzegladaj());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private boolean isOverviewClicked() {
@@ -244,12 +250,12 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     private void clickResourceBuildings() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonSurowce());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private void clickStationBuildings() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonStacja());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private void clickLab() throws OgameElementNotFoundException, OgameException {
@@ -258,42 +264,42 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     private void clickDefence() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonObrona());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private void clickShipyard() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonStocznia());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private void clickFleet() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonFlota());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private void clickEventList() throws OgameElementNotFoundException, OgameException {
         this.clickOverview();
         if (!isTextPresent(mappings.getOverview().getLeftButtonEventListIsEmpty())) {
             click(mappings.getOverview().getLeftButtonEventList());
-            wait(1);
+            waitMilisecond(1000);
         }
     }
 
     private void clickResourceSettings() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonResourceSettings());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private void clickMovements() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonSlotsList());
-        wait(1);
+        waitMilisecond(1000);
     }
 
     private void clickMessages() throws OgameElementNotFoundException, OgameException {
-         clickAndWait(mappings.getOverview().getLeftButtonMessages());
-         wait(1);
+        clickAndWait(mappings.getOverview().getLeftButtonMessages());
+        waitMilisecond(1000);
     }
-    
+
     @Override
     public int getPlanetCount() throws OgameException {
         String s = getText(mappings.getOverview().getCountplanet());
@@ -328,21 +334,21 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public void changePlanet(int planetNumber) throws OgameException {
         clickAndWait(mappings.getOverview().getChangeplanetbyid(planetNumber));
-        wait(1);
+        waitMilisecond(1000);
     }
 
     // TODO poprawić obsługę planet powyżej 12 znaków
     @Override
     public void changePlanetByName(String name) throws OgameException {
         clickAndWait(mappings.getOverview().getChangeplanetbyName(name));
-        wait(1);
+        waitMilisecond(1000);
     }
 
     @Override
     public void changePlanetByCoords(Coords c) throws OgameException {
         String xpath = mappings.getOverview().getChangeplanetbyCoords(c);
         clickAndWait(xpath);
-        wait(1);
+        waitMilisecond(1000);
     }
 
     @Override
@@ -419,7 +425,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         } else if (b.isStationBuilding()) {
             this.clickStationBuildings();
             click(buildingMap.get(b));
-            wait(1);
+            waitMilisecond(1000);
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
             if (selenium.isElementPresent(mappings.getBuldings().getStationButtonDisabled())) {
                 /*
@@ -445,7 +451,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         } else {
             this.clickResourceBuildings();
             click(buildingMap.get(b));
-            wait(1);
+            waitMilisecond(1000);
             //this.clickAndWait(buildingMap.get(b)); //selenium.click
             if (isElementPresent(mappings.getBuldings().getResourcesButtonDisabled())) {
                 /*
@@ -482,9 +488,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         double value;
         for (Iterator<Entry<String, String>> it = set.iterator(); it.hasNext();) {
             temp = it.next();
-            if (s.contains(temp.getKey())){
-            s.replace(temp.getKey(), "");
-            multiplyier *= Integer.parseInt(temp.getValue());
+            if (s.contains(temp.getKey())) {
+                s.replace(temp.getKey(), "");
+                multiplyier *= Integer.parseInt(temp.getValue());
             }
         }
         char thousandSep = '.';
@@ -502,7 +508,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         if (!b.isResourceBuilding()) {
             this.clickStationBuildings();
             click(buildingMap.get(b));
-            this.wait(1);
+            this.waitMilisecond(1000);
             if (isElementPresent(mappings.getBuldings().getSta_metal())) {
                 metal = replaceHugeNumbers(getText(mappings.getBuldings().getSta_metal_value()));
             }
@@ -519,7 +525,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         } else {
             this.clickResourceBuildings();
             click(buildingMap.get(b));
-            this.wait(1);
+            this.waitMilisecond(1000);
             if (isElementPresent(mappings.getBuldings().getRes_metal())) {
                 metal = replaceHugeNumbers(getText(mappings.getBuldings().getRes_metal_value()));
             }
@@ -545,13 +551,13 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         } else if (b.isStationBuilding()) {
             this.clickStationBuildings();
             click(buildingMap.get(b));
-            this.wait(1);
+            this.waitMilisecond(1000);
             String s = getText(mappings.getBuldings().getTime_xpath());
             cal = buildingsTimeParser.parse(s);
         } else {
             this.clickResourceBuildings();
             click(buildingMap.get(b));
-            this.wait(1);
+            this.waitMilisecond(1000);
             String s = getText(mappings.getBuldings().getTime_xpath());
             cal = buildingsTimeParser.parse(s);
         }
@@ -685,15 +691,14 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             throws OgameCannotSendFleetException, OgameElementNotFoundException,
             OgameIOException, OgameFileNotFoundException, OgameException {
         // sprawdzamy czy flota ma dostępną misję
-        logger.log(Level.INFO, "Sending fleet - {0} - {1} - {2} - {3} - {4}", new String[]{
-                    f.toString(), c.toString(), speed.toString(), m.toString(), r.toString()
-                });
+        System.out.println("Sending fleet - "+f.toString()+" - "+c.shortPrint()+" - "+m.print()+
+                " - "+r.toString()+" - "+speed.toString());
         if (!this.isFleetAbleToAccessMission(f, m, c)) {
             logger.log(Level.WARNING, "Fleet cant go for such mission");
             throw OgameException.FLEET_MISSION_UNAVAILABLE_FOR_FLEET;
         }
         this.clickFleet();
-        logger.log(Level.INFO, "First screen");
+        //logger.log(Level.INFO, "First screen");
         if (isTextPresent(mappings.getFleet().getNo_fleet_text())) {
             throw OgameException.FLEET_NO_FLEET_ON_PLANET;
         }
@@ -708,7 +713,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
              */
         }
         clickAndWait(mappings.getFleet().getFleetSend_okscreen1());
-        wait(0, 1);
+        this.waitMilisecond(1000);
         if (m == Mission.STATION) {
             int i = 2;
             String temp, text;
@@ -773,7 +778,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             for (int i = 0; i < 10 && textTime.length() != mappings.getFleet().getFlight_arrival_format().length(); i++) {
                 this.waitMilisecond(100);
                 textTime = getText(mappings.getFleet().getFlight_arrival_label());
-                System.err.println("i="+i+" "+textTime);
+                //System.err.println("i=" + i + " " + textTime);
             }
             time = tp.parse(textTime);
         } else {
@@ -785,7 +790,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             for (int i = 0; i < 10 && textTime.length() != mappings.getFleet().getFlight_arrival_format().length(); i++) {
                 this.waitMilisecond(100);
                 textTime = getText(mappings.getFleet().getFlight_arrival_back_label());
-                System.err.println("i="+i+" "+textTime);
+                //System.err.println("i=" + i + " " + textTime);
             }
             time = tp.parse(textTime);
 
@@ -801,7 +806,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
         clickAndWait(mappings.getFleet().getFleetSend_okscreen3());
         this.clickOverview();
-        return new ArrivalTime(time,period);
+        return new ArrivalTime(time, period);
     }
 
     @Override
@@ -846,47 +851,128 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return this.sendFleet(Fleet.WHOLE_FLEET, c, Speed.S100, Mission.ATTACK, Resources.ALL_RESOURCES);
     }
 
+    @Override
+    public int getSlotsTotal() throws OgameException {
+        this.clickFleet();
+        String text = getText(mappings.getFleet().getUsedMaxFleets());
+        String remove = getText(mappings.getFleet().getUsedMaxFleetsRemove());
+        String[] str = text.replace(remove, "").replace(" ", "").split(mappings.getFleet().getUsedMaxFleetsSep());
+        return Integer.parseInt(str[1]);
+        /* // stara wersja oparta o movement
+         * this.clickMovements();
+         * return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_maxFleets()));*/
+    }
+
+    @Override
+    public int getSlotsOccupied() throws OgameException {
+        this.clickFleet();
+        String text = getText(mappings.getFleet().getUsedMaxFleets());
+        text = text.replace(getText(mappings.getFleet().getUsedMaxFleetsRemove()), "").replace(" ", "");
+        String[] str = text.split(mappings.getFleet().getUsedMaxFleetsSep());
+        return Integer.parseInt(str[0]);
+        /* // stara wersja oparta o movement
+        this.clickMovements();
+        return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_usedFleets()));*/
+    }
+
+    @Override
+    public int getExpeditionsTotal() throws OgameException {
+        this.clickFleet();
+        String text = getText(mappings.getFleet().getUsedMaxExp());
+        text.replace(getText(mappings.getFleet().getUsedMaxExpRemove()), "").replace(" ", "");
+        String[] str = text.split(mappings.getFleet().getUsedMaxFleetsSep());
+        return Integer.parseInt(str[1]);
+        /* // stara wersja oparta o movement
+        this.clickMovements();
+        return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_maxExp()));*/
+    }
+
+    @Override
+    public int getExpeditionsOccupied() throws OgameException {
+        this.clickFleet();
+        String text = getText(mappings.getFleet().getUsedMaxExp());
+        text = text.replace(getText(mappings.getFleet().getUsedMaxExpRemove()), "").replace(" ", "");
+        String[] str = text.split(mappings.getFleet().getUsedMaxFleetsSep());
+        return Integer.parseInt(str[0]);
+        /* // stara wersja oparta o movement
+        this.clickMovements();
+        return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_useExp()));*/
+    }
+
     /* *************************************************************************
      * **** Wiadomości *****************************************************
      * *************************************************************************/
-
-    private int countReports() throws OgameElementNotFoundException{
+    private int countReports() throws OgameElementNotFoundException {
         return getXpathCount(mappings.getMessages().getMessageItemCount());
     }
-    
-    private Report parseReport(String url){
-        System.err.println(getHTMLContent(url));
-        return null;
+
+    private int parseReportNumbers(String s) {
+        return Integer.parseInt(s.replace('.', ' ').replace(" ", ""));
     }
-    
+
+    private Report parseReport(String url) throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingError {
+        String mmetal="0", ccrystal="0", ddeuter="0", eenergy="0";
+        Coords c=null;
+        selenium.openWindow(url, "temp");
+        selenium.selectWindow("temp");
+        int trials = 0;
+        while (trials < 3) {
+            trials++;
+            waitMilisecond(1000);
+            try {
+                c = Coords.parse(getText(mappings.getSpyreport().getCoords()));
+                mmetal = getText(mappings.getSpyreport().getMetal());
+                ccrystal = getText(mappings.getSpyreport().getCristal());
+                ddeuter = getText(mappings.getSpyreport().getDeuterium());
+                eenergy = getText(mappings.getSpyreport().getEnergy());
+                break;
+            } catch (OgameElementNotFoundException ex) {
+                if (trials == 3) {
+                    throw ex;
+                }
+            }
+        }
+        selenium.close();
+        selenium.selectWindow(null);
+        int metal = parseReportNumbers(mmetal);
+        int crystal = parseReportNumbers(ccrystal);
+        int deuter = parseReportNumbers(ddeuter);
+        int energy = parseReportNumbers(eenergy);
+        return new Report(c, new PlanetResources(metal, crystal, deuter, energy));
+    }
+
     @Override
-    public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException{
+    public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException {
+        System.out.println("Get " + count + " previous reports");
         this.clickMessages();
         int reports = countReports();
         int reportParsed = 0;
-        System.err.println("Reports ="+reports);
         String temp, xpath;
-        Map<MessageType,String> str2MessageType = mappings.getMessages().getMessageTypesMappings();
-        while (reportParsed<count){
-        for (int i=1;i<reports+1;i++){
-            xpath = mappings.getMessages().getMessageItem(i);
-            temp = getText(xpath+mappings.getMessages().getMessageTypeText());
-            if (temp.contains((String) str2MessageType.get(Message.SPY_REPORT)) ){
-                temp = xpath+mappings.getMessages().getMessageUrlAtribute();
-                temp = getAttribute(temp);
-                parseReport(temp);
-                reportParsed++;
-                if (reportParsed>=count) break;
+        List<Report> list = new ArrayList<Report>();
+        Map<MessageType, String> str2MessageType = mappings.getMessages().getMessageTypesMappings();
+        while (reportParsed < count) {
+            reports = countReports();
+            for (int i = 1; i < reports + 1; i++) {
+                xpath = mappings.getMessages().getMessageItem(i);
+                temp = getText(xpath + mappings.getMessages().getMessageTypeText());
+                if (temp.contains((String) str2MessageType.get(Message.SPY_REPORT))) {
+                    temp = xpath + mappings.getMessages().getMessageUrlAtribute();
+                    temp = getAttribute(temp);
+                    list.add(parseReport(temp));
+                    reportParsed++;
+                    if (reportParsed >= count) {
+                        break;
+                    }
+                }
+            }
+            if (reportParsed < count) {
+                this.click(mappings.getMessages().getNextPage());
+                waitMilisecond(1000);
             }
         }
-        this.click(mappings.getMessages().getNextPage());
-        wait(1);
-        }
-        return null;
+        return list;
     }
-    
-    
-    
+
     /* *************************************************************************
      * **** NIE SPRAWDZONE *****************************************************
      * *************************************************************************/
@@ -1291,7 +1377,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         String xpath = mappings.getSlots().getSlots_fleet_by_id(f.getId());
         if (selenium.isElementPresent(xpath)) {
             selenium.click(xpath + mappings.getSlots().getSlots_fleetReversal_button_suffix());
-            wait(1);
+            waitMilisecond(1000);
         } else {
             throw new OgameException("No fleet of following ID number");
         }
@@ -1300,30 +1386,6 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public Resources getPlanetHourlyProduction() throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getSlotsTotal() throws OgameException {
-        this.clickMovements();
-        return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_maxFleets()));
-    }
-
-    @Override
-    public int getSlotsOccupied() throws OgameException {
-        this.clickMovements();
-        return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_usedFleets()));
-    }
-
-    @Override
-    public int getExpeditionsTotal() throws OgameException {
-        this.clickMovements();
-        return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_maxExp()));
-    }
-
-    @Override
-    public int getExpeditionsOccupied() throws OgameException {
-        this.clickMovements();
-        return Integer.parseInt(selenium.getText(mappings.getSlots().getSlots_useExp()));
     }
 
     /**************************************************************************
@@ -1581,8 +1643,6 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         comeBackParse = new SimpleDateFormat(mappings.getSlots().getSlots_parseReturn());
         logger.log(Level.INFO, "[DONE]");
     }
-    
-
     /***************************************************************************
      ***************** POLA PRYWATNE ******************************************* 
      ***************************************************************************/

@@ -213,6 +213,31 @@ public class Coords {
     public String toString() {
         return "Coords{" + "universe=" + universe + ", system=" + system + ", position=" + position + ", dest=" + dest + '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Coords other = (Coords) obj;
+        if (this.universe != other.universe) {
+            return false;
+        }
+        if (this.system != other.system) {
+            return false;
+        }
+        if (this.position != other.position) {
+            return false;
+        }
+        if (this.dest != other.dest && (this.dest == null || !this.dest.equals(other.dest))) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Przedstawia kordynat w postaci stringa parsowalnego
      * @return 

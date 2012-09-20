@@ -8,6 +8,7 @@ import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
 import OgameEngine.PropertiesBuildings;
 import OgameEngine.PropertiesMessages;
+import OgameEngine.PropertiesSpyReport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -90,6 +91,10 @@ public class MappingProperties {
 
     public PropertiesMessages getMessages() {
         return messages;
+    }
+
+    public PropertiesSpyReport getSpyreport() {
+        return spyreport;
     }
     
     
@@ -187,6 +192,7 @@ public class MappingProperties {
     private PropertiesResources resources;
     private PropertiesSlots slots;
     private PropertiesMessages messages;
+    private PropertiesSpyReport spyreport;
     
     private static final Logger logger = Logger.getLogger(MappingProperties.class.getName());
     
@@ -205,6 +211,7 @@ public class MappingProperties {
                 result.shipyard = new PropertiesShipyard();
                 result.slots = new PropertiesSlots();
                 result.messages = new PropertiesMessages();
+                result.spyreport = new PropertiesSpyReport();
         } catch (OgameFileNotFoundException ex) {
             Logger.getLogger(MappingProperties.class.getName()).log(Level.SEVERE, null, ex);
         } catch (OgameIOException ex) {

@@ -110,7 +110,7 @@ public class PropertiesFleet extends MappingProperties {
         flight_period_label = properties.getProperty("flight_period_label");
         flight_period_format = properties.getProperty("flight_period_format");
         flight_arrival_label = properties.getProperty("flight_arrival_label");
-                flight_arrival_back_label = properties.getProperty("flight_arrival_back_label");
+        flight_arrival_back_label = properties.getProperty("flight_arrival_back_label");
         flight_arrival_format = properties.getProperty("flight_arrival_format");
 
         fleetSend_okscreen3 = properties.getProperty("fleetSend_okscreen3");
@@ -130,6 +130,13 @@ public class PropertiesFleet extends MappingProperties {
         hm_skol = properties.getProperty("hm_skol");
         hm_rec = properties.getProperty("hm_rec");
         hm_ss = properties.getProperty("hm_ss");
+
+        usedMaxFleets = properties.getProperty("usedMaxFleets");
+        usedMaxFleetsRemove = properties.getProperty("usedMaxFleetsRemove");
+        usedMaxFleetsSep = properties.getProperty("usedMaxFleetsSep");
+        usedMaxExp = properties.getProperty("usedMaxExp");
+        usedMaxExpRemove = properties.getProperty("usedMaxExpRemove");
+        usedMaxExpSep = properties.getProperty("usedMaxExpSep");
 
     }
 
@@ -547,6 +554,31 @@ public class PropertiesFleet extends MappingProperties {
     public String getHm_ss() {
         return shipyardCountXpath.replace("%s", hm_ss);
     }
+
+    public String getUsedMaxExp() {
+        return usedMaxExp;
+    }
+
+    public String getUsedMaxExpRemove() {
+        return usedMaxExpRemove;
+    }
+
+    public String getUsedMaxExpSep() {
+        return usedMaxExpSep;
+    }
+
+    public String getUsedMaxFleets() {
+        return usedMaxFleets;
+    }
+
+    public String getUsedMaxFleetsRemove() {
+        return usedMaxFleetsRemove;
+    }
+
+    public String getUsedMaxFleetsSep() {
+        return usedMaxFleetsSep;
+    }
+    
     private String no_fleet_text;
     private String fleetSend_lm;
     private String fleetSend_cm;
@@ -630,13 +662,11 @@ public class PropertiesFleet extends MappingProperties {
     private String fleetSend_expedition_time_target_pref;//=label=
     private String fleetSend_holding_time;//=//select[@name="holdingtime"]
     private String fleetSend_holding_time_target_pref;//=label=
-    
     private String flight_period_label;
     private String flight_period_format;
     private String flight_arrival_label;
     private String flight_arrival_back_label;
     private String flight_arrival_format;
-    
     private String fleetSend_okscreen3;//=//a[@class="on" and @id="start"]
     private String fleetSend_errorscreen3;//=//a[@class="off" and @id="start"]
     // get size
@@ -654,4 +684,10 @@ public class PropertiesFleet extends MappingProperties {
     private String hm_skol;//=button208
     private String hm_rec;//=button209
     private String hm_ss;//=button210
+    private String usedMaxFleets;//=//div[@class="fleetStatus"]/div[@id="slots"]/div[1]
+    private String usedMaxFleetsRemove;//=//div[@class="fleetStatus"]/div[@id="slots"]/div[1]/span[2]
+    private String usedMaxFleetsSep;//=/
+    private String usedMaxExp;//=//div[@class="fleetStatus"]/div[@id="slots"]/div[2]
+    private String usedMaxExpRemove;//=//div[@class="fleetStatus"]/div[@id="slots"]/div[2]/span[2]
+    private String usedMaxExpSep;//=/
 }
