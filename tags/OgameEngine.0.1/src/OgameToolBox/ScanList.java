@@ -14,6 +14,7 @@ import OgameElementsUnchecked.Resources;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.Ogame;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * @author Piotr Kowalski
  */
 public class ScanList {
+
     /**
      * Konstruktor główny
      * @param scanningList 
@@ -29,54 +31,64 @@ public class ScanList {
     public ScanList(List<ScanElement> scanningList) {
         this.scanningList = scanningList;
     }
-   /**
+
+    /**
      * Kontruktor konwertujący z statycznej tablicy
      * @param scanningList lista kordów do skanowania
      */
     public ScanList(Coords[] scanningList) {
         List<ScanElement> list = new ArrayList<ScanElement>();
-        for (int i=0; i < scanningList.length; i++){
+        for (int i = 0; i < scanningList.length; i++) {
             list.add(new ScanElement(scanningList[i]));
         }
         this.scanningList = list;
     }
-    public ScanList(Coords[] scanningList, Fleet scanningFleet){
+
+    public ScanList(Coords[] scanningList, Fleet scanningFleet) {
         List<ScanElement> list = new ArrayList<ScanElement>();
-        for (int i=0; i < scanningList.length; i++){
-            list.add(new ScanElement(scanningList[i],scanningFleet));
+        for (int i = 0; i < scanningList.length; i++) {
+            list.add(new ScanElement(scanningList[i], scanningFleet));
         }
         this.scanningList = list;
     }
-  
-    public List<Report> scan(Ogame o) throws OgameException{
-        int slotsFree = o.getSlotsTotal()-o.getSlotsOccupied();
-        List<TimePeriod> returns =new ArrayList<TimePeriod>();
+
+    public List<Report> scan(Ogame o) throws OgameException {
+        int slotsFree = o.getSlotsTotal() - o.getSlotsOccupied();
+        System.out.println("Will scan with " + slotsFree + " fleets");
+        List<TimePeriod> returns = new ArrayList<TimePeriod>();
         TimePeriod longest;
         Iterator<ScanElement> it = this.scanningList.iterator();
-        int currentSend =0, totalsend=0;
-        for (ScanElement temp;it.hasNext();){
+        int currentSend = 0, totalsend = 0;
+        for (ScanElement temp; it.hasNext();) {
             temp = it.next();
             try {
-            returns.add(
-                    o.sendFleet(temp.getScanFleet(),temp.getDestination(),temp.getSpeed(), 
-                    Mission.SPY, Resources.NO_RESOURCES).getFlyingTime()
-                    );
-            } catch(OgameException ex){
+                returns.add(
+                        o.sendFleet(temp.getScanFleet(), temp.getDestination(), temp.getSpeed(),
+                        Mission.SPY, Resources.NO_RESOURCES).getFlyingTime());
+            } catch (OgameException ex) {
                 continue;
             }
             currentSend++;
             totalsend++;
-            if (currentSend%slotsFree==0){
-                longest = returns.isEmpty()?new TimePeriod(3,0,0):TimePeriod.max(returns);
+            if (currentSend % slotsFree == 0 && !returns.isEmpty()) {
+                longest = TimePeriod.max(returns);// ponowna próba za 10 minut
                 o.wait(longest);
                 returns = new ArrayList<TimePeriod>();
-                slotsFree = o.getSlotsTotal()-o.getSlotsOccupied();
-                currentSend=0;
+                slotsFree = o.getSlotsTotal() - o.getSlotsOccupied();
+                currentSend = 0;
+                System.out.println("Will scan with " + slotsFree + " fleets");
             }
         }
-
-        return null;
+        if (!returns.isEmpty()) {
+            longest = TimePeriod.max(returns);
+            o.wait(longest);
+        }
+        List<Report> list = o.getReports(totalsend);
+        Collections.sort(list);
+        Collections.reverse(list); // porządkujemy rosnąco
+        return list;
     }
+
     /**
      * Metoda służąca do zalogowania skanowania i zakończenia działania 
      * @param o Obiekt Ogame
@@ -86,11 +98,9 @@ public class ScanList {
      * @param p obiekt planety
      * @return Lista raportów ze skanowania
      */
-    public List<Report> scanAndLogin(Ogame o, String uni, String nick, String pass, Planet p){
+    public List<Report> scanAndLogin(Ogame o, String uni, String nick, String pass, Planet p) {
         //TODO do zrobienia
         return null;
     }
-    
-    
     private List<ScanElement> scanningList;
 }

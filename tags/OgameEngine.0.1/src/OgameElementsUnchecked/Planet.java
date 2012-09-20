@@ -26,7 +26,7 @@ import OgameElements.Coords;
         public String getName() {
             return name;
         }
-
+        @Override
         public String toString() {
             return "Planet{" + "coords=" + coords + ", name=" + name + '}';
         }
@@ -68,5 +68,17 @@ import OgameElements.Coords;
 //        public int getUni() {
 //            return uni;
 //        }
+
+    @Override
+    public boolean equals(Object obj) {
+         if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Planet p = (Planet) obj;
+        return this.coords.equals(p.coords);
+    }
     
 }

@@ -19,6 +19,7 @@ import OgameElementsUnchecked.Defence;
 import OgameElements.BuildingsPlanet;
 import OgameElements.Coords;
 import OgameElements.Report;
+import OgameElements.Time;
 import OgameElements.TimePeriod;
 import OgameElementsUnchecked.Fleet;
 import OgameElementsUnchecked.Performance;
@@ -72,6 +73,11 @@ public interface IOgame {
      * @param t obiekt czasu oczekiwania
      */
     abstract public void wait(TimePeriod t);
+    /**
+     * Metoda oczekiwania aż do podanego czasu
+     * @param t Czas końca oczekiwania
+     */
+    abstract public void waitTill(Time t);
     /**************************************************************************
      ************************** METODY LOGOWAN *********************************
      **************************************************************************/
@@ -303,6 +309,35 @@ public interface IOgame {
      */
     abstract public ArrivalTime sendFSFleet(Coords c) throws OgameException;
 
+    /**
+     * Pobiera ilość dostępny ogólnie slotów
+     * @return ilość możliwych slotów
+     * @throws OgameElementNotFoundException brak xpatha
+     * @throws OgameException inny błąd
+     */
+    abstract public int getSlotsTotal() throws OgameElementNotFoundException,OgameException;
+ /**
+     * Pobiera ilość zajętych obecnie slotów
+     * @return ilość zajętych slotów
+     * @throws OgameElementNotFoundException brak xpatha
+     * @throws OgameException inny błąd
+     */
+    abstract public int getSlotsOccupied() throws OgameElementNotFoundException,OgameException;
+     /**
+     * Pobiera ilość dostępny ekspedycji
+     * @return ilość możliwych ekspedycji
+     * @throws OgameElementNotFoundException brak xpatha
+     * @throws OgameException inny błąd
+     */
+    abstract public int getExpeditionsTotal() throws OgameElementNotFoundException,OgameException;
+     /**
+     * Pobiera ilość zajętych ekspedycji
+     * @return ilość zajętych ekspedycji
+     * @throws OgameElementNotFoundException brak xpatha
+     * @throws OgameException inny błąd
+     */
+    abstract public int getExpeditionsOccupied() throws OgameElementNotFoundException,OgameException;
+    
     // TODO dotąd są zrobione
     /* ***********************************************************************/
     
@@ -455,13 +490,6 @@ public interface IOgame {
 
     abstract public void turnBackFlight(Slots f) throws OgameException; //moja :-)
 
-    abstract public int getSlotsTotal() throws OgameException;
-
-    abstract public int getSlotsOccupied() throws OgameException;
-
-    abstract public int getExpeditionsTotal() throws OgameException;
-
-    abstract public int getExpeditionsOccupied() throws OgameException;
 
     abstract public Resources getPlanetHourlyProduction() throws OgameException;
 }
