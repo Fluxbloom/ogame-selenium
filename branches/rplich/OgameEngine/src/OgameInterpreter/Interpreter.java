@@ -4,8 +4,11 @@
  */
 package OgameInterpreter;
 
-import OgameEngine.*;
-import OgameEngine.Fleet.Ships;
+import OgameElements.Buildings;
+import OgameElements.Coords;
+import OgameElementsUnchecked.*;
+import OgameEngine.Exceptions.*;
+import OgameEngine.Ogame;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -33,10 +36,10 @@ public class Interpreter {
         }
     }
 
-    public String interpret(String s) throws OgameException {
+    public String interpret(String s) throws OgameException, OgameParsingError, OgameFileNotFoundException, OgameIOException, OgameElementNotFoundException {
         //o.start();
         
-        String help = "help",send1 = "sendfleet", send2 = "sf", chplanet = "chplanet", build = "build", study = "study", buildShip = "buildShip";
+        String help = "help",send1 = "sendfleet", send2 = "sf", chplanet = "chplanet", build = "build", study = "study", Ship = "Ship", Defence = "Defence";
         if (s.substring(0, help.length()).compareTo(help) == 0) {
             return help(s.substring(help.length()));
         } else  if (s.substring(0, send1.length()).compareTo(send1) == 0) {
@@ -49,8 +52,10 @@ public class Interpreter {
             build(s.substring(build.length()));
         } else if (s.substring(0, study.length()).compareTo(study) == 0) {
             study(s.substring(study.length()));
-        } else if (s.substring(0, buildShip.length()).compareTo(buildShip) == 0) {
-            buildShip(s.substring(buildShip.length()));
+        } else if (s.substring(0, Ship.length()).compareTo(Ship) == 0) {
+            Ship(s.substring(Ship.length()));
+        } else if (s.substring(0, Defence.length()).compareTo(Defence) == 0) {
+            Defence(s.substring(Defence.length()));
         }
         return null;
     }
@@ -144,7 +149,7 @@ public class Interpreter {
         return null;
     }
 
-    private void chplanet(String substring) throws OgameException {
+    private void chplanet(String substring) throws OgameException, OgameFileNotFoundException, OgameParsingError, OgameIOException {
         String[] s = substring.split(" ");
         List<String> params = new ArrayList<String>();
         for (int i = 0; i < s.length; i++) {
@@ -169,7 +174,7 @@ public class Interpreter {
         //else o.changePlanetByName(param);
     }
 
-    private void buildDefence(String substring) throws OgameException {
+    private void Defence(String substring) throws OgameException {
         String[] s = substring.split(" ");
         List<String> params = new ArrayList<String>();
         for (int i = 0; i < s.length; i++) {
@@ -183,32 +188,19 @@ public class Interpreter {
         value = it.next();
         Map<String,Defence> mapString2Defence = new HashMap<String,Defence>();
         mapString2Defence.put("-dp", Defence.DUZA_POWLOKA);
-        mapString2Defence.put("-dl", Defence.DUZY_LASER);// TODO dokończyć
-        o.buildDefence(mapString2Defence.get(param), value);
-        if (param.compareTo("-dp") == 0) {
-            o.buildDefence(Defence.DUZA_POWLOKA, value);
-        } else if (param.compareTo("-dl") == 0) {
-            o.buildDefence(Defence.DUZY_LASER, value);
-        } else if (param.compareTo("-dg") == 0) {
-            o.buildDefence(Defence.DZIALO_GAUSSA, value);
-        } else if (param.compareTo("-dj") == 0) {
-            o.buildDefence(Defence.DZIALO_JONOWE, value);
-        } else if (param.compareTo("-mp") == 0) {
-            o.buildDefence(Defence.MALA_POWLOKA, value);
-        } else if (param.compareTo("-ml") == 0) {
-            o.buildDefence(Defence.MALY_LASER, value);
-        } else if (param.compareTo("-pr") == 0) {
-            o.buildDefence(Defence.PRZECIWRAKIETA, value);
-        } else if (param.compareTo("-rm") == 0) {
-            o.buildDefence(Defence.RAKITA_MIEDZYPLANETARNA, value);
-        } else if (param.compareTo("-wp") == 0) {
-            o.buildDefence(Defence.WYRZUTNIA_PLAZMY, value);
-        } else if (param.compareTo("-wr") == 0) {
-            o.buildDefence(Defence.WYRZUTNIA_RAKIET, value);
-        }
+        mapString2Defence.put("-dl", Defence.DUZY_LASER);
+        mapString2Defence.put("-dg", Defence.DZIALO_GAUSSA);
+        mapString2Defence.put("-dj", Defence.DZIALO_JONOWE);
+        mapString2Defence.put("-mp", Defence.MALA_POWLOKA);
+        mapString2Defence.put("-ml", Defence.MALY_LASER);
+        mapString2Defence.put("-pr", Defence.PRZECIWRAKIETA);
+        mapString2Defence.put("-rm", Defence.RAKITA_MIEDZYPLANETARNA);
+        mapString2Defence.put("-wp", Defence.WYRZUTNIA_PLAZMY);
+        mapString2Defence.put("-wr", Defence.WYRZUTNIA_RAKIET);// TODO dokończyć
+        o.build(mapString2Defence.get(param), value);
     }
 
-    private void buildShip(String substring) throws OgameException {
+    private void Ship(String substring) throws OgameException {
         String[] s = substring.split(" ");
         List<String> params = new ArrayList<String>();
         for (int i = 0; i < s.length; i++) {
@@ -220,17 +212,18 @@ public class Interpreter {
         Iterator<String> it = params.iterator();
         param = it.next();
         value = it.next();
+        
         if (param.compareTo("-bomb") == 0) {
-            o.buildShip(Fleet.Ships.BOMB, value);
+            o.build(Ships.BOMB, value);
         } else if (param.compareTo("-cm") == 0) {
-            o.buildShip(Fleet.Ships.CM, value);
+            o.build(Ships.CM, value);
         } else if (param.compareTo("-dt") == 0) {
-            o.buildShip(Fleet.Ships.DT, value);
+            o.build(Ships.DT, value);
         } else if (param.compareTo("-gs") == 0) {
-            o.buildShip(Fleet.Ships.GS, value);
+            o.build(Ships.GS, value);
         } else if (param.compareTo("-kol") == 0) {
-            o.buildShip(Fleet.Ships.KOL, value);
-        } else if (param.compareTo("-kr") == 0) {
+            o.build(Ships.KOL, value);
+        } /*else if (param.compareTo("-kr") == 0) {
             o.buildShip(Fleet.Ships.KR, value);
         } else if (param.compareTo("-lm") == 0) {
             o.buildShip(Fleet.Ships.LM, value);
@@ -248,10 +241,10 @@ public class Interpreter {
             o.buildShip(Fleet.Ships.SAT, value);
         } else if (param.compareTo("-sond") == 0) {
             o.buildShip(Fleet.Ships.SOND, value);
-        }
+        }*/
     }
 
-    private void build(String substring) throws OgameException {
+    private void build(String substring) throws OgameException, OgameElementNotFoundException {
         String[] s = substring.split(" ");
         List<String> params = new ArrayList<String>();
         for (int i = 0; i < s.length; i++) {
@@ -262,45 +255,49 @@ public class Interpreter {
         String param;
         Iterator<String> it = params.iterator();
         param = it.next();
-        if (param.compareTo("depozyt") == 0) {
-            o.build(Buildings.DEPOZYT);
-        } else if (param.compareTo("ekstraktor_deuteru") == 0) {
-            o.build(Buildings.EKSTRAKTOR_DEUTERU);
-        } else if (param.compareTo("elektrownia_fuzyjna") == 0) {
-            o.build(Buildings.ELEKTROWNIA_FUZYJNA);
-        } else if (param.compareTo("elektrownia_sloneczna") == 0) {
-            o.build(Buildings.ELEKTROWNIA_SLONECZNA);
-        } else if (param.compareTo("fabryka_nanitow") == 0) {
-            o.build(Buildings.FABRYKA_NANITOW);
-        } else if (param.compareTo("fabryka_robotow") == 0) {
-            o.build(Buildings.FABRYKA_ROBOTOW);
-        } else if (param.compareTo("kopalnia_krysztalu") == 0) {
-            o.build(Buildings.KOPALNIA_KRYSZTALU);
-        } else if (param.compareTo("kopalnia_metalu") == 0) {
-            o.build(Buildings.KOPALNIA_METALU);
-        } else if (param.compareTo("laboratorium") == 0) {
-            o.build(Buildings.LABORATORIUM_BADAWCZE);
-        } else if (param.compareTo("magazyn_deuteru") == 0) {
-            o.build(Buildings.MAGAZYN_DEUTERU);
-        } else if (param.compareTo("magazyn_krysztalu") == 0) {
-            o.build(Buildings.MAGAZYN_KRYSZTALU);
-        } else if (param.compareTo("magazyn_metalu") == 0) {
-            o.build(Buildings.MAGAZYN_METALU);
-        } else if (param.compareTo("satelita") == 0) {
-            o.build(Buildings.SATELITA_SLONECZNA);
-        } else if (param.compareTo("schowek_deuteru") == 0) {
-            o.build(Buildings.SCHOWEK_DEUTERU);
-        } else if (param.compareTo("schowek_krysztalu") == 0) {
-            o.build(Buildings.SCHOWEK_KRYSZTALU);
-        } else if (param.compareTo("schowek_metalu") == 0) {
-            o.build(Buildings.SCHOWEK_METALU);
-        } else if (param.compareTo("silos") == 0) {
-            o.build(Buildings.SILOS_RAKIETOWY);
-        } else if (param.compareTo("stocznia") == 0) {
-            o.build(Buildings.STOCZNIA);
-        } else if (param.compareTo("terraformer") == 0) {
-            o.build(Buildings.TERRAFORMER);
-        }
+        Map<String,Buildings> mapString2Building = new HashMap<String,Buildings>();
+        mapString2Building.put("ekstraktor_deuteru", Buildings.DEUTERIUM_EXTRACTOR);
+        o.build(mapString2Building.get(param));
+        
+//        if (param.compareTo("depozyt") == 0) {
+//            o.build(Buildings.DEPOZYT);
+//        } else if (param.compareTo("ekstraktor_deuteru") == 0) {
+//            o.build(Buildings.EKSTRAKTOR_DEUTERU);
+//        } else if (param.compareTo("elektrownia_fuzyjna") == 0) {
+//            o.build(Buildings.ELEKTROWNIA_FUZYJNA);
+//        } else if (param.compareTo("elektrownia_sloneczna") == 0) {
+//            o.build(Buildings.ELEKTROWNIA_SLONECZNA);
+//        } else if (param.compareTo("fabryka_nanitow") == 0) {
+//            o.build(Buildings.FABRYKA_NANITOW);
+//        } else if (param.compareTo("fabryka_robotow") == 0) {
+//            o.build(Buildings.FABRYKA_ROBOTOW);
+//        } else if (param.compareTo("kopalnia_krysztalu") == 0) {
+//            o.build(Buildings.KOPALNIA_KRYSZTALU);
+//        } else if (param.compareTo("kopalnia_metalu") == 0) {
+//            o.build(Buildings.KOPALNIA_METALU);
+//        } else if (param.compareTo("laboratorium") == 0) {
+//            o.build(Buildings.LABORATORIUM_BADAWCZE);
+//        } else if (param.compareTo("magazyn_deuteru") == 0) {
+//            o.build(Buildings.MAGAZYN_DEUTERU);
+//        } else if (param.compareTo("magazyn_krysztalu") == 0) {
+//            o.build(Buildings.MAGAZYN_KRYSZTALU);
+//        } else if (param.compareTo("magazyn_metalu") == 0) {
+//            o.build(Buildings.MAGAZYN_METALU);
+//        } else if (param.compareTo("satelita") == 0) {
+//            o.build(Buildings.SATELITA_SLONECZNA);
+//        } else if (param.compareTo("schowek_deuteru") == 0) {
+//            o.build(Buildings.SCHOWEK_DEUTERU);
+//        } else if (param.compareTo("schowek_krysztalu") == 0) {
+//            o.build(Buildings.SCHOWEK_KRYSZTALU);
+//        } else if (param.compareTo("schowek_metalu") == 0) {
+//            o.build(Buildings.SCHOWEK_METALU);
+//        } else if (param.compareTo("silos") == 0) {
+//            o.build(Buildings.SILOS_RAKIETOWY);
+//        } else if (param.compareTo("stocznia") == 0) {
+//            o.build(Buildings.STOCZNIA);
+//        } else if (param.compareTo("terraformer") == 0) {
+//            o.build(Buildings.TERRAFORMER);
+//        }
     }
 
     private void study(String substring) throws OgameException {
@@ -315,8 +312,8 @@ public class Interpreter {
         Iterator<String> it = params.iterator();
         param = it.next();
         if (param.compareTo("astrofizyka") == 0) {
-            o.study(Study.ASTROFIZYKA);
-        } else if (param.compareTo("naped_impulsowy") == 0) {
+            o.research(ResearchingArea.ASTROFIZYKA);
+        } /*else if (param.compareTo("naped_impulsowy") == 0) {
             o.study(Study.NAPED_IMPULSOWY);
         } else if (param.compareTo(" naped_nadprzestrzenny") == 0) {
             o.study(Study.NAPED_NADPRZESTRZENNY);
@@ -346,11 +343,11 @@ public class Interpreter {
             o.study(Study.TECHNOLOGIA_PLAZMOWA);
         } else if (param.compareTo("ekstraktor_deuteru") == 0) {
             o.study(Study.TECHNOLOGIA_SZPIEGOWSKA);
-        }
+        }*/
 
     }
 
-    private void send(String substring) throws OgameException {
+    private void send(String substring) throws  OgameParsingError, OgameFileNotFoundException, OgameIOException, OgameException {
         String[] s = substring.split(" ");
 //        for(int i = 0; i< s.length; i++){
 //            System.out.println("i="+i+" s="+s[i]);
@@ -421,13 +418,13 @@ public class Interpreter {
                 if (res == Resources.NO_RESOURCES) {
                     res = new Resources("0", "0", value);
                 } else {
-                    res.setDeuter(value);
+                    res.setDeuterium(value);
                 }
             } //typ misji
             else if (param.compareTo("-m") == 0 || param.compareTo("--mission") == 0) {
                 if (value.compareTo("attack") == 0) {
-                    m = Mission.MISSION_ATTACK;
-                } else if (value.compareTo("acs") == 0) {
+                    m = Mission.ATTACK;
+                } /*else if (value.compareTo("acs") == 0) {
                     m = Mission.MISSION_ACS;
                 } else if (value.compareTo("explore") == 0) {
                     m = Mission.MISSION_EXPLORE;
@@ -445,7 +442,7 @@ public class Interpreter {
                     m = Mission.MISSION_STAY;
                 } else if (value.compareTo("transport") == 0) {
                     m = Mission.MISSION_TRANSPORT;
-                }
+                }*/
             }
         }
         // nadanie

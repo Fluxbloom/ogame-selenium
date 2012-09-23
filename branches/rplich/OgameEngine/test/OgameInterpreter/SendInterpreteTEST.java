@@ -5,9 +5,8 @@
 package OgameInterpreter;
 
 
-import OgameEngine.OgameException;
+import OgameEngine.Exceptions.OgameException;
 import org.junit.*;
-import static org.junit.Assert.*;
 
 /**
  *
