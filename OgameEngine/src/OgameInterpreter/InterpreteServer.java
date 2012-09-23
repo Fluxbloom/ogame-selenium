@@ -4,7 +4,7 @@
  */
 package OgameInterpreter;
 
-import OgameEngine.OgameException;
+import OgameEngine.Exceptions.OgameException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;

@@ -4,7 +4,7 @@
  */
 package OgameInterpreter;
 
-import OgameEngine.OgameException;
+import OgameEngine.Exceptions.OgameException;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
