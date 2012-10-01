@@ -4,8 +4,6 @@
  */
 package OgameElements;
 
-import OgameElementsUnchecked.ShipyardProduct;
-import OgameElementsUnchecked.ShipyardShips;
 import java.util.logging.Logger;
 
 

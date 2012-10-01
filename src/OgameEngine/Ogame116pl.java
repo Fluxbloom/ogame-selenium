@@ -10,14 +10,14 @@ import OgameElements.Buildings;
 import OgameEngine.Exceptions.OgameCannotSendFleetException;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.Exceptions.OgameElementNotFoundException;
-import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.PlanetResources;
-import OgameElementsUnchecked.Resources;
-import OgameElementsUnchecked.Speed;
-import OgameElementsUnchecked.ResearchingArea;
-import OgameElementsUnchecked.Slots;
-import OgameElementsUnchecked.Mission;
-import OgameElementsUnchecked.Defence;
+import OgameElements.Planet;
+import OgameElements.PlanetResources;
+import OgameElements.Resources;
+import OgameElements.Speed;
+import OgameElements.ResearchingArea;
+import OgameElements.Slots;
+import OgameElements.Mission;
+import OgameElements.Defence;
 import OgameElements.BuildingsPlanet;
 import OgameElements.Destination;
 import OgameElements.Coords;
@@ -28,19 +28,18 @@ import OgameElements.SimpleTimePeriodParser;
 import OgameElements.Time;
 import OgameElements.TimeParser;
 import OgameElements.TimePeriod;
-import OgameElementsUnchecked.Events;
-import OgameElementsUnchecked.Events.FriendOrFoe;
-import OgameElementsUnchecked.Events.Multiplicity;
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Performance;
-import OgameElementsUnchecked.Performance.Production;
-import OgameElementsUnchecked.Performance.ResourceField;
-import OgameElementsUnchecked.Ships;
-import OgameElementsUnchecked.ShipyardShips;
+import OgameElements.Events;
+import OgameElements.Events.FriendOrFoe;
+import OgameElements.Events.Multiplicity;
+import OgameElements.Fleet;
+import OgameElements.Performance;
+import OgameElements.Performance.Production;
+import OgameElements.Performance.ResourceField;
+import OgameElements.Ships;
+import OgameElements.ShipyardShips;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
 import OgameEngine.Exceptions.OgameParsingError;
-import OgameEngineUnchecked.MappingProperties;
 import com.thoughtworks.selenium.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -691,8 +690,8 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             throws OgameCannotSendFleetException, OgameElementNotFoundException,
             OgameIOException, OgameFileNotFoundException, OgameException {
         // sprawdzamy czy flota ma dostępną misję
-        System.out.println("Sending fleet - "+f.toString()+" - "+c.shortPrint()+" - "+m.print()+
-                " - "+r.toString()+" - "+speed.toString());
+        System.out.println("Sending fleet - " + f.toString() + " - " + c.shortPrint() + " - " + m.print()
+                + " - " + r.toString() + " - " + speed.toString());
         if (!this.isFleetAbleToAccessMission(f, m, c)) {
             logger.log(Level.WARNING, "Fleet cant go for such mission");
             throw OgameException.FLEET_MISSION_UNAVAILABLE_FOR_FLEET;
@@ -911,27 +910,16 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     private Report parseReport(String url) throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingError {
-        String mmetal="0", ccrystal="0", ddeuter="0", eenergy="0";
-        Coords c=null;
+        String mmetal = "0", ccrystal = "0", ddeuter = "0", eenergy = "0";
+        Coords c = null;
         selenium.openWindow(url, "temp");
         selenium.selectWindow("temp");
-        int trials = 0;
-        while (trials < 3) {
-            trials++;
-            waitMilisecond(1000);
-            try {
-                c = Coords.parse(getText(mappings.getSpyreport().getCoords()));
-                mmetal = getText(mappings.getSpyreport().getMetal());
-                ccrystal = getText(mappings.getSpyreport().getCristal());
-                ddeuter = getText(mappings.getSpyreport().getDeuterium());
-                eenergy = getText(mappings.getSpyreport().getEnergy());
-                break;
-            } catch (OgameElementNotFoundException ex) {
-                if (trials == 3) {
-                    throw ex;
-                }
-            }
-        }
+        this.waitMilisecond(mappings.getSelenium().getLoadTime());
+        c = Coords.parse(getText(mappings.getSpyreport().getCoords()));
+        mmetal = getText(mappings.getSpyreport().getMetal());
+        ccrystal = getText(mappings.getSpyreport().getCristal());
+        ddeuter = getText(mappings.getSpyreport().getDeuterium());
+        eenergy = getText(mappings.getSpyreport().getEnergy());
         selenium.close();
         selenium.selectWindow(null);
         int metal = parseReportNumbers(mmetal);
@@ -967,7 +955,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             }
             if (reportParsed < count) {
                 this.click(mappings.getMessages().getNextPage());
-                waitMilisecond(1000);
+                waitMilisecond(mappings.getSelenium().getLoadTime());
             }
         }
         return list;
@@ -1395,7 +1383,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
      * Inicjalizacja 
      */
     private void init() {
-        initMappingProperties();
+        //initMappingProperties();
         initBuilding();
         initLab();
         initShipyard();
@@ -1406,10 +1394,12 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     }
 
+    /**
+     * @deprecated odczytywanie propertiesów przeniose do klasy nadrzędnej Ogame
+     */
     private void initMappingProperties() {
         logger.log(Level.INFO, "Reading static mappings");
-        mappings = MappingProperties.mappingPropertiesFabric();
-        logger.log(Level.INFO, "[DONE]");
+        mappings = PropertiesOgame.mappingPropertiesFabric();
     }
 
     private void initBuilding() {
@@ -1646,7 +1636,6 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     /***************************************************************************
      ***************** POLA PRYWATNE ******************************************* 
      ***************************************************************************/
-    private MappingProperties mappings;
     private HashMap<Mission, String> missionMap;
     private HashMap<Mission, String> missionOffMap;
     private HashMap<Ships, String> shipsMap;

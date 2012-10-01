@@ -5,7 +5,7 @@
 package OgameToolBox;
 
 import OgameElements.Report;
-import OgameElementsUnchecked.Planet;
+import OgameElements.Planet;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
 import java.util.ArrayList;

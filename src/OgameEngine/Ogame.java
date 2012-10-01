@@ -20,8 +20,13 @@ import java.util.logging.Logger;
  * Klasa abstrakcyjna stanowiaca interfejs dla różnych algorytmów
  * @author Piotr Kowalski
  */
-public abstract class Ogame implements IOgame{
-    
+public abstract class Ogame implements IOgame {
+
+    protected Ogame() {
+        logger.log(Level.INFO, "Reading static mappings");
+        mappings = PropertiesOgame.mappingPropertiesFabric();
+    }
+
     /**
      * Metoda fabryki produkująca obiekt Ogame dla danego uniwersum
      * <p>Wspierane ukłądy<\p>
@@ -32,15 +37,15 @@ public abstract class Ogame implements IOgame{
      * @param lang String z kodem kraju
      * @return obiekt Ogame z implementacją algorytmów dla danego uni
      */
-    public static Ogame ogameFabric(String uni,String lang){
-        if (lang.compareTo("pl")==0){
-            if (uni.compareTo("uni116")==0 || uni.compareTo("116")==0){
+    public static Ogame ogameFabric(String uni, String lang) {
+        if (lang.compareTo("pl") == 0) {
+            if (uni.compareTo("uni116") == 0 || uni.compareTo("116") == 0) {
                 return new Ogame116pl();
             }
         }
         return new Ogame116pl();
     }
-    
+
     /*************************************************************************
      *********************** METODY SELENIUM Z BLEDEM ************************
      *************************************************************************/
@@ -50,15 +55,26 @@ public abstract class Ogame implements IOgame{
      * @return tekst reprezentujący pole
      * @throws OgameElementNotFoundException nie istnieje obiekt pod wskazanym xpathem 
      */
-    protected String getText(String xpath) throws OgameElementNotFoundException{
-        String s ;
+    protected String getText(String xpath) throws OgameElementNotFoundException {
+        String s;
         try {
-        s= selenium.getText(xpath);
-        } catch (SeleniumException ex){
-            throw new OgameElementNotFoundException(xpath);
+            try {
+                s = selenium.getText(xpath);
+            } catch (SeleniumException ex) {
+                throw new OgameElementNotFoundException(xpath);
+            }
+        } catch (OgameElementNotFoundException ex) {
+            try {
+                this.waitMilisecond(mappings.getSelenium().getRetryTime());
+                s = selenium.getText(xpath);
+            } catch (SeleniumException ex2) {
+                throw ex;
+            }
+
         }
         return s;
     }
+
     /**
      * Metoda weryfikująca obecność tekstu na stronie
      * @param text szukany tekst
@@ -67,26 +83,39 @@ public abstract class Ogame implements IOgame{
     protected boolean isTextPresent(String text) {
         return selenium.isTextPresent(text);
     }
+
     /**
      * Metoda weryfikująca obecność elementu na stronie 
      * @param xpath położenie szukanego elementu
      * @return true jeśli element obecny, false w p.p.
      */
-    protected boolean isElementPresent(String xpath){
+    protected boolean isElementPresent(String xpath) {
         return selenium.isElementPresent(xpath);
     }
+
     /**
      * Metoda klikająca w link, przycisk
      * @param xpath położenie elementu
      * @throws OgameElementNotFoundException brak elementu pod wskazanym położeniem na stronie 
      */
-    protected void click(String xpath) throws OgameElementNotFoundException{
+    protected void click(String xpath) throws OgameElementNotFoundException {
+
         try {
+            try {
             selenium.click(xpath);
-        }catch (SeleniumException ex){
+        } catch (SeleniumException ex) {
             throw new OgameElementNotFoundException(xpath);
         }
+        } catch (OgameElementNotFoundException ex) {
+            try {
+            selenium.click(xpath);
+        } catch (SeleniumException ex2) {
+            throw new OgameElementNotFoundException(xpath);
+        }
+
+        }
     }
+
     /**
      * Wybranie obiektu z pola combo
      * @param xpath położenie pola combo
@@ -94,72 +123,78 @@ public abstract class Ogame implements IOgame{
      * @throws OgameElementNotFoundException brak pola combo pod wskazanym miejscem
      * @throws OgameException błąd wyboru, timeout lub brak takiej wartości
      */
-    protected void select(String xpath, String value) throws OgameElementNotFoundException, OgameException{
-        if (!isElementPresent(xpath)) throw new OgameElementNotFoundException(xpath);
+    protected void select(String xpath, String value) throws OgameElementNotFoundException, OgameException {
+        if (!isElementPresent(xpath)) {
+            throw new OgameElementNotFoundException(xpath);
+        }
         try {
             selenium.select(xpath, value);
-        }catch (SeleniumException ex){
-            throw new OgameException(xpath+"->"+value);
+        } catch (SeleniumException ex) {
+            throw new OgameException(xpath + "->" + value);
         }
-        
+
     }
+
     /**
      * Pobranie wartości atrybutu bloku html
      * @param xpath położenie bloku html
      * @return wartość atrybutu jako string
      * @throws OgameElementNotFoundException brak bloku html pod wskazanym miejscem 
      */
-    protected String getAttribute(String xpath) throws OgameElementNotFoundException{
+    protected String getAttribute(String xpath) throws OgameElementNotFoundException {
         String s;
         try {
-            s=selenium.getAttribute(xpath);
-        }catch (SeleniumException ex){
+            s = selenium.getAttribute(xpath);
+        } catch (SeleniumException ex) {
             throw new OgameElementNotFoundException(xpath);
         }
         return s;
     }
+
     /**
      * Wstawienie w polu input danych
      * @param xpath połozenie pola input
      * @param text tekst do umieszczenia w polu
      * @throws OgameElementNotFoundException brak pola input
      */
-    protected void type(String xpath, String text) throws OgameElementNotFoundException{
+    protected void type(String xpath, String text) throws OgameElementNotFoundException {
         try {
             selenium.type(xpath, text);
-        }catch (SeleniumException ex){
+        } catch (SeleniumException ex) {
             throw new OgameElementNotFoundException(xpath);
         }
     }
+
     /**
      * Pobranie ilości pasujący elementów xpath
      * @param xpath 
      * @return ilość pasujących
      * @throws OgameElementNotFoundException na wszelki wypadek
      */
-    protected int getXpathCount(String xpath) throws OgameElementNotFoundException{
+    protected int getXpathCount(String xpath) throws OgameElementNotFoundException {
         try {
             return selenium.getXpathCount(xpath).intValue();
-        }catch (SeleniumException ex){
+        } catch (SeleniumException ex) {
             throw new OgameElementNotFoundException(xpath);
         }
     }
+
     /**
      * Pobiera kod html spod danego linka
      * @param url link strony
      * @return kod html
      */
-    protected String getHTMLContent(String url){
-            String result ="";
-            selenium.openWindow(url,"temp");
-            this.waitMilisecond(1000);
-            selenium.selectWindow("temp");
-            result =selenium.getHtmlSource();
-            selenium.close();
-            selenium.selectWindow(null);
-            return result;
+    protected String getHTMLContent(String url) {
+        String result = "";
+        selenium.openWindow(url, "temp");
+        this.waitMilisecond(1000);
+        selenium.selectWindow("temp");
+        result = selenium.getHtmlSource();
+        selenium.close();
+        selenium.selectWindow(null);
+        return result;
     }
-    
+
     /**
      * TEST otwiera link w nowym oknie a następnie wybiera pary z tabeli i zapisuje pary z pierwszej i 
      * drugiej kolumny
@@ -190,10 +225,7 @@ public abstract class Ogame implements IOgame{
         }
         return result;
     }
-    
-    
-
+    protected PropertiesOgame mappings;
     protected Selenium selenium;
-    
     private static final Logger logger = Logger.getLogger(Ogame.class.getName());
 }
