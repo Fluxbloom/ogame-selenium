@@ -5,9 +5,9 @@
 package OgameToolBox;
 
 import OgameElements.Coords;
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.Speed;
+import OgameElements.Fleet;
+import OgameElements.Planet;
+import OgameElements.Speed;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +21,7 @@ public class FarmingList {
      * Konstruktor pustej listy farmingowej
      */
     public FarmingList() {
-        list = new ArrayList<FarmingElement>();
+        list = new ArrayList<FleetElement>();
         it = list.iterator();
     }
     /**
@@ -29,9 +29,9 @@ public class FarmingList {
      * @param c tablica kordynatów
      */
     public FarmingList(Coords[] c){
-        list = new ArrayList<FarmingElement>();
+        list = new ArrayList<FleetElement>();
         for (int i=0; i< c.length; i++){
-            list.add(new FarmingElement(c[i]));
+            list.add(new FleetElement(c[i]));
         }
         it =list.iterator();
     }
@@ -41,12 +41,12 @@ public class FarmingList {
      * @param p planeta nadanie - celem uniknięcia za krótkich ataków w jednym układzie. Ataki te są wysyłane na 60%
      */
     public FarmingList(Coords[] c,Planet p){
-        list = new ArrayList<FarmingElement>();
+        list = new ArrayList<FleetElement>();
         for (int i=0; i< c.length; i++){
             if (p.getCoords().isSameSystem(c[i])){
-                list.add(new FarmingElement(c[i],Speed.S60));
+                list.add(new FleetElement(c[i],Speed.S60));
             } else {
-            list.add(new FarmingElement(c[i]));
+            list.add(new FleetElement(c[i]));
             }
         }
         it =list.iterator();
@@ -58,12 +58,12 @@ public class FarmingList {
      * @param p planeta nadanie - celem uniknięcia za krótkich ataków w jednym układzie. Ataki te są wysyłane na 60%
      */
     public FarmingList(Coords[] c,Fleet farming,Planet p){
-        list = new ArrayList<FarmingElement>();
+        list = new ArrayList<FleetElement>();
         for (int i=0; i< c.length; i++){
             if (p.getCoords().isSameSystem(c[i])){
-                list.add(new FarmingElement(c[i],Speed.S60,farming));
+                list.add(new FleetElement(c[i],Speed.S60,farming));
             } else {
-            list.add(new FarmingElement(c[i]));
+            list.add(new FleetElement(c[i]));
             }
         }
         it =list.iterator();
@@ -79,19 +79,36 @@ public class FarmingList {
         while(listt.hasNext()){
             temp = listt.next();
             if (p.getCoords().isSameSystem(temp)){
-                list.add(new FarmingElement(temp,Speed.S60));
+                list.add(new FleetElement(temp,Speed.S60));
             } else {
-            list.add(new FarmingElement(temp));
+            list.add(new FleetElement(temp));
             }
         }
         it =list.iterator();
     }
     /**
+     * Przekazuje listę planet do farmienia
+     * @return 
+     */
+    List<FleetElement> getList() {
+        return list;
+    }
+    /**
+     * Resetuje flagę nadania floty
+     */
+    public void resetIsSend(){
+        Iterator<FleetElement> iter = this.list.iterator();
+        while(iter.hasNext()){
+            iter.next().setLastSend(false);
+        }
+    }
+    
+    /**
      * Dodaje kordynatat na listę
      * @param c kordynat
      */
     public void add(Coords c){
-        list.add(new FarmingElement(c));
+        list.add(new FleetElement(c));
     }
     /**
      * Dodaje kordynatat na listę
@@ -100,9 +117,9 @@ public class FarmingList {
      */
     public void add(Coords c,Planet p){
         if (!p.getCoords().isSameSystem(c)){
-            list.add(new FarmingElement(c));
+            list.add(new FleetElement(c));
         } else {
-            list.add(new FarmingElement(c,Speed.S60));
+            list.add(new FleetElement(c,Speed.S60));
         }
     }
 
@@ -110,7 +127,7 @@ public class FarmingList {
      * Dodaje nowy element farmingu na listę
      * @param fe element farmingu
      */
-    public void add(FarmingElement fe){
+    public void add(FleetElement fe){
         list.add(fe);
         it=list.iterator();
     }
@@ -118,13 +135,13 @@ public class FarmingList {
      * Zwraca następny element farmingu
      * @return następny element do farmingu
      */
-    public FarmingElement next(){
+    public FleetElement next(){
         //it=(it==null?list.iterator():it);
         if (!it.hasNext()){
             it=list.iterator();
         }
         //System.err.println(" per  "+it.hasNext());
-        FarmingElement temp =it.next();
+        FleetElement temp =it.next();
         //System.err.println(" next "+temp.toString());
         return temp;
     }
@@ -134,16 +151,16 @@ public class FarmingList {
      */
     public Coords[] getCoordsArray(){
         Coords[] c = new Coords[list.size()];
-        Iterator<FarmingElement> iter = list.iterator();
+        Iterator<FleetElement> iter = list.iterator();
         int i=0;
-        for (FarmingElement temp; iter.hasNext();){
+        for (FleetElement temp; iter.hasNext();){
             temp = iter.next();
             c[i]=temp.getDestination();
             i++;
         }
         return c;
     }    
-    private Iterator<FarmingElement> it;
-    private List<FarmingElement> list;
+    private Iterator<FleetElement> it;
+    private List<FleetElement> list;
     
 }

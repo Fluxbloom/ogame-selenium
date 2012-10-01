@@ -4,8 +4,8 @@
  */
 package OgameToolBox;
 
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Planet;
+import OgameElements.Fleet;
+import OgameElements.Planet;
 
 /**
  * Klasa oddaje ilość flot na planecie, oraz kwestie nadawania z niej fs-a

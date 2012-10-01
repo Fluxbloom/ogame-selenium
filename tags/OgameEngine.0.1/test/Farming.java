@@ -5,12 +5,12 @@
 
 import OgameElements.Coords;
 import OgameElements.TimePeriod;
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Mission;
-import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.Resources;
-import OgameElementsUnchecked.Ships;
-import OgameElementsUnchecked.Speed;
+import OgameElements.Fleet;
+import OgameElements.Mission;
+import OgameElements.Planet;
+import OgameElements.Resources;
+import OgameElements.Ships;
+import OgameElements.Speed;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.OgameTest;
 import java.io.IOException;

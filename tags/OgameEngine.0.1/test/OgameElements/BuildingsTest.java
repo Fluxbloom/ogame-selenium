@@ -4,7 +4,6 @@
  */
 package OgameElements;
 
-import OgameElementsUnchecked.PlanetResources;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.Ogame;
 import OgameEngine.OgameTest;

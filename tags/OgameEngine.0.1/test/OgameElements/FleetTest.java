@@ -4,10 +4,6 @@
  */
 package OgameElements;
 
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Mission;
-import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.Ships;
 import OgameEngine.Exceptions.OgameElementNotFoundException;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.OgameTest;

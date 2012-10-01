@@ -34,11 +34,12 @@ public class NewScanning extends OgameTest {
 
     @Test
     public void scan() throws OgameException {
-        //scanNami();
+        scanNami();
         //scanAisha();
         //scanVidel();
-        scanHinata();
-        scanTatsuki();
+        //scanHinata();
+        //scanTatsuki();
+        //scanHotaru();
     }
 
     private void scanNami() throws OgameException {
@@ -47,13 +48,17 @@ public class NewScanning extends OgameTest {
                     "2:59:11", "2:65:4", "2:67:9"
                 });
         Coords[] cNami2 = Coords.parseArray(new String[]{
-                    "2:45:9", "2:46:4", "2:46:5", "2:46:6", "2:46:9", "2:46:10",
-                    "2:47:4", "2:47:5", "2:50:6", "2:54:6", "2:54:7", "2:56:11", "2:56:12",
-                    "2:61:10", "2:64:7", "2:65:4", "2:67:9"
+            "2:43:6", "2:44:6", "2:44:10", "2:46:4",
+                    "2:47:10","2:48:7","2:48:12", "2:50:6","2:50:7","2:50:10","2:52:4",
+                    "2:54:6", "2:54:7", "2:56:11", "2:56:12",
+                    "2:58:8","2:58:12","2:59:11",
+                    "2:61:10","2:62:10",
+                    "2:64:7", "2:65:4"
+                    ,"2:67:7","2:67:9","2:69:7"
                 });
         o.start();
         o.login(uni, nick, pass);
-        o.changePlanet(3);
+        o.changePlanet(1);
         ScanList nami = new ScanList(cNami2);
         List<Report> raportyNami = nami.scan(o);
         for (int i = 0; i < raportyNami.size(); i++) {
@@ -145,7 +150,23 @@ public class NewScanning extends OgameTest {
         o.logout();
         o.stop();
     }
-
+    private void scanHotaru() throws OgameException{
+    Coords[] cHotaru= Coords.parseArray(new String[]{
+                 "2:42:12","3:42:4","3:41:10","3:40:6","3:38:7","3:38:12",
+                "3:35:5","3:35:8","3:35:12","3:21:8","3:21:11","3:21:12", "3:29:6","3:30:4","3:30:9"});
+    
+        o.start();
+        o.login(uni, nick, pass);
+        o.changePlanet(3);
+        ScanList hotaru = new ScanList(cHotaru);
+        List<Report> raportyHotaru = hotaru.scan(o);
+        for (int i = 0; i < raportyHotaru.size(); i++) {
+            System.out.println("Numer " + i);
+            System.out.println(raportyHotaru.get(i).print());
+        }
+        o.logout();
+        o.stop();
+    }
     @Test
     @Ignore
     public void getReportTest() throws OgameElementNotFoundException, OgameException {

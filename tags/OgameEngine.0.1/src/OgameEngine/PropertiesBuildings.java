@@ -6,7 +6,6 @@ package OgameEngine;
 
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
-import OgameEngineUnchecked.MappingProperties;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import java.util.Map;
  * // TODO dodac pola dla księżyców
  * @author Piotr Kowalski
  */
-public class PropertiesBuildings extends MappingProperties {
+public class PropertiesBuildings extends PropertiesOgame {
 
     /**
      * Domyślny konstruktor

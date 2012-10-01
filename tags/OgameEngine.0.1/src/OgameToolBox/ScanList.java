@@ -7,10 +7,12 @@ package OgameToolBox;
 import OgameElements.Coords;
 import OgameElements.Report;
 import OgameElements.TimePeriod;
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Mission;
-import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.Resources;
+import OgameElements.Fleet;
+import OgameElements.Mission;
+import OgameElements.PlanetResources;
+import OgameElements.PlanetResources;
+import OgameElements.Resources;
+import OgameElements.Ships;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.Ogame;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class ScanList {
      * Konstruktor główny
      * @param scanningList 
      */
-    public ScanList(List<ScanElement> scanningList) {
+    public ScanList(List<FleetElement> scanningList) {
         this.scanningList = scanningList;
     }
 
@@ -37,33 +39,50 @@ public class ScanList {
      * @param scanningList lista kordów do skanowania
      */
     public ScanList(Coords[] scanningList) {
-        List<ScanElement> list = new ArrayList<ScanElement>();
+        List<FleetElement> list = new ArrayList<FleetElement>();
         for (int i = 0; i < scanningList.length; i++) {
-            list.add(new ScanElement(scanningList[i]));
+            list.add(new FleetElement(scanningList[i]));
         }
         this.scanningList = list;
     }
-
+    /**
+     * Konstruktor z dodatkową flotą definiowaną do skanowania
+     * @param scanningList tablica planet do skanowania
+     * @param scanningFleet flota skanująca
+     */
     public ScanList(Coords[] scanningList, Fleet scanningFleet) {
-        List<ScanElement> list = new ArrayList<ScanElement>();
+        List<FleetElement> list = new ArrayList<FleetElement>();
         for (int i = 0; i < scanningList.length; i++) {
-            list.add(new ScanElement(scanningList[i], scanningFleet));
+            list.add(new FleetElement(scanningList[i], scanningFleet));
         }
         this.scanningList = list;
     }
-
+    /**
+     * Tworzy listę skanowania z listy farmingowej
+     * @param lista 
+     */
+    public ScanList(FarmingList lista){
+        this.scanningList = lista.getList();
+    }
+    
     public List<Report> scan(Ogame o) throws OgameException {
+        List<Report> skipList = new ArrayList<Report>();
         int slotsFree = o.getSlotsTotal() - o.getSlotsOccupied();
         System.out.println("Will scan with " + slotsFree + " fleets");
         List<TimePeriod> returns = new ArrayList<TimePeriod>();
         TimePeriod longest;
-        Iterator<ScanElement> it = this.scanningList.iterator();
+        Iterator<FleetElement> it = this.scanningList.iterator();
         int currentSend = 0, totalsend = 0;
-        for (ScanElement temp; it.hasNext();) {
+        for (FleetElement temp; it.hasNext();) {
             temp = it.next();
+            if (temp.isLastSend()) {// jesli poprzednio atakowany to odpuszczamy jego skanowanie
+                // ale nie możemy stracić go z listy, tworzymy więc sztuczny raport
+                skipList.add(new Report(temp.getDestination(),new PlanetResources(0,0,0,0)));
+                continue;
+            } 
             try {
                 returns.add(
-                        o.sendFleet(temp.getScanFleet(), temp.getDestination(), temp.getSpeed(),
+                        o.sendFleet(scanningFleet, temp.getDestination(), temp.getSpeed(),
                         Mission.SPY, Resources.NO_RESOURCES).getFlyingTime());
             } catch (OgameException ex) {
                 continue;
@@ -84,23 +103,16 @@ public class ScanList {
             o.wait(longest);
         }
         List<Report> list = o.getReports(totalsend);
+        list.addAll(skipList);
         Collections.sort(list);
         Collections.reverse(list); // porządkujemy rosnąco
         return list;
     }
-
-    /**
-     * Metoda służąca do zalogowania skanowania i zakończenia działania 
-     * @param o Obiekt Ogame
-     * @param uni nazwa uni
-     * @param nick login
-     * @param pass hasło
-     * @param p obiekt planety
-     * @return Lista raportów ze skanowania
-     */
-    public List<Report> scanAndLogin(Ogame o, String uni, String nick, String pass, Planet p) {
-        //TODO do zrobienia
-        return null;
+    private static final Fleet sondFleet = new Fleet();
+    static {
+        sondFleet.add(Ships.SOND, 3);
     }
-    private List<ScanElement> scanningList;
+
+    private List<FleetElement> scanningList;
+    private Fleet scanningFleet = ScanList.sondFleet;
 }

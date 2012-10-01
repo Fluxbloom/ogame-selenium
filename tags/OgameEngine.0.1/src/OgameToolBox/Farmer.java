@@ -7,10 +7,10 @@ package OgameToolBox;
 import OgameElements.Coords;
 import OgameElements.Report;
 import OgameElements.TimePeriod;
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Mission;
-import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.Resources;
+import OgameElements.Fleet;
+import OgameElements.Mission;
+import OgameElements.Planet;
+import OgameElements.Resources;
 import OgameEngine.Exceptions.OgameElementNotFoundException;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.Ogame;
@@ -47,6 +47,16 @@ public class Farmer {
         this.freeSlotsLeft=0;
     }
     
+        /**
+     * Konstruktor nowego obiektu farmiącego
+     * @param planetWithSonds obiekt planety z sondami
+     */
+    public Farmer(PlanetElement planetWithSonds) {
+        list = new HashMap<PlanetElement, FarmingList>();
+        this.planetWithSonds = planetWithSonds.getPlanet();
+        this.freeSlotsLeft=0;
+    }
+    
     /**
      * Konstruktor zostawiajacy pewną ilość wolnych slotów
      * @param planetWithSonds planeta z sondami
@@ -57,7 +67,28 @@ public class Farmer {
         this.planetWithSonds = planetWithSonds;
         this.freeSlotsLeft=freeSlotsLeft;
     }
+    /**
+     * Konstruktor zostawiajacy pewną ilość wolnych slotów
+     * @param planetWithSonds planeta z sondami
+     * @param freeSlotsLeft ilość slotów która mają pozostać wolne (nie powinno blokować możliwości nadania fs-a)
+     */
+    public Farmer(PlanetElement planetWithSonds,int freeSlotsLeft) {
+        list = new HashMap<PlanetElement, FarmingList>();
+        this.planetWithSonds = planetWithSonds.getPlanet();
+        this.freeSlotsLeft=freeSlotsLeft;
+    }
 
+    /**
+     * Ustawia wartość odpowiedzi na pytanie czy sondy brać z planety nadania
+     * @param stationarySonds 
+     */
+    
+    public void setStationarySonds(boolean stationarySonds) {
+        this.stationarySonds = stationarySonds;
+    }
+
+    
+    
     /**
      * Dodanie listy farmingowej z planety
      * @param p planeta
@@ -96,14 +127,14 @@ public class Farmer {
         temp.add(c, p.getPlanet());
     }
 
-    public TimePeriod farm(Ogame o) throws OgameElementNotFoundException, OgameException {
+    private List<TimePeriod> farm(Ogame o)throws OgameElementNotFoundException, OgameException {
         List<TimePeriod> returns = new ArrayList<TimePeriod>();
         Set<Entry<PlanetElement, FarmingList>> set = this.list.entrySet();
         Iterator<Entry<PlanetElement, FarmingList>> it = set.iterator();
         int i;
         int size;
         FarmingList fl;
-        FarmingElement fe;
+        FleetElement fe;
         
         for (Entry<PlanetElement, FarmingList> temp; it.hasNext();) {
             temp = it.next();
@@ -115,6 +146,7 @@ public class Farmer {
                     fl = temp.getValue();
                     fe = fl.next();
                     returns.add(o.sendFleet(fe.getFleet(), fe.getDestination(), fe.getSpeed(), Mission.ATTACK, Resources.NO_RESOURCES).getFlyingTime());
+                    fe.setLastSend(true);
                     i++;
                 } catch (OgameException ex) {
                     System.err.println(ex.getMessage());
@@ -129,6 +161,7 @@ public class Farmer {
                 try {
                     fe = temp.getValue().next();
                     returns.add(o.sendFleet(temp.getKey().getFsFleet(), fe.getDestination(), fe.getSpeed(), Mission.ATTACK, Resources.ALL_RESOURCES).getFlyingTime());
+                    fe.setLastSend(true);
                     break;
                 } catch (OgameException ex) {
                     if (ex == OgameException.FLEET_NO_FLEET_ON_PLANET) {
@@ -137,8 +170,18 @@ public class Farmer {
                 }
             }
         }
-        TimePeriod max = TimePeriod.max(returns);
+        
+        return returns;
+    }
+    
+    public TimePeriod farmMax(Ogame o) throws OgameElementNotFoundException, OgameException {
+        TimePeriod max = TimePeriod.max(farm(o));
         return max;
+    }
+    
+    public TimePeriod farmMin(Ogame o) throws OgameElementNotFoundException, OgameException {
+        TimePeriod min = TimePeriod.min(farm(o));
+        return min;
     }
     
     public TimePeriod scanAndFarm(Ogame o) throws OgameException {
@@ -150,20 +193,26 @@ public class Farmer {
         List<Report> tempList;
         Map<PlanetElement,FarmingList> newlist = new HashMap<PlanetElement,FarmingList>();
         List<ReportElement> joinedRaportList = new ArrayList<ReportElement>();
+        FarmingList fl;
         try {
         Set<Entry<PlanetElement,FarmingList>> set = list.entrySet();
         Iterator<Entry<PlanetElement,FarmingList>> it = set.iterator();
         for (Entry<PlanetElement,FarmingList> temp;it.hasNext();){
             temp = it.next();
-            tempScan=new ScanList(temp.getValue().getCoordsArray());
+            tempScan=new ScanList(temp.getValue());
+            if (this.stationarySonds){
+                o.changePlanet(temp.getKey().getPlanet());
+            }
             tempList = tempScan.scan(o);
             System.out.println(temp.getKey().getPlanet().getName()+"\n"+Report.printList(tempList));
             // twardy kawałek
             // z planet gdzie ma być fs do wspólnej tablicy zrzucamy wszystko prócz pierwszego elementu
             // z planet gdzie fs nie ma być możemy wrzucić wszystko
             ReportElement.join(joinedRaportList,temp.getKey().isFs()?ReportElement.createListSkipFirst(temp.getKey(), tempList):ReportElement.createList(temp.getKey(), tempList));
-            newlist.put(temp.getKey(),Report.getFarmingList(tempList, temp.getKey().getPlanet())); // new FarmingList(Report.getCoordsArray(tempList),temp.getKey().getPlanet())
-            
+            fl = Report.getFarmingList(tempList, temp.getKey().getPlanet());
+            newlist.put(temp.getKey(),fl); // new FarmingList(Report.getCoordsArray(tempList),temp.getKey().getPlanet())
+            // resetujemy nadania floty z danej planety
+            fl.resetIsSend();
         }
         // Teraz joinedRaportList zawiera wszystkie raporty w parze z planetami, trzeba posortować
         ReportElement.sortDESC(joinedRaportList);
@@ -171,7 +220,7 @@ public class Farmer {
         // Teraz przypisujemy wartości flot na każdą planetę
         int totalFleets = o.getSlotsTotal()-o.getSlotsOccupied()-this.freeSlotsLeft;
         int assignedFleets=0;
-        // najpierw +1 flota tam gdzie fs
+        // najpierw +1 flota tam gdzie fs, to gwarantuje nadanie floty zostawionej poza listą
         Set<Entry<PlanetElement,FarmingList>> set2 = newlist.entrySet();
         Iterator<Entry<PlanetElement,FarmingList>> it2 = set2.iterator();
         for (Entry<PlanetElement,FarmingList> temp;it2.hasNext();){
@@ -190,14 +239,17 @@ public class Farmer {
             pe.setFleetCount(pe.getFleetCount()+1);
         }
         this.list=newlist;
-        } catch (OgameException ex){}
+        } catch (OgameException ex){
+        System.err.println(ex.getMessage()+"\n"+ex.getStackTrace());
+        }
         finally{
-        return farm(o);
+        return farmMin(o);
         }
     }
     
     private Map<PlanetElement, FarmingList> list;
     private Planet planetWithSonds;
     private int freeSlotsLeft;
+    private boolean stationarySonds=false;
     
 }

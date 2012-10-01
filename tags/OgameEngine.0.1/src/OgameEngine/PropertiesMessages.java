@@ -8,7 +8,6 @@ import OgameElements.Message;
 import OgameElements.MessageType;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
-import OgameEngineUnchecked.MappingProperties;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.Map;
  * Klasa służy do pobrania pól xpath do elementów związanych z menu wiadomości
  * @author Piotr Kowalski
  */
-public class PropertiesMessages extends MappingProperties{
+public class PropertiesMessages extends PropertiesOgame{
     
     /**
      * Domyślny konstruktor

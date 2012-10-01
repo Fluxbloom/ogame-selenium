@@ -4,7 +4,6 @@
  */
 package OgameElements;
 
-import OgameElementsUnchecked.Resources;
 import OgameEngine.Exceptions.OgameElementNotFoundException;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.OgameTest;

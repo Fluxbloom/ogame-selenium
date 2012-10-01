@@ -4,8 +4,6 @@
  */
 package OgameElements;
 
-import OgameElementsUnchecked.ShipyardShips;
-
 /**
  * Klasa gromadząca budynki na planecie i księżycu
  * @author Piotr Kowalski

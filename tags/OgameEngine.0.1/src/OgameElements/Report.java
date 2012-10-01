@@ -4,14 +4,9 @@
  */
 package OgameElements;
 
-import OgameElementsUnchecked.Fleet;
-import OgameElementsUnchecked.Planet;
-import OgameElementsUnchecked.PlanetResources;
-import OgameElementsUnchecked.Ships;
-import OgameElementsUnchecked.Speed;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
-import OgameToolBox.FarmingElement;
+import OgameToolBox.FleetElement;
 import OgameToolBox.FarmingList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -106,7 +101,7 @@ public class Report extends Message implements Comparable{
             f = new Fleet();
             double ships = ( (double) temp.sum()) / 10000.0;
             f.add(Ships.MT, (int) (ships+1));
-            fl.add(new FarmingElement(temp.getCords(),p.getCoords().isSameSystem(temp.getCords())?Speed.S60:Speed.S100,f));
+            fl.add(new FleetElement(temp.getCords(),p.getCoords().isSameSystem(temp.getCords())?Speed.S60:Speed.S100,f));
         }
         return fl;
     }

@@ -6,13 +6,12 @@ package OgameEngine;
 
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
-import OgameEngineUnchecked.MappingProperties;
 
 /**
  * Klasa dostarcza xpathów z konfiguracji dla potrzeb rozczytywania raportów szpiegowskich
  * @author Piotr Kowalski
  */
-public class PropertiesSpyReport extends MappingProperties {
+public class PropertiesSpyReport extends PropertiesOgame {
     /**
      * Konstruktor wczytujący propertiesy
      * @throws OgameFileNotFoundException Błąd braku pliku
