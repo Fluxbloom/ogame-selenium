@@ -954,6 +954,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
                 }
             }
             if (reportParsed < count) {
+                waitMilisecond(mappings.getSelenium().getLoadTime());
                 this.click(mappings.getMessages().getNextPage());
                 waitMilisecond(mappings.getSelenium().getLoadTime());
             }
