@@ -8,8 +8,7 @@ package OgameElements;
  *
  * @author plich
  */
-public class Defence {
-    private String name;
+public class Defence extends ShipyardProduct{
     private Defence(String name){this.name=name;};
     public static final Defence WYRZUTNIA_RAKIET = new Defence("WR");
     public static final Defence MALY_LASER = new Defence("LL");
