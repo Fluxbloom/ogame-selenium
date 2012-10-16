@@ -932,6 +932,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException {
         System.out.println("Get " + count + " previous reports");
+        this.clickOverview();
         this.clickMessages();
         int reports = countReports();
         int reportParsed = 0;

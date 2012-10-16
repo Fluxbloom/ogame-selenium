@@ -103,12 +103,15 @@ public abstract class Ogame implements IOgame {
         try {
             try {
             selenium.click(xpath);
+            this.waitMilisecond(mappings.getSelenium().getLoadTime());
         } catch (SeleniumException ex) {
             throw new OgameElementNotFoundException(xpath);
         }
         } catch (OgameElementNotFoundException ex) {
             try {
+            this.waitMilisecond(mappings.getSelenium().getRetryTime());
             selenium.click(xpath);
+            this.waitMilisecond(mappings.getSelenium().getLoadTime());
         } catch (SeleniumException ex2) {
             throw new OgameElementNotFoundException(xpath);
         }
