@@ -73,7 +73,7 @@ public class NewFarming extends OgameTest {
          "2:244:5","2:224:6","2:224:10","2:228:6","2:228:7","2:229:10"   ,
          "2:230:6","2:234:5","2:235:4","2:235:5",
          "2:241:6","2:241:11",
-        "2:247:4","2:258:4","2:261:8","2:250:3","2:250:11","2:251:11"//,"2:224:5","2:250:12" //obrona
+        "2:247:4","2:258:4","2:250:3","2:250:11","2:251:11"//,"2:224:5","2:250:12" //obrona
                 });
         Coords[] cHotaru = Coords.parseArray( new String[]{
                 "3:21:8","3:21:11",//"3:21:12",
@@ -107,6 +107,7 @@ public class NewFarming extends OgameTest {
         f.add(nami, cNami, farming);
         f.add(hotaru, cHotaru,farming);
         TimePeriod await = new TimePeriod(0, 10, 0);
+        //o.wait(25, 0);
         while (true) {
             try {
                 await = new TimePeriod(0, 10, 0);

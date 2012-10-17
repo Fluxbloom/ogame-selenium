@@ -914,12 +914,26 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         Coords c = null;
         selenium.openWindow(url, "temp");
         selenium.selectWindow("temp");
+        try {
         this.waitMilisecond(mappings.getSelenium().getLoadTime());
         c = Coords.parse(getText(mappings.getSpyreport().getCoords()));
         mmetal = getText(mappings.getSpyreport().getMetal());
         ccrystal = getText(mappings.getSpyreport().getCristal());
         ddeuter = getText(mappings.getSpyreport().getDeuterium());
         eenergy = getText(mappings.getSpyreport().getEnergy());
+        } catch (OgameElementNotFoundException ex){
+             selenium.close();
+            selenium.selectWindow(null);
+            throw ex;
+        } catch ( OgameFileNotFoundException ex){ selenium.close();
+            selenium.selectWindow(null);
+            throw ex;}
+        catch ( OgameIOException ex){ selenium.close();
+            selenium.selectWindow(null);
+            throw ex;}
+        catch ( OgameParsingError ex){ selenium.close();
+            selenium.selectWindow(null);
+            throw ex;}
         selenium.close();
         selenium.selectWindow(null);
         int metal = parseReportNumbers(mmetal);
