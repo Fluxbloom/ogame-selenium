@@ -38,6 +38,7 @@ public class PropertiesOverview extends PropertiesOgame {
         leftButtonStocznia = properties.getProperty("leftButtonStocznia");
         leftButtonObrona = properties.getProperty("leftButtonObrona");
         leftButtonFlota = properties.getProperty("leftButtonFlota");
+        leftButtonGalaxy = properties.getProperty("leftButtonGalaxy");
         leftButtonEventList = properties.getProperty("leftButtonEventList");
         leftButtonEventListIsEmpty = properties.getProperty("leftButtonEventListIsEmpty");
         leftButtonEventListIsListVisibleText = properties.getProperty("leftButtonEventListIsListVisibleText");
@@ -171,6 +172,13 @@ public class PropertiesOverview extends PropertiesOgame {
      */
     public String getLeftButtonMessages() {
         return leftButtonMessages;
+    }
+    /**
+     * Pobiera xpath do przycisku otwierającego podgląd galaktyki
+     * @return xpath do galaktyki
+     */
+    public String getLeftButtonGalaxy() {
+        return leftButtonGalaxy;
     }
 
     
@@ -313,6 +321,7 @@ public class PropertiesOverview extends PropertiesOgame {
     private String leftButtonStocznia;
     private String leftButtonObrona;
     private String leftButtonFlota;
+    private String leftButtonGalaxy;
     private String leftButtonEventList;
     private String leftButtonEventListIsEmpty;
     private String leftButtonEventListIsListVisibleText;

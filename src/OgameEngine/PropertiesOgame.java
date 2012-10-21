@@ -96,6 +96,11 @@ public class PropertiesOgame {
     public PropertiesSpyReport getSpyreport() {
         return spyreport;
     }
+
+    public PropertiesGalaxy getGalaxy() {
+        return galaxy;
+    }
+    
     
     
     
@@ -188,6 +193,7 @@ public class PropertiesOgame {
     private PropertiesShipyard shipyard;
     private PropertiesDefence defence;
     private PropertiesFleet fleet;
+    private PropertiesGalaxy galaxy;
     private PropertiesEvents events;
     private PropertiesResources resources;
     private PropertiesSlots slots;
@@ -203,6 +209,7 @@ public class PropertiesOgame {
                 result.login = new PropertiesLogin();
                 result.overview = new PropertiesOverview();
                 result.fleet = new PropertiesFleet();
+                result.galaxy = new PropertiesGalaxy();
                 result.buldings = new PropertiesBuildings();
                 result.defence = new PropertiesDefence();
                 result.events = new PropertiesEvents();
