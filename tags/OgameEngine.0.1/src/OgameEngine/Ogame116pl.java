@@ -276,6 +276,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         waitMilisecond(1000);
     }
 
+    private void clickGalaxy() throws OgameElementNotFoundException, OgameException {
+        clickAndWait(mappings.getOverview().getLeftButtonGalaxy());
+    }
+    
     private void clickEventList() throws OgameElementNotFoundException, OgameException {
         this.clickOverview();
         if (!isTextPresent(mappings.getOverview().getLeftButtonEventListIsEmpty())) {
@@ -978,6 +982,15 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     /* *************************************************************************
+     * *** GALAKTYKA ***********************************************************
+     * ********************************************************************** */
+    
+    public void getGalaxyView(Coords c){}
+    void getGalaxyView(int galaxy,int system) throws OgameElementNotFoundException, OgameException{
+        this.clickGalaxy();
+    }
+    
+    /* *************************************************************************
      * **** NIE SPRAWDZONE *****************************************************
      * *************************************************************************/
     @Override
@@ -1617,6 +1630,10 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         logger.log(Level.INFO, "[DONE]");
     }
 
+    private void initGalaxy(){
+        
+    }
+    
     private void initResources() {
         logger.log(Level.INFO, "Initializing Performance Map");
         performanceMap = new HashMap<Performance.ResourceField, String>();
