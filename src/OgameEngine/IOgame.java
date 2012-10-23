@@ -22,6 +22,7 @@ import OgameElements.Report;
 import OgameElements.Time;
 import OgameElements.TimePeriod;
 import OgameElements.Fleet;
+import OgameElements.GalaxyRow;
 import OgameElements.Performance;
 import OgameElements.Performance.Production;
 import OgameElements.Performance.ResourceField;
@@ -377,8 +378,26 @@ public interface IOgame {
     /* ************************************************************************
      * ************************* WIADOMOSCI *********************************
      * ************************************************************************/
-    
+    /**
+     * Metoda pobiera określoną ilość ostatnich raportów szpiegowskich
+     * @param count ilość raportów
+     * @return raporty szpiegowskie
+     * @throws OgameElementNotFoundException brak elementu
+     * @throws OgameException inny błąd
+     */
     abstract public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException;
+    
+     /* ************************************************************************
+     * ************************* GALAKTYKA  ************************************
+     * ************************************************************************/   
+    
+    abstract public GalaxyRow getGalaxyView(Coords c) throws OgameElementNotFoundException, OgameException;
+    
+    abstract public List<GalaxyRow> getGalaxyView(List<Coords> c) throws OgameElementNotFoundException, OgameException;
+    
+    abstract public List<GalaxyRow> getGalaxySystemView(Coords c) throws OgameElementNotFoundException, OgameException;
+    
+    abstract public List<GalaxyRow> getGalaxySystemView(List<Coords> c) throws OgameElementNotFoundException, OgameException;
     
     /* ************************************************************************/
     

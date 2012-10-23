@@ -32,6 +32,10 @@ import OgameElements.Events;
 import OgameElements.Events.FriendOrFoe;
 import OgameElements.Events.Multiplicity;
 import OgameElements.Fleet;
+import OgameElements.GalaxyRow;
+import OgameElements.GalaxyRow.GalaxyStatus;
+import OgameElements.GalaxyRow.GalaxyStatusMinutes;
+import OgameElements.GalaxyRow.PlayerStatuses;
 import OgameElements.Performance;
 import OgameElements.Performance.Production;
 import OgameElements.Performance.ResourceField;
@@ -45,6 +49,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,7 +65,7 @@ import java.util.logging.Logger;
  *
  * @author Piotr Kowalski & Rafał Plich & Michał Dróżdż
  */
-class Ogame116pl extends Ogame {//extends SeleneseTestCase {
+public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     public Ogame116pl() {
         init();
@@ -279,7 +284,7 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private void clickGalaxy() throws OgameElementNotFoundException, OgameException {
         clickAndWait(mappings.getOverview().getLeftButtonGalaxy());
     }
-    
+
     private void clickEventList() throws OgameElementNotFoundException, OgameException {
         this.clickOverview();
         if (!isTextPresent(mappings.getOverview().getLeftButtonEventListIsEmpty())) {
@@ -919,25 +924,29 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         selenium.openWindow(url, "temp");
         selenium.selectWindow("temp");
         try {
-        this.waitMilisecond(mappings.getSelenium().getLoadTime());
-        c = Coords.parse(getText(mappings.getSpyreport().getCoords()));
-        mmetal = getText(mappings.getSpyreport().getMetal());
-        ccrystal = getText(mappings.getSpyreport().getCristal());
-        ddeuter = getText(mappings.getSpyreport().getDeuterium());
-        eenergy = getText(mappings.getSpyreport().getEnergy());
-        } catch (OgameElementNotFoundException ex){
-             selenium.close();
+            this.waitMilisecond(mappings.getSelenium().getLoadTime());
+            c = Coords.parse(getText(mappings.getSpyreport().getCoords()));
+            mmetal = getText(mappings.getSpyreport().getMetal());
+            ccrystal = getText(mappings.getSpyreport().getCristal());
+            ddeuter = getText(mappings.getSpyreport().getDeuterium());
+            eenergy = getText(mappings.getSpyreport().getEnergy());
+        } catch (OgameElementNotFoundException ex) {
+            selenium.close();
             selenium.selectWindow(null);
             throw ex;
-        } catch ( OgameFileNotFoundException ex){ selenium.close();
+        } catch (OgameFileNotFoundException ex) {
+            selenium.close();
             selenium.selectWindow(null);
-            throw ex;}
-        catch ( OgameIOException ex){ selenium.close();
+            throw ex;
+        } catch (OgameIOException ex) {
+            selenium.close();
             selenium.selectWindow(null);
-            throw ex;}
-        catch ( OgameParsingError ex){ selenium.close();
+            throw ex;
+        } catch (OgameParsingError ex) {
+            selenium.close();
             selenium.selectWindow(null);
-            throw ex;}
+            throw ex;
+        }
         selenium.close();
         selenium.selectWindow(null);
         int metal = parseReportNumbers(mmetal);
@@ -984,12 +993,166 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     /* *************************************************************************
      * *** GALAKTYKA ***********************************************************
      * ********************************************************************** */
-    
-    public void getGalaxyView(Coords c){}
-    void getGalaxyView(int galaxy,int system) throws OgameElementNotFoundException, OgameException{
-        this.clickGalaxy();
+    private GalaxyRow parseRow(Coords c, String xpath) throws OgameElementNotFoundException {
+        // 1. czy wiersz jest pusty + aktywnosc
+        GalaxyStatus status;
+        if (this.isElementPresent(xpath + mappings.getGalaxy().getPosition_empty())) {
+            status = GalaxyRow.EMPTY;
+        } else if (this.isElementPresent(xpath + mappings.getGalaxy().getPosition_occupied())) {
+            if (isElementPresent(xpath + mappings.getGalaxy().getPlanet_activity())) {
+                status = GalaxyRow.ACTIVITY;
+            } else if (isElementPresent(xpath + mappings.getGalaxy().getPlanet_minutes())) {
+                int minutes = Integer.parseInt(getText(xpath + mappings.getGalaxy().getPlanet_minutes_text()).replace(" ", ""));
+                status = new GalaxyStatusMinutes(minutes);
+            } else {
+                status = GalaxyRow.NO_ACTIVITY;
+            }
+        } else {
+            status = GalaxyRow.NO_ACTIVITY;
+        }
+        // 2 nazwa planey
+        String planetName = getText(xpath + mappings.getGalaxy().getPlanet_name()).trim();
+        // 3 ksiezyc
+        GalaxyStatus moon;
+        if (this.isElementPresent(xpath + mappings.getGalaxy().getNo_moon())) {
+            moon = GalaxyRow.EMPTY;
+        } else if (this.isElementPresent(xpath + mappings.getGalaxy().getMoon())) {
+            if (isElementPresent(xpath + mappings.getGalaxy().getMoon_activity())) {
+                moon = GalaxyRow.ACTIVITY;
+            } else if (isElementPresent(xpath + mappings.getGalaxy().getMoon_minutes())) {
+                int minutes = Integer.parseInt(getText(xpath + mappings.getGalaxy().getMoon_minutes_text()).replace(" ", ""));
+                moon = new GalaxyStatusMinutes(minutes);
+            } else {
+                moon = GalaxyRow.NO_ACTIVITY;
+            }
+        } else {
+            moon = GalaxyRow.NO_ACTIVITY;
+        }
+        // 4 debris
+        GalaxyStatus debris;
+        if (this.isElementPresent(xpath + mappings.getGalaxy().getNo_debris())) {
+            debris = GalaxyRow.EMPTY;
+        } else {
+            debris = GalaxyRow.NO_ACTIVITY;
+            //TODO byc moze tu bedzie dostep do składu pz
+        }
+        //5 gracz
+        String playerName;
+        if (this.isElementPresent(xpath + mappings.getGalaxy().getNo_player())) {
+            playerName = "";
+        } else {
+            playerName = getText(xpath + mappings.getGalaxy().getPlayer());
+            if (playerName.contains("(")) {
+                playerName = playerName.substring(0, playerName.lastIndexOf('('));
+            }
+            playerName = playerName.trim();
+        }
+
+        //6 status gracza
+        List<PlayerStatuses> statuses = new ArrayList<PlayerStatuses>();
+        if (isElementPresent(xpath + mappings.getGalaxy().getBandit())) {
+            statuses.add(GalaxyRow.BANDIT);
+        }
+        if (isElementPresent(xpath + mappings.getGalaxy().getStarlord())) {
+            statuses.add(GalaxyRow.STARLORD);
+        }
+        if (isElementPresent(xpath + mappings.getGalaxy().getInactive())) {
+            statuses.add(GalaxyRow.INACTIVE);
+        }
+        if (isElementPresent(xpath + mappings.getGalaxy().getLongInactive())) {
+            statuses.add(GalaxyRow.LONG_INACTIVE);
+        }
+        if (isElementPresent(xpath + mappings.getGalaxy().getBanned())) {
+            statuses.add(GalaxyRow.BANNED);
+        }
+        if (isElementPresent(xpath + mappings.getGalaxy().getVacation())) {
+            statuses.add(GalaxyRow.VACATION);
+        }
+        if (isElementPresent(xpath + mappings.getGalaxy().getNoob())) {
+            statuses.add(GalaxyRow.NOOB);
+        }
+        if (isElementPresent(xpath + mappings.getGalaxy().getOutlaw())) {
+            statuses.add(GalaxyRow.OUTLAW);
+        }
+        if (statuses.isEmpty()) {
+            statuses.add(GalaxyRow.NORMAL);
+        }
+
+        //7 sojusz gracza
+        String allyName;
+        if (this.isElementPresent(xpath + mappings.getGalaxy().getNo_ally())) {
+            allyName = "";
+        } else {
+            allyName = getText(xpath + mappings.getGalaxy().getAlly());
+        }
+
+        return new GalaxyRow(c, status, planetName, moon, debris, playerName, statuses, allyName);
     }
+
+    @Override
+    public GalaxyRow getGalaxyView(Coords c) throws OgameElementNotFoundException, OgameException {
+        //TODO czy nie jestesmy juz w odpowiednim oknie
+        this.clickGalaxy();
+        this.type(mappings.getGalaxy().getGalaxySwitch(), Integer.toString(c.getUniverse()));
+        this.type(mappings.getGalaxy().getSystemSwitch(), Integer.toString(c.getSystem()));
+        this.click(mappings.getGalaxy().getShow_button());
+        String row = this.mappings.getGalaxy().getRow(c.getPosition());
+        return parseRow(new Coords(c.getUniverse(), c.getSystem(), c.getPosition()), row);
+    }
+    @Override
+    public List<GalaxyRow> getGalaxyView(List<Coords> c) throws OgameElementNotFoundException, OgameException {
+        Collections.sort(c);
+        //TODO czy nie jestesmy juz w odpowiednim oknie
+        List<GalaxyRow> list = new ArrayList<GalaxyRow>();
+        this.clickGalaxy();
+        Iterator<Coords> it = c.iterator(); 
+        Coords temp=null,previous;
+        while(it.hasNext()){
+            previous=temp;
+            temp = it.next();
+            if (previous==null || !temp.isSameSystem(previous)){
+            this.type(mappings.getGalaxy().getGalaxySwitch(), Integer.toString(temp.getUniverse()));
+            this.type(mappings.getGalaxy().getSystemSwitch(), Integer.toString(temp.getSystem()));
+            this.click(mappings.getGalaxy().getShow_button());
+            }
+            String row = this.mappings.getGalaxy().getRow(temp.getPosition());
+            list.add(parseRow(new Coords(temp.getUniverse(), temp.getSystem(), temp.getPosition()), row));
+        }
+        return list;
+    }
+
+    @Override
+    public List<GalaxyRow> getGalaxySystemView(Coords c) throws OgameElementNotFoundException, OgameException {
+        this.clickGalaxy();
+        this.type(mappings.getGalaxy().getGalaxySwitch(), Integer.toString(c.getUniverse()));
+        this.type(mappings.getGalaxy().getSystemSwitch(), Integer.toString(c.getSystem()));
+        this.click(mappings.getGalaxy().getShow_button());
+
+        // tworzymy naszą liste
+        List<GalaxyRow> list = new ArrayList<GalaxyRow>();
+
+        // najpierw określmy ilość linijek
+        int lines = this.getXpathCount(this.mappings.getGalaxy().getRow_count());
+        String row;
+        for (int i = 1; i < lines + 1; i++) {
+            row = this.mappings.getGalaxy().getRow(i);
+            list.add(parseRow(new Coords(c.getUniverse(), c.getSystem(), i), row));
+        }
+        return list;
+    }
+
+    @Override
+    public List<GalaxyRow> getGalaxySystemView(List<Coords> c) throws OgameElementNotFoundException, OgameException {
+        List<GalaxyRow> list = new ArrayList<GalaxyRow>();
+        Iterator<Coords> it = c.iterator();
+        while(it.hasNext()){
+            list.addAll(this.getGalaxySystemView(it.next()));
+        }
+        return list;
+    }
+
     
+
     /* *************************************************************************
      * **** NIE SPRAWDZONE *****************************************************
      * *************************************************************************/
@@ -1630,10 +1793,9 @@ class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         logger.log(Level.INFO, "[DONE]");
     }
 
-    private void initGalaxy(){
-        
+    private void initGalaxy() {
     }
-    
+
     private void initResources() {
         logger.log(Level.INFO, "Initializing Performance Map");
         performanceMap = new HashMap<Performance.ResourceField, String>();
