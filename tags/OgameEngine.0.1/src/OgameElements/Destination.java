@@ -9,7 +9,7 @@ package OgameElements;
  * pola zniszczeń i planety w kordynatach planet
  * @author Piotr Kowalski
  */
-public class Destination {
+public class Destination implements Comparable {
 
     /**
      * Domyślny konstruktor zapisujący nazwę danego obiektu. 
@@ -29,6 +29,36 @@ public class Destination {
     public String toString() {
         return "Destination{" + "name=" + name + '}';
     }
+    /**
+     * Metoda porównuje cele w porzadku Planeta < Ksiezyc < PZ 
+     * @param arg0
+     * @return 
+     */
+    @Override
+    public int compareTo(Object arg0) {
+        Destination d = (Destination) arg0;
+        if (this==Destination.PLANET && d==Destination.PLANET) {
+            return 0;
+        } else if (this==Destination.PLANET && d==Destination.MOON) {
+            return -1;
+        } else if (this==Destination.PLANET && d==Destination.DEBRIS) {
+            return -2;
+        } else if (this==Destination.MOON && d==Destination.PLANET) {
+            return 1;
+        } else if (this==Destination.MOON && d==Destination.MOON) {
+            return 0;
+        } else if (this==Destination.MOON && d==Destination.DEBRIS) {
+            return -1;
+        } else if (this==Destination.DEBRIS && d==Destination.PLANET) {
+            return 2;
+        } else if (this==Destination.DEBRIS && d==Destination.MOON) {
+            return 1;
+        } else  {
+            return 0;
+        }
+    }
+    
+    
     
     /**
      * Stałą odpowiadajaca planecie

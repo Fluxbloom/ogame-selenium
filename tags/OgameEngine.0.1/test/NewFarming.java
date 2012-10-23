@@ -70,7 +70,7 @@ public class NewFarming extends OgameTest {
             "2:211:4","2:213:12","2:214:5"
                 });
         Coords[] cTatsuki = Coords.parseArray(new String[]{
-         "2:244:5","2:224:6","2:224:10","2:228:6","2:228:7","2:229:10"   ,
+         "2:224:6","2:224:10","2:228:6","2:228:7","2:229:10"   ,
          "2:230:6","2:234:5","2:235:4","2:235:5",
          "2:241:6","2:241:11",
         "2:247:4","2:258:4","2:250:3","2:250:11","2:251:11"//,"2:224:5","2:250:12" //obrona
@@ -101,13 +101,13 @@ public class NewFarming extends OgameTest {
         PlanetElement tatsuki = new PlanetElement(new Planet(new Coords(2, 244, 7), "Tatsuki"), fs, 1,false);
         PlanetElement nami = new PlanetElement(new Planet(new Coords(2, 57, 11), "Nami"), fs, 1,false);
         PlanetElement hotaru = new PlanetElement(new Planet(new Coords(3,33,5),"Hotaru"),fs,1,false);
-        Farmer f = new Farmer(aisha,1); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
+        Farmer f = new Farmer(aisha); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
         f.setStationarySonds(true);
         f.add(aisha, cAisha, farming);
         f.add(videl, cVidel, farming);
         f.add(hinata, cHinata, farming);
         f.add(tatsuki, cTatsuki, farming);
-        f.add(nami, cNami, farming);
+        //f.add(nami, cNami, farming);
         f.add(hotaru, cHotaru,farming);
         TimePeriod await = new TimePeriod(0, 10, 0);
         //o.wait(59, 0);

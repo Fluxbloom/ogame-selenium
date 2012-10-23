@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * cel lub bazę w postaci flagi Planeta, Księzyc czy Pole zniszczeń
  * @author Piotr Kowalski
  */
-public class Coords {
+public class Coords implements Comparable{
     /**
      * Główny konstruktor obiektów kordynatów
      * @param uni numer uniwersum ( z zakresu 1-maks)
@@ -213,7 +213,11 @@ public class Coords {
     public String toString() {
         return "Coords{" + "universe=" + universe + ", system=" + system + ", position=" + position + ", dest=" + dest + '}';
     }
-
+    /**
+     * Porównuje dwa obiekty
+     * @param obj
+     * @return 
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -237,6 +241,28 @@ public class Coords {
         }
         return true;
     }
+
+    @Override
+    public int compareTo(Object arg0) {
+        Coords c = (Coords) arg0;
+        if (this.universe < c.universe){
+            return -1000;
+        } else if (this.universe > c.universe){
+            return 1000;
+        } else if (this.system < c.system){
+            return -100;
+        } else if (this.system > c.system){
+            return 100;
+        } else if (this.position < c.position){
+            return -10;
+        } else if(this.position>c.position){
+            return 10;
+        } else {
+            return this.dest.compareTo(c.dest);
+        }
+    }
+    
+    
 
     /**
      * Przedstawia kordynat w postaci stringa parsowalnego
@@ -334,6 +360,30 @@ public class Coords {
             }
         }
         return result;
+    }
+    /**
+     * Tworzy liste kolejnych systemów pomiędzy kordem lewym a kordem prawym
+     * @param left kord lewy
+     * @param right kord prawy
+     * @return lista układów pomiędzy
+     */
+    public static List<Coords> coordsSystemRange(Coords left, Coords right) throws OgameFileNotFoundException, OgameIOException{
+        List<Coords> list = new ArrayList<Coords>();
+        if (left.universe!=right.universe) { 
+            list.add(left);
+            list.add(right);
+        } else {
+            Coords l,r;
+            l = left.compareTo(right)<0?left:right;
+            r = left.compareTo(right)<0?right:left;
+            list.add(l);
+            int system = l.system;
+            while (system<r.system){
+                system++;
+                list.add(new Coords(l.universe,system,l.position));   
+            }
+        }
+        return list;
     }
     
     /**
