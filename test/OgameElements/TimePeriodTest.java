@@ -4,7 +4,7 @@
  */
 package OgameElements;
 
-import OgameEngine.Exceptions.OgameParsingError;
+import OgameEngine.Exceptions.OgameParsingException;
 import java.util.Calendar;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -124,7 +124,7 @@ public class TimePeriodTest {
 
 
     @Test
-            public void parsingTimePeriodTest() throws OgameParsingError {
+            public void parsingTimePeriodTest() throws OgameParsingException {
         String tim ="1:54:11 h";
         TimePeriodParser tpp = new SimpleTimePeriodParser("HH:mm:ss 'h'");
         tpp.parse(tim);

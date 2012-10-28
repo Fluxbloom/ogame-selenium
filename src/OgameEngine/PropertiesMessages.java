@@ -46,6 +46,13 @@ public class PropertiesMessages extends PropertiesOgame{
             }
         }
         nextPage = properties.getProperty("nextPage");
+        commander= properties.getProperty("commander").compareToIgnoreCase("true")==0?true:false;
+        spy_tab=properties.getProperty("spy_tab");
+        battle_tab=properties.getProperty("battle_tab");
+        player_tab=properties.getProperty("player_tab");
+        expedition_tab=properties.getProperty("expedition_tab");
+        ally_tab=properties.getProperty("ally_tab");
+        other_tab=properties.getProperty("other_tab");
     }
     private MessageType mapStringToMessage(String s){
         if (s.compareTo("Return")==0){
@@ -113,4 +120,12 @@ public class PropertiesMessages extends PropertiesOgame{
     private String messageTypeText;
     private Map<MessageType,String> messageTypesMappings;
     private String nextPage;
+    
+    private boolean  commander;
+ private String spy_tab;
+ private String battle_tab;
+ private String player_tab;
+ private String expedition_tab;
+ private String ally_tab;
+ private String other_tab;
 }

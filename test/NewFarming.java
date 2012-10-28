@@ -54,7 +54,7 @@ public class NewFarming extends OgameTest {
                     "2:91:6","2:97:4", "2:97:10","2:103:12", "2:105:7","2:105:12",
                     "2:107:9", "2:107:10", "2:107:12","2:108:7","2:112:6",
                     "2:114:6", "2:114:11", "2:114:12", "2:115:6", "2:115:7",
-                    "2:118:11", "2:119:7", "2:119:12", "2:122:10"
+                    "2:118:11", "2:119:12", "2:122:10"
                 //,"2:116:4","2:97:6", "2:97:11","2:103:8"
                 });
         Coords[] cVidel = Coords.parseArray(new String[]{
@@ -95,19 +95,19 @@ public class NewFarming extends OgameTest {
         fs.add(Ships.PAN, Ships.ALL);
         farming.add(Ships.MT, 5);
         exp.add(Ships.DT, 100);
-        PlanetElement aisha = new PlanetElement(new Planet(new Coords(2, 106, 6), "Aisha"), fs, 1,false);
-        PlanetElement videl = new PlanetElement(new Planet(new Coords(2, 158, 7), "Videl"), fs, 1,false);
-        PlanetElement hinata = new PlanetElement(new Planet(new Coords(2, 199, 7), "Hinata"), fs, 1,false);
-        PlanetElement tatsuki = new PlanetElement(new Planet(new Coords(2, 244, 7), "Tatsuki"), fs, 1,false);
-        PlanetElement nami = new PlanetElement(new Planet(new Coords(2, 57, 11), "Nami"), fs, 1,false);
-        PlanetElement hotaru = new PlanetElement(new Planet(new Coords(3,33,5),"Hotaru"),fs,1,false);
+        PlanetElement aisha = new PlanetElement(new Planet(new Coords(2, 106, 6), "Aisha"), fs, 1);
+        PlanetElement videl = new PlanetElement(new Planet(new Coords(2, 158, 7), "Videl"), fs, 1);
+        PlanetElement hinata = new PlanetElement(new Planet(new Coords(2, 199, 7), "Hinata"), fs, 1);
+        PlanetElement tatsuki = new PlanetElement(new Planet(new Coords(2, 244, 7), "Tatsuki"), fs, 1);
+        PlanetElement nami = new PlanetElement(new Planet(new Coords(2, 57, 11), "Nami"), fs, 1);
+        PlanetElement hotaru = new PlanetElement(new Planet(new Coords(3,33,5),"Hotaru"),fs,1);
         Farmer f = new Farmer(aisha); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
         f.setStationarySonds(true);
         f.add(aisha, cAisha, farming);
         f.add(videl, cVidel, farming);
         f.add(hinata, cHinata, farming);
         f.add(tatsuki, cTatsuki, farming);
-        //f.add(nami, cNami, farming);
+        f.add(nami, cNami, farming);
         f.add(hotaru, cHotaru,farming);
         TimePeriod await = new TimePeriod(0, 10, 0);
         //o.wait(59, 0);

@@ -4,7 +4,7 @@
  */
 package OgameElements;
 
-import OgameEngine.Exceptions.OgameParsingError;
+import OgameEngine.Exceptions.OgameParsingException;
 import OgameEngine.OgameTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -28,7 +28,7 @@ public class TimeTest extends OgameTest{
     }
 
     @Test
-    public void testParsingTime() throws OgameParsingError{
+    public void testParsingTime() throws OgameParsingException{
         String s = "09.09.12 23:34:27";
         TimeParser tp = new TimeParser("dd.MM.yy HH:mm:ss");
         Time t = tp.parse(s);

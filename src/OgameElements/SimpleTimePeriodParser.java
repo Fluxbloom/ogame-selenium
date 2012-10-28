@@ -4,7 +4,7 @@
  */
 package OgameElements;
 
-import OgameEngine.Exceptions.OgameParsingError;
+import OgameEngine.Exceptions.OgameParsingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -49,15 +49,15 @@ Z        Time zone                  RFC 822 time zone   -0800
      * Nadpisanie metody parsowania
      * @param s String do parsowania
      * @return sparsowany obiekt TimePeriod
-     * @throws OgameParsingError błąd parsowania
+     * @throws OgameParsingException błąd parsowania
      */
     @Override
-    public TimePeriod parse(String s) throws OgameParsingError {
+    public TimePeriod parse(String s) throws OgameParsingException {
         
         try {
             return new TimePeriod(format.parse(s) );
         } catch (ParseException ex) {
-            throw new OgameParsingError(s+" vs pattern ="+pattern);
+            throw new OgameParsingException(s+" vs pattern ="+pattern);
         }
     }
     

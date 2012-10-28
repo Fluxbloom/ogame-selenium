@@ -97,18 +97,7 @@ public class SeleniumStartTest {
         o.login(uni, nick, pass);
         o.build(Buildings.METAL_STORAGE);
         o.wait(10);
-    }
-
-    
-@Test
-@Ignore
-public void startFleet() throws OgameException, IOException{
-    o.login(uni, nick, pass);
-    o.changePlanetByCoords(new Coords(2,158,7));
-    o.sendFleet(Fleet.WHOLE_FLEET, new Coords(2,158,8),Speed.S10, Mission.TRANSPORT, Resources.ALL_RESOURCES);
-    o.logout();
-}    
-
+    } 
     
     @Test
     @Ignore

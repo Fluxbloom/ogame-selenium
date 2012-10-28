@@ -7,7 +7,7 @@ package OgameElements;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
-import OgameEngine.Exceptions.OgameParsingError;
+import OgameEngine.Exceptions.OgameParsingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -283,6 +283,12 @@ public class Coords implements Comparable{
     }
     
     /**
+     * Metoda zwracająca prosty string kordynatów pomijając dokładny cel i zapisujac w postaci [1:1:1]
+     */
+    public String simpleString() {
+        return "["+this.universe+":"+this.system+":"+this.position+"]";
+    }
+    /**
      * Metoda statyczna parsowania ciagu znaków do kordynatów
      * Wspierane kordynaty "[1:1:1]", "1:1:1", "1:1:1:m" - księżyc, "1:1:1:pz" - pz
      * [1:1:1:m] - księżyc , [1:1:1:pz] - pole zniszczeń
@@ -291,7 +297,7 @@ public class Coords implements Comparable{
      * @throws OgameException Błąd parsowania kordynatów
      */
     private static PropertiesCoords prop = null;
-    public static Coords parse(String s) throws OgameFileNotFoundException, OgameIOException, OgameParsingError {
+    public static Coords parse(String s) throws OgameFileNotFoundException, OgameIOException, OgameParsingException {
         if (prop == null) {
             prop = new PropertiesCoords();
         }
@@ -305,13 +311,13 @@ public class Coords implements Comparable{
                 } else if (str[3].compareTo(prop.getMoon_markup())==0){
                     return new Coords(str[0],str[1],str[2],Coords.MOON);
                 } else {
-                    throw new OgameParsingError(s);
+                    throw new OgameParsingException(s);
                 }
             }else {
-                    throw new OgameParsingError(s);
+                    throw new OgameParsingException(s);
                 }
         }catch(NumberFormatException ex){
-            throw new OgameParsingError(s +" "+ex.getMessage());
+            throw new OgameParsingException(s +" "+ex.getMessage());
         }
     }
     /**
