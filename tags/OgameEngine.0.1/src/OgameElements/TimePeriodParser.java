@@ -4,7 +4,7 @@
  */
 package OgameElements;
 
-import OgameEngine.Exceptions.OgameParsingError;
+import OgameEngine.Exceptions.OgameParsingException;
 
 /**
  * Klasa utworzona do pomocy w zarządzaniu czasami
@@ -39,7 +39,7 @@ public class TimePeriodParser {
      * @param s String parsowany
      * @return Obiekt Kalendarza stanowiący różnicę czasów 
      */
-    public TimePeriod parse(String s) throws OgameParsingError {
+    public TimePeriod parse(String s) throws OgameParsingException {
         int weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
         String[] str;
         // week
@@ -73,7 +73,7 @@ public class TimePeriodParser {
             s = str.length > 1 ? str[1] : "";
         }
         if (weeks==0 && days ==0 && hours==0 && minutes ==0 && seconds ==0)
-            throw new OgameParsingError("Time period parsing of "+s);
+            throw new OgameParsingException("Time period parsing of "+s);
         return new TimePeriod(weeks,days,hours,minutes,seconds);
     }
     private String week;

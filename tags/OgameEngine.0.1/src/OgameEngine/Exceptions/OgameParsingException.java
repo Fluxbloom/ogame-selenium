@@ -8,13 +8,13 @@ package OgameEngine.Exceptions;
  * Klasa błędu parsowania
  * @author Piotr Kowalski
  */
-public class OgameParsingError extends OgameException {
+public class OgameParsingException extends OgameException {
 
     /**
      * Domyślny konstruktor błędu parsowania
      * @param message 
      */
-    public OgameParsingError(String message) {
+    public OgameParsingException(String message) {
         super(message);
     }
 

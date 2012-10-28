@@ -97,6 +97,7 @@ public class GalaxyRow implements Comparable{
     static public final PlayerStatuses LONG_INACTIVE = new PlayerStatuses("I");
     static public final PlayerStatuses VACATION = new PlayerStatuses("u");
     static public final PlayerStatuses NOOB = new PlayerStatuses("s");
+    static public final PlayerStatuses STRONG = new PlayerStatuses("d");
     static public final PlayerStatuses OUTLAW = new PlayerStatuses("o");
     static public final PlayerStatuses BANNED = new PlayerStatuses("g");
     static public final PlayerStatuses HONOUR = new PlayerStatuses("ph");

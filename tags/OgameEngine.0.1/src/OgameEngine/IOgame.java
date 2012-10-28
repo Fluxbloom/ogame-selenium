@@ -5,6 +5,7 @@
 package OgameEngine;
 
 import OgameElements.ArrivalTime;
+import OgameElements.AstronomicalObject;
 import OgameElements.Buildings;
 import OgameEngine.Exceptions.OgameException;
 import OgameElements.Planet;
@@ -140,7 +141,7 @@ public interface IOgame {
      * @return lista planet gracza
      * @throws OgameException  nieodnalezione pola
      */
-    abstract public List<Planet> getPlanetList() throws OgameException;
+    abstract public List<AstronomicalObject> getPlanetList() throws OgameException;
 
     /**
      * Zmień planete na planete o określonym numerze
@@ -148,6 +149,13 @@ public interface IOgame {
      * @throws OgameException nieodnalezione pola
      */
     abstract public void changePlanet(int planetNumber) throws OgameException;
+    
+     /**
+     * Zmień planete na ksiezyc o określonym numerze
+     * @param planetNumber numer ksiezyca na liście
+     * @throws OgameException nieodnalezione pola
+     */
+    abstract public void changeMoon(int planetNumber) throws OgameException;
 
     /**
      * Zmień planetę na planetę o określonej nazwie. Gdy kilka o identycznej nazwie wtedy na pierwszą z nich w liście.
@@ -157,35 +165,12 @@ public interface IOgame {
     abstract public void changePlanetByName(String name) throws OgameException;
 
     /**
-     * Zmień planetę na planetę o określonych koordynatach
-     * @param c kordynaty planety na którą ma być dokonana zmiana
-     * @throws OgameException brak planety o podanych koordynatach
-     */
-    abstract public void changePlanetByCoords(Coords c) throws OgameException;
-
-    /**
      * Zmień planetę na podaną tym obiektem
      * @param p Obiekt planety na którą ma być przełączenie
      * @throws OgameException brak planety o podanych kordynatach
      */
     // TODO ta metoda domyślnie powinna pozwolić również na przełączenie się na księżyc
-    abstract public void changePlanet(Planet p) throws OgameException;
-
-    /**
-     * Pobiera nazwy wszystkich planet na liście
-     * @deprecated zalecane jest pobieranie calych planet
-     * @return Lista nazw wszystkich planet
-     * @throws OgameException brak odpowiednich pól
-     */
-    abstract public List<String> getPlanetNames() throws OgameException;
-
-    /**
-     * Pobiera kordynaty wszystkich planet gracza
-     * @deprecated zalecane jest pobieranie calych planet
-     * @return Lista kordynatów w postaci
-     * @throws OgameException brak pól
-     */
-    abstract public List<String> getPlanetCoords() throws OgameException;
+    abstract public void changePlanet(AstronomicalObject p) throws OgameException;
 
     /**
      * Pobiera zasoby na danej planecie

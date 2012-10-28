@@ -9,7 +9,7 @@ import OgameEngine.Exceptions.OgameIOException;
 
 /**
  * Klasa odczytuje statyczne dane zawarte w pliku galaxySwitch.properties. 
- * Dane te dotyczą przycisków i pól zawartych w oknie podglądu galaktyki
+ * Dane te dotyczą przycisków inactive pól zawartych w oknie podglądu galaktyki
  * @author dyschemist
  */
 public class PropertiesGalaxy extends PropertiesOgame {
@@ -47,9 +47,10 @@ public class PropertiesGalaxy extends PropertiesOgame {
         player = properties.getProperty("player");
 
         vacation = properties.getProperty("vacation");
-        i = properties.getProperty("i");
-        I = properties.getProperty("I");
+        inactive = properties.getProperty("i");
+        longInactive = properties.getProperty("I");
         noob = properties.getProperty("noob");
+        strong = properties.getProperty("strong");
         banned = properties.getProperty("banned");
         outlaw = properties.getProperty("outlaw");
         honour = properties.getProperty("honour");
@@ -58,6 +59,7 @@ public class PropertiesGalaxy extends PropertiesOgame {
 
         no_ally = properties.getProperty("no_ally");
         ally = properties.getProperty("ally");
+        isGalaxyOn=properties.getProperty("isGalaxyOn");
     }
 
     /**
@@ -149,7 +151,7 @@ public class PropertiesGalaxy extends PropertiesOgame {
     }
 
     public String getInactive() {
-        return i;
+        return inactive;
     }
 
     public String getAlly() {
@@ -169,7 +171,7 @@ public class PropertiesGalaxy extends PropertiesOgame {
     }
 
     public String getLongInactive() {
-        return I;
+        return longInactive;
     }
 
     public String getNo_ally() {
@@ -184,6 +186,10 @@ public class PropertiesGalaxy extends PropertiesOgame {
         return noob;
     }
 
+    public String getStrong() {
+        return strong;
+    }
+    
     public String getOutlaw() {
         return outlaw;
     }
@@ -199,8 +205,10 @@ public class PropertiesGalaxy extends PropertiesOgame {
     public String getVacation() {
         return vacation;
     }
-    
-    
+
+    public String getIsGalaxyOn() {
+        return isGalaxyOn;
+    }
     
     private String galaxySwitch;
     private String systemSwitch;
@@ -224,9 +232,10 @@ public class PropertiesGalaxy extends PropertiesOgame {
     private String no_player;
     private String player;
     private String vacation;
-    private String i;
-    private String I;
+    private String inactive;
+    private String longInactive;
     private String noob;
+    private String strong;
     private String banned;
     private String outlaw;
     private String honour;
@@ -234,4 +243,5 @@ public class PropertiesGalaxy extends PropertiesOgame {
     private String starlord;
     private String no_ally;
     private String ally;
+    private String isGalaxyOn;
 }

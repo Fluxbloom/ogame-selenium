@@ -7,71 +7,49 @@ package OgameElements;
 import OgameElements.Coords;
 
 /**
- *
- * @author dyschemist
+ * Klasa reprezentuje planety posiadane przez gracza
+ * @author Piotr Kowalski
  */
-    public class Planet {
-        private Coords coords;
-        private String name;
+public class Planet extends AstronomicalObject {
 
-        public Planet(Coords coords, String name) {
-            this.coords = coords;
-            this.name = name;
-        }
+    public Planet(Coords coords, String name) {
+        super(coords, name);
+    }
 
-        public Coords getCoords() {
-            return coords;
-        }
+    public Planet(Coords coords, String name, int id) {
+        super(coords, name);
+        this.id = new Integer(id);
+    }
 
-        public String getName() {
-            return name;
-        }
-        @Override
-        public String toString() {
-            return "Planet{" + "coords=" + coords + ", name=" + name + '}';
-        }
-        
-        
-        
-//    private int uni;
-//    private int sys;
-//    private int pos;
-//
-//    public Planet(int uni, int sys, int pos) {
-//        this.uni = uni;
-//        this.sys = sys;
-//        this.pos = pos;
-//    }
-//    public Planet(String uni, String sys, String pos) {
-//        this(Integer.parseInt(uni),Integer.parseInt(sys),Integer.parseInt(pos));
-//    }
-//    public static Planet parse(String s){
-//                String[] str =s.replace("[", "").replace("]", "").split(":");
-//        return new Planet(str[0],str[1],str[2]);
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "Planet{" + "uni=" + uni + ", sys=" + sys + ", pos=" + pos + '}';
-//    }
-//    public String shortPrint(){
-//        return "["+this.uni+":"+this.sys+":"+this.pos+"]";
-//    }
-//        public int getPos() {
-//            return pos;
-//        }
-//
-//        public int getSys() {
-//            return sys;
-//        }
-//
-//        public int getUni() {
-//            return uni;
-//        }
+    public Planet(Coords coords, String name, Moon moon) {
+        super(coords, name);
+        this.moon = moon;
+    }
+
+    public Planet(Coords coords, String name, int id, Moon moon) {
+        super(coords, name);
+        this.id = new Integer(id);
+        this.moon = moon;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Moon getMoon() {
+        return moon;
+    }
+
+    @Override
+    public String toString() {
+        return "Planet{" + "coords=" + coords + ", name=" + name+ " moon=" + moon + ", id=" + id + '}';
+    }
+    
+    
 
     @Override
     public boolean equals(Object obj) {
-         if (obj == null) {
+        if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
@@ -80,5 +58,6 @@ import OgameElements.Coords;
         final Planet p = (Planet) obj;
         return this.coords.equals(p.coords);
     }
-    
+    private Moon moon;
+    private Integer id = null;
 }

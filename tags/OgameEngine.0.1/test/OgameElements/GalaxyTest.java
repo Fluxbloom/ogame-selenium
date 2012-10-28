@@ -49,7 +49,7 @@ public class GalaxyTest extends OgameTest {
             if (!temp.isInactive()) continue;
             System.out.println(temp.toString());
         }
-        //o.logout();
-        //o.stop();
+        o.logout();
+        o.stop();
     }
 }

@@ -4,7 +4,7 @@
  */
 package OgameElements;
 
-import OgameEngine.Exceptions.OgameParsingError;
+import OgameEngine.Exceptions.OgameParsingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,15 +50,15 @@ Z        Time zone                  RFC 822 time zone   -0800
      * Tworzy obiekt Time z stringa z czasem
      * @param string string do parsowania
      * @return obiekt Time z sparsowanym czasem
-     * @throws OgameParsingError błąð parsowania
+     * @throws OgameParsingException błąð parsowania
      */
-    public Time parse(String string) throws OgameParsingError{
+    public Time parse(String string) throws OgameParsingException{
         Calendar cal = new GregorianCalendar();
         try {
             cal.setTime(format.parse(string));
         } catch (ParseException ex) {
             logger.log(Level.SEVERE, "Parsing error: {0}", string);
-            throw new OgameParsingError(ex.getMessage());
+            throw new OgameParsingException(ex.getMessage());
         }
         return new Time(cal);
     }

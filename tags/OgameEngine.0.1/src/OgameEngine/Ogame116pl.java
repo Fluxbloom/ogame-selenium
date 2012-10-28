@@ -5,6 +5,7 @@
 package OgameEngine;
 
 import OgameElements.ArrivalTime;
+import OgameElements.AstronomicalObject;
 import OgameElements.TimePeriodParser;
 import OgameElements.Buildings;
 import OgameEngine.Exceptions.OgameCannotSendFleetException;
@@ -36,6 +37,7 @@ import OgameElements.GalaxyRow;
 import OgameElements.GalaxyRow.GalaxyStatus;
 import OgameElements.GalaxyRow.GalaxyStatusMinutes;
 import OgameElements.GalaxyRow.PlayerStatuses;
+import OgameElements.Moon;
 import OgameElements.Performance;
 import OgameElements.Performance.Production;
 import OgameElements.Performance.ResourceField;
@@ -43,7 +45,9 @@ import OgameElements.Ships;
 import OgameElements.ShipyardShips;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
-import OgameEngine.Exceptions.OgameParsingError;
+import OgameEngine.Exceptions.OgameMoonNotFoundException;
+import OgameEngine.Exceptions.OgameParsingException;
+import OgameEngine.Exceptions.OgamePlanetNotFoundException;
 import com.thoughtworks.selenium.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -205,7 +209,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public boolean isLogged() {
-        logger.info("Check if logged");
+        System.out.println("Check if logged");
         try {
             this.clickOverview();
             if (isElementPresent(mappings.getLogin().getLoginMetadata())) {
@@ -308,6 +312,9 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         waitMilisecond(1000);
     }
 
+    /* *************************************************************************
+     * *********** OBSŁUGA PLANET **********************************************
+     **************************************************************************/
     @Override
     public int getPlanetCount() throws OgameException {
         String s = getText(mappings.getOverview().getCountplanet());
@@ -322,68 +329,90 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public Planet getPlanet(int planetNumber) throws OgameException {
-        String name = getText(mappings.getOverview().getChangeplanetgetName(planetNumber));
-        Coords coords = Coords.parse(getText(mappings.getOverview().getChangeplanetgetCoords(planetNumber)));
-        return new Planet(coords, name);
+        String name = getText(mappings.getOverview().getPlanetgetName(planetNumber));
+        Coords coords = Coords.parse(getText(mappings.getOverview().getPlanetgetCoords(planetNumber)));
+        //int id = getText(mappings.getOverview())
+        // Sprawdźmy czy jest ksiezyc
+        Moon moon = null;
+        String moonXpath = mappings.getOverview().getMoon_byCoords(coords);
+        if (this.isElementPresent(moonXpath)) {
+            moon = new Moon(new Coords(coords.getUniverse(),coords.getSystem(),coords.getPosition(),Destination.MOON), "");
+            return new Planet(coords, name, moon);
+        } else {
+            return new Planet(coords, name);
+        }
     }
 
     @Override
-    public List<Planet> getPlanetList() throws OgameException {
-        int size = this.getPlanetCount();
-        List<Planet> result = new ArrayList<Planet>();
+    public List<AstronomicalObject> getPlanetList() throws OgameException {
+        List<AstronomicalObject> result = new ArrayList<AstronomicalObject>();
+        // pobieramy planety
+        int size;
+        try {
+            String xpath = this.mappings.getOverview().getPlanetcount();
+            size = this.getXpathCount(xpath);
+        } catch (OgameElementNotFoundException ex) {
+            size = 0;
+        }
+
         Planet temp;
         for (int i = 1; i < size + 1; i++) {
             temp = this.getPlanet(i);
             result.add(temp);
+            if (temp.getMoon()!=null){
+                result.add(temp.getMoon());
+            }
         }
+        
         return result;
     }
 
     @Override
-    public void changePlanet(int planetNumber) throws OgameException {
-        clickAndWait(mappings.getOverview().getChangeplanetbyid(planetNumber));
-        waitMilisecond(1000);
+    public void changeMoon(int planetNumber) throws OgameException {
+        try {
+            String xpath = mappings.getOverview().getMoon_byid(planetNumber);
+            this.click(xpath);
+        } catch (OgameElementNotFoundException ex) {
+            throw new OgameMoonNotFoundException("Moon no." + planetNumber + " not found");
+        }
     }
 
-    // TODO poprawić obsługę planet powyżej 12 znaków
+    @Override
+    public void changePlanet(int planetNumber) throws OgameException {
+        clickAndWait(mappings.getOverview().getPlanetbyid(planetNumber));
+        waitMilisecond(mappings.getSelenium().getLoadTime());
+    }
+
     @Override
     public void changePlanetByName(String name) throws OgameException {
-        clickAndWait(mappings.getOverview().getChangeplanetbyName(name));
-        waitMilisecond(1000);
+        clickAndWait(mappings.getOverview().getPlanetbyName(name));
+        waitMilisecond(mappings.getSelenium().getLoadTime());
     }
 
     @Override
-    public void changePlanetByCoords(Coords c) throws OgameException {
-        String xpath = mappings.getOverview().getChangeplanetbyCoords(c);
-        clickAndWait(xpath);
-        waitMilisecond(1000);
-    }
-
-    @Override
-    public void changePlanet(Planet p) throws OgameException {
-        this.changePlanetByCoords(p.getCoords());
-    }
-
-    @Override
-    public List<String> getPlanetNames() throws OgameException {
-        int i = this.getPlanetCount();
-        List<String> list = new ArrayList<String>();
-        for (int j = 1; j < i + 1; j++) {
-            list.add(getText(mappings.getOverview().getChangeplanetgetName(j)));
+    public void changePlanet(AstronomicalObject p) throws OgameException {
+        if (p.isPlanet()) {
+            try {
+                String xpath = mappings.getOverview().getPlanetbyCoords(p.getCoords());
+                this.click(xpath);
+            } catch (OgameElementNotFoundException ex) {
+                throw new OgamePlanetNotFoundException("Planet " + p.getName() + " C:" + p.getCoords().simpleString() + " not found");
+            }
         }
-        return list;
-    }
-
-    @Override
-    public List<String> getPlanetCoords() throws OgameException {
-        int i = this.getPlanetCount();
-        List<String> list = new ArrayList<String>();
-        for (int j = 1; j < i + 1; j++) {
-            list.add(getText(mappings.getOverview().getChangeplanetgetCoords(j)));
+        if (p.isMoon()) {
+            try {
+                String xpath = mappings.getOverview().getMoon_byCoords(p.getCoords());
+                this.click(xpath);
+            } catch (OgameElementNotFoundException ex) {
+                throw new OgameMoonNotFoundException("Moon " + p.getName() + " C:" + p.getCoords().simpleString() + " not found");
+            }
         }
-        return list;
+        waitMilisecond(mappings.getSelenium().getLoadTime());
     }
 
+    /* *************************************************************************
+     * **** ZASOBY I DOLNY PANEL ***********************************************
+     **************************************************************************/
     @Override
     public PlanetResources getResources() throws OgameElementNotFoundException {
         int metal = replaceHugeNumbers(getText(mappings.getOverview().getResources_metal()));
@@ -918,7 +947,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return Integer.parseInt(s.replace('.', ' ').replace(" ", ""));
     }
 
-    private Report parseReport(String url) throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingError {
+    private Report parseReport(String url) throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingException {
         String mmetal = "0", ccrystal = "0", ddeuter = "0", eenergy = "0";
         Coords c = null;
         selenium.openWindow(url, "temp");
@@ -942,7 +971,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             selenium.close();
             selenium.selectWindow(null);
             throw ex;
-        } catch (OgameParsingError ex) {
+        } catch (OgameParsingException ex) {
             selenium.close();
             selenium.selectWindow(null);
             throw ex;
@@ -954,6 +983,13 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         int deuter = parseReportNumbers(ddeuter);
         int energy = parseReportNumbers(eenergy);
         return new Report(c, new PlanetResources(metal, crystal, deuter, energy));
+    }
+
+    public List<Report> getReports(List<Coords> coords) throws OgameElementNotFoundException, OgameException {
+        this.clickOverview();
+        this.clickMessages();
+
+        return null;
     }
 
     @Override
@@ -1074,6 +1110,9 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         if (isElementPresent(xpath + mappings.getGalaxy().getOutlaw())) {
             statuses.add(GalaxyRow.OUTLAW);
         }
+        if (isElementPresent(xpath + mappings.getGalaxy().getStarlord())) {
+            statuses.add(GalaxyRow.STRONG);
+        }
         if (statuses.isEmpty()) {
             statuses.add(GalaxyRow.NORMAL);
         }
@@ -1092,28 +1131,33 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     @Override
     public GalaxyRow getGalaxyView(Coords c) throws OgameElementNotFoundException, OgameException {
         //TODO czy nie jestesmy juz w odpowiednim oknie
-        this.clickGalaxy();
+        if (!this.isElementPresent(mappings.getGalaxy().getIsGalaxyOn())) {
+            this.clickGalaxy();
+        }
         this.type(mappings.getGalaxy().getGalaxySwitch(), Integer.toString(c.getUniverse()));
         this.type(mappings.getGalaxy().getSystemSwitch(), Integer.toString(c.getSystem()));
         this.click(mappings.getGalaxy().getShow_button());
         String row = this.mappings.getGalaxy().getRow(c.getPosition());
         return parseRow(new Coords(c.getUniverse(), c.getSystem(), c.getPosition()), row);
     }
+
     @Override
     public List<GalaxyRow> getGalaxyView(List<Coords> c) throws OgameElementNotFoundException, OgameException {
         Collections.sort(c);
         //TODO czy nie jestesmy juz w odpowiednim oknie
         List<GalaxyRow> list = new ArrayList<GalaxyRow>();
-        this.clickGalaxy();
-        Iterator<Coords> it = c.iterator(); 
-        Coords temp=null,previous;
-        while(it.hasNext()){
-            previous=temp;
+        if (!this.isElementPresent(mappings.getGalaxy().getIsGalaxyOn())) {
+            this.clickGalaxy();
+        }
+        Iterator<Coords> it = c.iterator();
+        Coords temp = null, previous;
+        while (it.hasNext()) {
+            previous = temp;
             temp = it.next();
-            if (previous==null || !temp.isSameSystem(previous)){
-            this.type(mappings.getGalaxy().getGalaxySwitch(), Integer.toString(temp.getUniverse()));
-            this.type(mappings.getGalaxy().getSystemSwitch(), Integer.toString(temp.getSystem()));
-            this.click(mappings.getGalaxy().getShow_button());
+            if (previous == null || !temp.isSameSystem(previous)) {
+                this.type(mappings.getGalaxy().getGalaxySwitch(), Integer.toString(temp.getUniverse()));
+                this.type(mappings.getGalaxy().getSystemSwitch(), Integer.toString(temp.getSystem()));
+                this.click(mappings.getGalaxy().getShow_button());
             }
             String row = this.mappings.getGalaxy().getRow(temp.getPosition());
             list.add(parseRow(new Coords(temp.getUniverse(), temp.getSystem(), temp.getPosition()), row));
@@ -1123,7 +1167,9 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     @Override
     public List<GalaxyRow> getGalaxySystemView(Coords c) throws OgameElementNotFoundException, OgameException {
-        this.clickGalaxy();
+        if (!this.isElementPresent(mappings.getGalaxy().getIsGalaxyOn())) {
+            this.clickGalaxy();
+        }
         this.type(mappings.getGalaxy().getGalaxySwitch(), Integer.toString(c.getUniverse()));
         this.type(mappings.getGalaxy().getSystemSwitch(), Integer.toString(c.getSystem()));
         this.click(mappings.getGalaxy().getShow_button());
@@ -1145,13 +1191,15 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public List<GalaxyRow> getGalaxySystemView(List<Coords> c) throws OgameElementNotFoundException, OgameException {
         List<GalaxyRow> list = new ArrayList<GalaxyRow>();
         Iterator<Coords> it = c.iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             list.addAll(this.getGalaxySystemView(it.next()));
         }
         return list;
     }
 
-    
+    /* *************************************************************************
+     * **** Testowane *****************************************************
+     * *************************************************************************/
 
     /* *************************************************************************
      * **** NIE SPRAWDZONE *****************************************************

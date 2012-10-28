@@ -74,17 +74,7 @@ public class ChangePlanetTest {
         o.logout();
         
     }
-    @Test
-    @Ignore
-    public void changePlanetByCoords() throws OgameException, IOException{
-        o.login(uni, nick, pass);
-        o.changePlanetByCoords(new Coords(2,199,7));
-        o.wait(15);
-        o.changePlanetByCoords(new Coords(2,158,7));
-        o.wait(15);
-        o.changePlanetByCoords(new Coords(2,106,6));
-        o.logout();
-    }
+   
     @Test
     @Ignore
     public void changePlanetById() throws OgameException{
@@ -97,16 +87,6 @@ public class ChangePlanetTest {
         o.logout();
     }
 
-    @Test
-    public void getPlanetListTest() throws OgameException{
-        o.login(uni, nick, pass);
-        List<Planet> lista = o.getPlanetList();
-        Iterator<Planet> it = lista.iterator();
-        for (Planet temp; it.hasNext();){
-            temp = it.next();
-            System.out.println(temp);
-        }
-        o.logout();
-    }        
+        
             
 }

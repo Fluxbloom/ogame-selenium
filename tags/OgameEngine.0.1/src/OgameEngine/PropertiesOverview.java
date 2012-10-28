@@ -44,16 +44,32 @@ public class PropertiesOverview extends PropertiesOgame {
         leftButtonEventListIsListVisibleText = properties.getProperty("leftButtonEventListIsListVisibleText");
         leftButtonResourceSettings = properties.getProperty("leftButtonResourceSettings");
         leftButtonSlotsList = properties.getProperty("leftButtonFlightsList");
-        leftButtonMessages=properties.getProperty("leftButtonMessages"); 
+        leftButtonMessages = properties.getProperty("leftButtonMessages");
         // CHANGE PLANET
         countplanet = properties.getProperty("countplanet");//=//div[@id="countColonies"]/p/span
         countplanet_separator = properties.getProperty("countplanet_separator");//=/
         countplanet_result_pos = Integer.parseInt(properties.getProperty("countplanet_result_pos"));//=1
-        changeplanetbyid = properties.getProperty("changeplanetbyid");//=//div[@id="myWorlds"]/div[contains(@class,"planet")][
-        changeplanetbyName = properties.getProperty("changeplanetbyName");//=")]
-        changeplanetbyCoords = properties.getProperty("changeplanetbyCoords");
-        changeplanetgetName = properties.getProperty("changeplanetgetName");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
-        changeplanetgetCoords = properties.getProperty("changeplanetgetCoords");//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
+
+        max_letters_in_name = Integer.parseInt(properties.getProperty("max_letters_in_name"));
+        letters_displayed_if_max_exceeded= Integer.parseInt(properties.getProperty("letters_displayed_if_max_exceeded"));
+        too_many_letters_suffix= properties.getProperty("too_many_letters_suffix");
+        
+        planetcount= properties.getProperty("planetcount");
+                planetbyid = properties.getProperty("planetbyid");
+                planetbyplanetid= properties.getProperty("planetbyplanetid");
+        planetbyName = properties.getProperty("planetbyName");
+        planetbyCoords = properties.getProperty("planetbyCoords");
+        planetgetName = properties.getProperty("planetgetName");
+        planetgetCoords = properties.getProperty("planetgetCoords");
+    
+
+    moon_count= properties.getProperty("moon_count");
+    moon_byid= properties.getProperty("moon_byid");
+    moon_byplanetid= properties.getProperty("moon_byplanetid");
+    moon_byCoords= properties.getProperty("moon_byCoords");
+    moon_getCoords= properties.getProperty("moon_getCoords");
+    
+        
         // top resources
         resources_metal = properties.getProperty("resources_metal");
         resources_crystal = properties.getProperty("resources_crystal");
@@ -173,6 +189,7 @@ public class PropertiesOverview extends PropertiesOgame {
     public String getLeftButtonMessages() {
         return leftButtonMessages;
     }
+
     /**
      * Pobiera xpath do przycisku otwierającego podgląd galaktyki
      * @return xpath do galaktyki
@@ -182,37 +199,6 @@ public class PropertiesOverview extends PropertiesOgame {
     }
 
     
-    
-    /**
-     * Tworzy dynamicznego xpatha do zmiany planety na te z podanym kordynatem
-     * @param c kordynat planety na ktorą ma być zmieniona 
-     * @throws OgameFileNotFoundException brak pliku konfiguracji kordynatów
-     * @throws OgameIOException brak możliwości odczytu pliku konfiguracji kordynatów
-     * @return xpath do zmiany planety
-     */
-    public String getChangeplanetbyCoords(Coords c) throws OgameFileNotFoundException, OgameIOException {
-        return changeplanetbyCoords.replace("%i", c.shortPrint());
-    }
-
-    /**
-     * Tworzy dynamicznego xpatha do zmiany planety na określony numer na liście
-     * @param i numer na liście planet
-     * @return xpath do zmiany planety
-     */
-    public String getChangeplanetbyid(int i) {
-        return changeplanetbyid.replace("%i", Integer.toString(i));
-    }
-
-    /**
-     * Tworzy dynamicznego xpatha do zmiany planety na planetę o określonej nazwie,
-     * a dokładnie na pierwszą planetę zawierającą tą nazwę
-     * @param s nazwa planety
-     * @return xpath do zmiany planety na pasującą do wzorca
-     */
-    public String getChangeplanetbyName(String s) {
-        return changeplanetbyName.replace("%s", s);
-    }
-
     /**
      * Zwraca xpatha do pobrania ilości planet
      * @return xpath do pobrania ilości planet
@@ -238,12 +224,63 @@ public class PropertiesOverview extends PropertiesOgame {
     }
 
     /**
+     * Tworzy dynamicznego xpatha do zmiany planety na te z podanym kordynatem
+     * @param c kordynat planety na ktorą ma być zmieniona 
+     * @throws OgameFileNotFoundException brak pliku konfiguracji kordynatów
+     * @throws OgameIOException brak możliwości odczytu pliku konfiguracji kordynatów
+     * @return xpath do zmiany planety
+     */
+    public String getPlanetbyCoords(Coords c) throws OgameFileNotFoundException, OgameIOException {
+        return planetbyCoords.replace("%i", c.shortPrint());
+    }
+
+    /**
+     * Tworzy dynamicznego xpatha do zmiany planety na określony numer na liście
+     * @param i numer na liście planet
+     * @return xpath do zmiany planety
+     */
+    public String getPlanetbyid(int i) {
+        return planetbyid.replace("%i", Integer.toString(i));
+    }
+
+    /**
+     * Tworzy dynamicznego xpatha do zmiany planety na planetę o określonej nazwie,
+     * a dokładnie na pierwszą planetę zawierającą tą nazwę
+     * @param s nazwa planety
+     * @return xpath do zmiany planety na pasującą do wzorca
+     */
+    public String getPlanetbyName(String s) {
+        String name = s;
+        if (s.length()>this.max_letters_in_name){
+            name = s.substring(0, this.letters_displayed_if_max_exceeded)+this.too_many_letters_suffix;
+        }
+        return planetbyName.replace("%s", name);
+    }
+    /**
+     * Tworzy dynamicznego xpatha do zmiany na planete o podanym id (stałym)
+     * @param id numer id
+     * @return xpath do zmiany planety
+     */
+    public String getPlanetbyplanetid(int id) {
+        return planetbyplanetid;
+    }
+
+    /**
+     * Tworzy xpatha do pobrania ilośći planet
+     * @return xpath do policzenia ilości planet 
+     */
+    public String getPlanetcount() {
+        return planetcount;
+    }
+
+    
+    /**
      * Zwraca xpath do odczytu kordynatów i-tej planety na liście
      * @param i numer planety na liście
      * @return xpath do pobrania koordynatów
      */
-    public String getChangeplanetgetCoords(int i) {
-        return changeplanetgetCoords.replace("%i", Integer.toString(i));
+    public String getPlanetgetCoords(int i) {
+        return planetgetCoords.replace("%i", Integer.toString(i));
     }
 
     /**
@@ -251,10 +288,37 @@ public class PropertiesOverview extends PropertiesOgame {
      * @param i numer planety na liście
      * @return xpath do pobrania nazwy planety
      */
-    public String getChangeplanetgetName(int i) {
-        return changeplanetgetName.replace("%i", Integer.toString(i));
+    public String getPlanetgetName(int i) {
+        return planetgetName.replace("%i", Integer.toString(i));
     }
 
+    /**
+     * Tworzy danamicznego xpatha do zmiany moona na położonego
+     * @param c kordynat przy którym stoi chcemy 
+     * @return xpath do określonego księzyca
+     */
+    public String getMoon_byCoords(Coords c) {
+        return moon_byCoords.replace("%i", c.simpleString());
+    }
+
+    public String getMoon_byid(int i) {
+        return moon_byid.replace("%i", Integer.toString(i));
+    }
+
+    public String getMoon_byplanetid() {
+        return moon_byplanetid;
+    }
+
+    public String getMoon_count() {
+        return moon_count;
+    }
+
+    public String getMoon_getCoords(int i) {
+        return moon_getCoords.replace("%i", Integer.toString(i));
+    }
+
+    
+    
     /**
      * Zwraca xpath do pola z ilością kryształu na planecie
      * @return xpath do pola z kryształem
@@ -294,7 +358,7 @@ public class PropertiesOverview extends PropertiesOgame {
     public String getResources_metal() {
         return resources_metal;
     }
-    
+
     public String getBuildingFree() {
         return buildingFree;
     }
@@ -310,9 +374,6 @@ public class PropertiesOverview extends PropertiesOgame {
     public String getOverviewClickedElementPresent() {
         return overviewClickedElementPresent;
     }
-    
-    
-    
     // LEFT MENU
     private String leftButtonPrzegladaj;
     private String leftButtonSurowce;
@@ -329,14 +390,27 @@ public class PropertiesOverview extends PropertiesOgame {
     private String leftButtonSlotsList;
     private String leftButtonMessages;
     //CHANGE PLANET
-    private String countplanet;//=//div[@id="countColonies"]/p/span
-    private String countplanet_separator;//=/
-    private int countplanet_result_pos;//=1
-    private String changeplanetbyid;//=]
-    private String changeplanetbyName;//=")]
-    private String changeplanetbyCoords;
-    private String changeplanetgetName;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-name"]
-    private String changeplanetgetCoords;//=//div[@id="myWorlds"]/div[contains(@class,"planet")][%i]/a/span[@class="planet-koords"]
+    private String countplanet;
+    private String countplanet_separator;
+    private int countplanet_result_pos;
+    
+    private int max_letters_in_name;
+    private int letters_displayed_if_max_exceeded;
+    private String too_many_letters_suffix;
+    
+    private String planetbyid;
+    private String planetbyName;
+    private String planetbyCoords;
+    private String planetgetName;
+    private String planetgetCoords;
+    private String planetcount;
+    private String planetbyplanetid;
+    
+    private String moon_count;
+    private String moon_byid;
+    private String moon_byplanetid;
+    private String moon_byCoords;
+    private String moon_getCoords;
     // TOP resources
     private String resources_metal;//=id=resources_metal
     private String resources_crystal;//=id=resources_crystal
