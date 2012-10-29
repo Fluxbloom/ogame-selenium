@@ -988,6 +988,10 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public List<Report> getReports(List<Coords> coords) throws OgameElementNotFoundException, OgameException {
         this.clickOverview();
         this.clickMessages();
+        if (mappings.getMessages().isCommander()){
+            this.click(mappings.getMessages().getSpy_tab());
+        }
+        
 
         return null;
     }
@@ -1026,6 +1030,8 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return list;
     }
 
+    
+    
     /* *************************************************************************
      * *** GALAKTYKA ***********************************************************
      * ********************************************************************** */
