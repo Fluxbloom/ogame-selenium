@@ -401,7 +401,7 @@ public class Coords implements Comparable{
     public static List<Coords> coordsAroundSystem(Coords system,int systems) throws OgameFileNotFoundException, OgameIOException {
         systems = systems>=0?systems:0;
         Coords left = new Coords(system.universe,system.system > systems?system.system-systems:1,system.position);
-        Coords right  = new Coords(system.universe,system.system < prop.getSystems()-system.system?system.system+systems:prop.getSystems(),system.position); 
+        Coords right  = new Coords(system.universe,system.system < prop.getSystems()-systems?system.system+systems:prop.getSystems(),system.position); 
         return Coords.coordsSystemRange(left, right);
     }
     /**
