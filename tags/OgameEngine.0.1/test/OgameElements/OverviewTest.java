@@ -8,8 +8,8 @@ import OgameEngine.Exceptions.OgameElementNotFoundException;
 import OgameEngine.Exceptions.OgameException;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
-import OgameEngine.Ogame116pl;
 import OgameEngine.OgameTest;
+import java.util.Iterator;
 import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -44,14 +44,20 @@ public class OverviewTest extends OgameTest{
         o.logout();
         o.stop();
     }
-
+    
     @Test
-    public void changeMoonTest() throws OgameFileNotFoundException, OgameIOException, OgameException{
+    public void getAndIterateAllPlanets() throws OgameException{
         o.start();
         o.login(uni, nick, pass);
-        Moon moon = new Moon(new Coords(2,158,7,Destination.MOON),"Nelliel");
         List<AstronomicalObject> list = o.getPlanetList();
+        Iterator<AstronomicalObject> it = list.iterator();
+        while(it.hasNext()){
+            o.changePlanet(it.next());
+            o.wait(20);
+        }
         o.logout();
         o.stop();
-    }
+    }        
+    
+    
 }

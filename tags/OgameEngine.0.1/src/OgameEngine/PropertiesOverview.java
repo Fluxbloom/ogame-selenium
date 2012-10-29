@@ -300,24 +300,39 @@ public class PropertiesOverview extends PropertiesOgame {
     public String getMoon_byCoords(Coords c) {
         return moon_byCoords.replace("%i", c.simpleString());
     }
-
+    
+    /**
+     * Tworzy dynamicznego xpata to zmiany na i-tego księzyca na liście
+     * @param i numer księzyca na liście
+     * @return xpath do księzyca
+     */
     public String getMoon_byid(int i) {
         return moon_byid.replace("%i", Integer.toString(i));
     }
-
+    
+    /**
+     * Tworzy dynamicznego xpatha do księżyca poprzez unikatowe id planety
+     * @return xpath do ksieżyca z wstawionym id planety
+     */
     public String getMoon_byplanetid() {
         return moon_byplanetid;
     }
-
+    /**
+     * Tworzy xpatha do odczytania ilości księżyców gracza
+     * @return 
+     */
     public String getMoon_count() {
         return moon_count;
     }
 
+    /**
+     * Tworzy dynamicznego xpatha do pobrania kordów księżyca dla i-tej planety
+     * @param i numer planety przy chcemy uzyskać dostęp do księzyca
+     * @return 
+     */
     public String getMoon_getCoords(int i) {
         return moon_getCoords.replace("%i", Integer.toString(i));
     }
-
-    
     
     /**
      * Zwraca xpath do pola z ilością kryształu na planecie

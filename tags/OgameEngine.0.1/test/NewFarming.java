@@ -87,6 +87,10 @@ public class NewFarming extends OgameTest {
                 "3:35:5","3:35:8","3:35:12",//"3:37:6",
                 "3:39:6","3:39:7","3:40:6","3:40:8","3:41:10",
                "3:43:6","3:43:8","3:44:9"});
+        
+        Coords[] cErza = Coords.parseArray(new String[]{
+           "4:337:6","4:339:12","4:340:12","4:340:8",
+        });
         Fleet fs = new Fleet(), farming = new Fleet(),exp = new Fleet();
         fs.add(Ships.LM, Ships.ALL);
         fs.add(Ships.MT, Ships.ALL);
@@ -95,13 +99,14 @@ public class NewFarming extends OgameTest {
         fs.add(Ships.PAN, Ships.ALL);
         farming.add(Ships.MT, 5);
         exp.add(Ships.DT, 100);
-        PlanetElement aisha = new PlanetElement(new Planet(new Coords(2, 106, 6), "Aisha"), fs, 1);
-        PlanetElement videl = new PlanetElement(new Planet(new Coords(2, 158, 7), "Videl"), fs, 1);
-        PlanetElement hinata = new PlanetElement(new Planet(new Coords(2, 199, 7), "Hinata"), fs, 1);
-        PlanetElement tatsuki = new PlanetElement(new Planet(new Coords(2, 244, 7), "Tatsuki"), fs, 1);
-        PlanetElement nami = new PlanetElement(new Planet(new Coords(2, 57, 11), "Nami"), fs, 1);
-        PlanetElement hotaru = new PlanetElement(new Planet(new Coords(3,33,5),"Hotaru"),fs,1);
-        Farmer f = new Farmer(aisha); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
+        PlanetElement aisha = new PlanetElement(new Planet(new Coords(2, 106, 6), "Aisha"), fs, 1,false);
+        PlanetElement videl = new PlanetElement(new Planet(new Coords(2, 158, 7), "Videl"), fs, 1,false);
+        PlanetElement hinata = new PlanetElement(new Planet(new Coords(2, 199, 7), "Hinata"), fs, 1,false);
+        PlanetElement tatsuki = new PlanetElement(new Planet(new Coords(2, 244, 7), "Tatsuki"), fs, 1,false);
+        PlanetElement nami = new PlanetElement(new Planet(new Coords(2, 57, 11), "Nami"), fs, 1,false);
+        PlanetElement hotaru = new PlanetElement(new Planet(new Coords(3,33,5),"Hotaru"),fs,1,false);
+        PlanetElement erza = new PlanetElement(new Planet(new Coords(4,344,8),"Erza"),fs,1,false);
+        Farmer f = new Farmer(aisha,1); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
         f.setStationarySonds(true);
         f.add(aisha, cAisha, farming);
         f.add(videl, cVidel, farming);
@@ -109,6 +114,7 @@ public class NewFarming extends OgameTest {
         f.add(tatsuki, cTatsuki, farming);
         f.add(nami, cNami, farming);
         f.add(hotaru, cHotaru,farming);
+        f.add(erza, cErza, farming);
         TimePeriod await = new TimePeriod(0, 10, 0);
         //o.wait(59, 0);
         while (true) {
