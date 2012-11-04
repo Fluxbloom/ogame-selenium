@@ -24,7 +24,7 @@ public class GalaxyRow implements Comparable{
         this.ally = ally;
     }
     
-    public GalaxyRow(Coords coord, GalaxyStatus status, String name, GalaxyStatus moon, GalaxyStatus debris, String playerName,List<PlayerStatuses> statuses, String ally) {
+    public GalaxyRow(Coords coord, GalaxyStatus status, String name, GalaxyStatus moon, GalaxyStatus debris, String playerName,List<PlayerActivityStatuses> statuses, String ally) {
         this.coord = coord;
         this.status = status;
         this.name = name;
@@ -63,7 +63,7 @@ public class GalaxyRow implements Comparable{
         } catch (Exception ex){
             s= coord.toString();
         }
-        Iterator<PlayerStatuses> it = this.statuses.iterator();
+        Iterator<PlayerActivityStatuses> it = this.statuses.iterator();
         String st = "{";
         while(it.hasNext()){
             st+=it.next().print();
@@ -78,6 +78,7 @@ public class GalaxyRow implements Comparable{
         return this.coord.compareTo(gr.coord);
     }
 
+   
     
 
     private Coords coord;
@@ -86,74 +87,29 @@ public class GalaxyRow implements Comparable{
     private GalaxyStatus moon;
     private GalaxyStatus debris;
     private String playerName;
-    List<PlayerStatuses> statuses = new ArrayList<PlayerStatuses>();
+    List<PlayerActivityStatuses> statuses = new ArrayList<PlayerActivityStatuses>();
     private String ally;
     
-    static public final GalaxyStatus EMPTY = new GalaxyStatus("Empty");
-    static public final GalaxyStatus NO_ACTIVITY = new GalaxyStatus("no activity");
-    static public final GalaxyStatus ACTIVITY = new GalaxyStatus("activity");
+    static public final GalaxyStatus EMPTY = GalaxyStatus.EMPTY;
+    static public final GalaxyStatus NO_ACTIVITY = GalaxyStatus.NO_ACTIVITY;
+    static public final GalaxyStatus ACTIVITY = GalaxyStatus.ACTIVITY;
     
-    static public final PlayerStatuses INACTIVE = new PlayerStatuses("i");
-    static public final PlayerStatuses LONG_INACTIVE = new PlayerStatuses("I");
-    static public final PlayerStatuses VACATION = new PlayerStatuses("u");
-    static public final PlayerStatuses NOOB = new PlayerStatuses("s");
-    static public final PlayerStatuses STRONG = new PlayerStatuses("d");
-    static public final PlayerStatuses OUTLAW = new PlayerStatuses("o");
-    static public final PlayerStatuses BANNED = new PlayerStatuses("g");
-    static public final PlayerStatuses HONOUR = new PlayerStatuses("ph");
-    static public final PlayerStatuses STARLORD = new PlayerStatuses("starl");
-    static public final PlayerStatuses BANDIT = new PlayerStatuses("bandit");
-    static public final PlayerStatuses NORMAL = new PlayerStatuses("n");
+    static public final PlayerActivityStatuses INACTIVE = PlayerActivityStatuses.INACTIVE;
+    static public final PlayerActivityStatuses LONG_INACTIVE = PlayerActivityStatuses.LONG_INACTIVE;
+    static public final PlayerActivityStatuses VACATION = PlayerActivityStatuses.VACATION;
+    static public final PlayerActivityStatuses NOOB = PlayerActivityStatuses.NOOB;
+    static public final PlayerActivityStatuses STRONG = PlayerActivityStatuses.STRONG;
+    static public final PlayerActivityStatuses OUTLAW = PlayerActivityStatuses.OUTLAW;
+    static public final PlayerActivityStatuses BANNED = PlayerActivityStatuses.BANNED;
+    static public final PlayerActivityStatuses HONOUR = PlayerActivityStatuses.HONOUR;
+    static public final PlayerActivityStatuses STARLORD = PlayerActivityStatuses.STARLORD;
+    static public final PlayerActivityStatuses BANDIT = PlayerActivityStatuses.BANDIT;
+    static public final PlayerActivityStatuses NORMAL = PlayerActivityStatuses.NORMAL;
     
     
-    static public class GalaxyStatus {
-        protected GalaxyStatus(String name){
-            this.name=name;
-        }
-        
-        private String name;
-
-        @Override
-        public String toString() {
-            return "GS{" + "name=" + name + '}';
-        }
-    }
-    static public class GalaxyStatusMinutes extends GalaxyStatus {
-
-        public GalaxyStatusMinutes(int minutes) {
-            super("minutes");
-            this.minutes=minutes;
-        }
-
-        public int getMinutes() {
-            return minutes;
-        }
-
-        @Override
-        public String toString() {
-            return "GSM{" + "minutes=" + minutes + '}';
-        }
-
-        private int minutes;
-    }
     
-    static public class PlayerStatuses {
-        protected PlayerStatuses(String status){
-            this.status=status;
-        }
-
-        @Override
-        public String toString() {
-            return "PlayerStatuses{" + "status=" + status + '}';
-        }
-        
-        public String print(){
-            return "("+status+")";
-        }
-        
-        
-        
-        private String status;
-    }
+    
+    
+   
     
 }

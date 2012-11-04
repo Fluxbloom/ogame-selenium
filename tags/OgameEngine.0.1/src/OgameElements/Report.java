@@ -4,14 +4,29 @@
  */
 package OgameElements;
 
+import OgameEngine.Exceptions.OgameCannotLoadReportException;
+import OgameEngine.Exceptions.OgameCannotSaveReportException;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
+import OgameEngine.Exceptions.OgameResourceParsingException;
+import OgameEngine.Exceptions.OgameTimeParseException;
 import OgameToolBox.FleetElement;
 import OgameToolBox.FarmingList;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * Klasa odpowiada raportowi w Ogame i zawiera wszystkie jego wewnętrzne operacje
@@ -19,14 +34,25 @@ import java.util.List;
  */
 public class Report extends Message implements Comparable{
     /**
-     * Konstruktor podstawowego raportuS
+     * Konstruktor podstawowego raportu
      * @param cords kordynaty
      * @param resources zasoby na planecie
      */
     public Report(Coords cords, PlanetResources resources) {
-        this.cords = cords;
-        this.resources = resources;
+        this(cords,null,resources,null,null,null,null,null);
     }
+
+    public Report(Coords cords, Time time, PlanetResources resources, GalaxyStatus status, FleetAndSatellites fleet, PlanetDefence defence, PlanetBuildings buildings, PlayerTechnologies techs) {
+        this.cords = cords;
+        this.time = time;
+        this.resources = resources;
+        this.status = status;
+        this.fleet = fleet;
+        this.defence = defence;
+        this.buildings = buildings;
+        this.techs = techs;
+    }
+
     /**
      * Zwraca koordynaty z raportu
      * @return koordynaty z raportu
@@ -59,12 +85,24 @@ public class Report extends Message implements Comparable{
     public String print() throws OgameFileNotFoundException, OgameIOException{
         return this.cords.shortPrint() + resources.toString();
     }
+    
+    public String reportPrint(){
+        String report = "Report from "+this.cords.toReportString() + " at "+this.time.getFormattedTimeString()+"\n";
+        report+=this.resources.toString()+"\n";
+        report+="Activity ? "+this.status.reportPrint()+"\n";
+        return report;
+    }
+    
     @Override
     public int compareTo(Object arg0) {
-        int sum = this.resources.getMetal()+this.resources.getCrystal()+this.resources.getDeuterium();
+        double sum = this.resources.getMetal()*Report.metal_price+
+                this.resources.getCrystal()*Report.crystal_price+
+                this.resources.getDeuterium()*Report.deuterium_price;
         Report arg = (Report) arg0;
-        int other = arg.resources.getMetal()+arg.resources.getCrystal()+arg.resources.getDeuterium();
-        return sum-other;
+        double other = arg.resources.getMetal()*Report.metal_price+
+                arg.resources.getCrystal()*Report.crystal_price+
+                arg.resources.getDeuterium()*Report.deuterium_price;
+        return sum-other>0?1:sum-other<0?-1:0;
     }
     /**
      * Zwraca sumę surowców na planecie
@@ -73,6 +111,66 @@ public class Report extends Message implements Comparable{
     public int sum(){
         return this.resources.getMetal()+this.resources.getCrystal()+this.resources.getDeuterium();
     }
+   
+    static public Report load(String file) throws OgameCannotLoadReportException {
+        Report report=null;
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document dom = db.parse(file);
+            Element root = dom.getDocumentElement();
+            // wczytujemy kordynat
+            Coords coords = Coords.parserXML(root);
+            // wczytujemy czas raportu
+            Time time = Time.parseXML(root); 
+            // wczytujemy zasoby
+            PlanetResources resources = PlanetResources.parseXML(root);
+            // wczytujemy aktywnosc
+            GalaxyStatus status = GalaxyStatus.parseXML(root);
+            report = new Report(coords,time,resources,status,null,null,null,null);
+        } catch (ParserConfigurationException ex) {
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        } catch (SAXException ex ){
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        } catch (IOException ex){
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        } catch ( NumberFormatException ex){
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        } catch (OgameFileNotFoundException ex){
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        } catch (OgameIOException ex){
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        } catch( OgameResourceParsingException ex){
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        } catch(  OgameTimeParseException ex){
+            throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
+        }
+        return report;
+    }
+      
+    static FileWriter fostream;
+    static FileInputStream fistream;
+    static BufferedWriter out;
+    static BufferedReader in;
+    
+    public void save(String file) throws OgameCannotSaveReportException{
+        try {
+        fostream = new FileWriter(file+"Report-"+this.cords.toReportString()+".xml");
+        out = new BufferedWriter(fostream);
+        out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        out.write("<report>\n");
+        out.write(this.cords.toXML());
+        out.write(this.time.toXML());
+        out.write(this.resources.toXML());
+        out.write(this.status.toXML());
+        out.write("</report>");
+        out.close();
+        } catch (IOException ex){
+            throw new OgameCannotSaveReportException("Report to "+file+" ex="+ex.getMessage());
+        }
+    }
+
+    
     /**
      * Wyprowadza listę kordynatów z listy raportów
      * @param lr lista raportów
@@ -141,7 +239,16 @@ public class Report extends Message implements Comparable{
     }
     
     private Coords cords;
+    private Time time;
     private PlanetResources resources;
+    private GalaxyStatus status;
+    private FleetAndSatellites fleet;
+    private PlanetDefence defence;
+    private PlanetBuildings buildings;
+    private PlayerTechnologies techs;
 
+    public static double metal_price=1.0;
+    public static double crystal_price=2.0;
+    public static double deuterium_price=3.0;
 
 }

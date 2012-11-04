@@ -29,6 +29,9 @@ import OgameElements.Performance.Production;
 import OgameElements.Performance.ResourceField;
 import OgameElements.ShipyardShips;
 import OgameEngine.Exceptions.OgameElementNotFoundException;
+import OgameEngine.Exceptions.OgameFileNotFoundException;
+import OgameEngine.Exceptions.OgameIOException;
+import OgameEngine.Exceptions.OgameParsingException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -134,14 +137,14 @@ public interface IOgame {
      * @return obiekt planety zawierający nazwę i kordynaty
      * @throws OgameException nieodnalezione pola
      */
-    abstract public Planet getPlanet(int planetNumber) throws OgameException;
+    abstract public Planet getPlanet(int planetNumber) throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingException;
 
     /**
      * Gromadzi dane o wszystkich planetach gracza
      * @return lista planet gracza
      * @throws OgameException  nieodnalezione pola
      */
-    abstract public List<AstronomicalObject> getPlanetList() throws OgameException;
+    abstract public List<AstronomicalObject> getPlanetList() throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingException;
 
     /**
      * Zmień planete na planete o określonym numerze

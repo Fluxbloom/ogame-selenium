@@ -45,7 +45,7 @@ public class NewFarming extends OgameTest {
             "2:46:5","2:45:6"
                 });
         Coords[] cAisha = Coords.parseArray(new String[]{
-                    "2:119:4","2:118:12","2:118:5","2:116:12","2:116:4","2:115:7","2:115:6","2:113:6","2:112:6","2:112:4","2:109:11","2:107:12",
+                    "2:119:4","2:118:12","2:118:5","2:116:12","2:116:4","2:115:7","2:115:6","2:113:6","2:112:6","2:109:11","2:107:12",
                     "2:105:7","2:97:4","2:97:6","2:97:11","2:103:8"
                 });
         Coords[] cVidel = Coords.parseArray(new String[]{
@@ -72,6 +72,7 @@ public class NewFarming extends OgameTest {
         fs.add(Ships.KR, Ships.ALL);
         fs.add(Ships.OW, Ships.ALL);
         fs.add(Ships.PAN, Ships.ALL);
+        fs.add(Ships.NISZ,Ships.ALL);
         farming.add(Ships.MT, 5);
         exp.add(Ships.DT, 100);
         PlanetElement aisha = new PlanetElement(new Planet(new Coords(2, 106, 6), "Aisha"), fs, 1);
@@ -91,9 +92,10 @@ public class NewFarming extends OgameTest {
         f.add(hotaru, cHotaru,farming);
         f.add(erza, cErza, farming);
         TimePeriod await = new TimePeriod(0, 10, 0);
-        //o.wait(59, 0);
+        //o.wait(1,0, 0);
+        int i =0;
         while (true) {
-            try {
+            try{
                 await = new TimePeriod(0, 10, 0);
                 o.start();
                 o.login(uni, nick, pass);
