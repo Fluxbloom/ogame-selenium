@@ -34,13 +34,13 @@ import OgameElements.Events.FriendOrFoe;
 import OgameElements.Events.Multiplicity;
 import OgameElements.Fleet;
 import OgameElements.GalaxyRow;
-import OgameElements.GalaxyRow.GalaxyStatus;
-import OgameElements.GalaxyRow.GalaxyStatusMinutes;
-import OgameElements.GalaxyRow.PlayerStatuses;
+import OgameElements.GalaxyStatus;
+import OgameElements.GalaxyStatusMinutes;
 import OgameElements.Moon;
 import OgameElements.Performance;
 import OgameElements.Performance.Production;
 import OgameElements.Performance.ResourceField;
+import OgameElements.PlayerActivityStatuses;
 import OgameElements.Ships;
 import OgameElements.ShipyardShips;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
@@ -328,7 +328,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public Planet getPlanet(int planetNumber) throws OgameException {
+    public Planet getPlanet(int planetNumber) throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingException {
         String name = getText(mappings.getOverview().getPlanetgetName(planetNumber));
         Coords coords = Coords.parse(getText(mappings.getOverview().getPlanetgetCoords(planetNumber)));
         //int id = getText(mappings.getOverview())
@@ -344,7 +344,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public List<AstronomicalObject> getPlanetList() throws OgameException {
+    public List<AstronomicalObject> getPlanetList() throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingException {
         List<AstronomicalObject> result = new ArrayList<AstronomicalObject>();
         // pobieramy planety
         int size;
@@ -363,7 +363,6 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
                 result.add(temp.getMoon());
             }
         }
-        
         return result;
     }
 
@@ -1091,7 +1090,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         }
 
         //6 status gracza
-        List<PlayerStatuses> statuses = new ArrayList<PlayerStatuses>();
+        List<PlayerActivityStatuses> statuses = new ArrayList<PlayerActivityStatuses>();
         if (isElementPresent(xpath + mappings.getGalaxy().getBandit())) {
             statuses.add(GalaxyRow.BANDIT);
         }

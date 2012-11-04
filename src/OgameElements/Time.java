@@ -4,11 +4,15 @@
  */
 package OgameElements;
 
+import OgameEngine.Exceptions.OgameTimeParseException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Klasa reprezentuje czasy ukończenia lub rozpoczęcia danej akcji w ogame 
@@ -105,6 +109,30 @@ public class Time {
         return newTime;
     }
     
+    public String toXML(){
+        String result="<"+xmlHeader+">";
+        result+=sdf.format(this.time.getTime());
+        result+="</"+xmlHeader+">\n";
+        return result;
+    }
+    
+    static public Time parseXML(Element root) throws OgameTimeParseException{
+        Time result = null;
+        NodeList list = root.getElementsByTagName(xmlHeader);
+        if (list.getLength()>0){
+            String time = list.item(0).getTextContent();
+            Calendar cal = new GregorianCalendar();
+            try {
+                cal.setTime(sdf.parse(time));
+                result = new Time(cal);
+            } catch (ParseException ex) {
+               throw new OgameTimeParseException();
+            }
+            
+        }
+        return result;
+    }
+    
     /**
      * Domyślny format wyświetlania
      */
@@ -118,4 +146,5 @@ public class Time {
     }
     
     private Calendar time;
+    public static String xmlHeader="time";
 }
