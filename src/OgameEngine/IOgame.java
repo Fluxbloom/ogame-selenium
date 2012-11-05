@@ -12,7 +12,7 @@ import OgameElements.Planet;
 import OgameElements.PlanetResources;
 import OgameElements.Speed;
 import OgameElements.Resources;
-import OgameElements.ResearchingArea;
+import OgameElements.Technology;
 import OgameElements.Slots;
 import OgameElements.Mission;
 import OgameElements.Events;
@@ -393,14 +393,14 @@ public interface IOgame {
      * ************************* LABORATORIUM *********************************
      * ************************************************************************/
     
-    abstract public void research(ResearchingArea s) throws OgameException;
+    abstract public void research(Technology s) throws OgameException;
 
     /**
      * <b>Metoda pobierająca wszytkie poziomy badań na planecie</b>.
      * @return Metoda zwraca obiekt HashMapę (tablicę asocjacyjną) par - rodzaj badania i jego poziom.
      * @throws OgameException 
      */
-    abstract public HashMap<ResearchingArea, Integer> getPlanetStudy() throws OgameException;
+    abstract public HashMap<Technology, Integer> getPlanetStudy() throws OgameException;
     
     /* ************************************************************************
      * ************************* STOCZNIA     *********************************
@@ -466,7 +466,7 @@ public interface IOgame {
      * @return Metoda zwraca obiekt PlanetResources zawierający zapisane zasoby surowców potrzebnych do zbadania danej technologii.
      * @throws OgameException, Błąd Odczytu. 
      */
-    abstract public PlanetResources getCost(ResearchingArea s) throws OgameException;
+    abstract public PlanetResources getCost(Technology s) throws OgameException;
     /**
      * Metoda pobierająca ile surowców jest potrzebnych do zbudowania danego statku.
      * @param s Odpowiada za statek, z którego zostaną pobrane ilości surowców potrzebne do zbudowania go. 
@@ -485,7 +485,7 @@ public interface IOgame {
 
     
 
-    abstract public long getProductionTime(ResearchingArea s) throws OgameException;
+    abstract public long getProductionTime(Technology s) throws OgameException;
 
     abstract public long getProductionTime(ShipyardShips s) throws OgameException;
 

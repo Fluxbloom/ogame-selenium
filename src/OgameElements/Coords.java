@@ -242,9 +242,9 @@ public class Coords implements Comparable {
         Destination dest = null;
         if (coord.getLength() > 0) {
             String text = coord.item(0).getTextContent();
-            if (text.contains("(M)")) {
+            if (text.contains("M")) {
                 dest = Destination.MOON;
-                text = text.replace("(M)", "");
+                text = text.replace("M", "");
             } else {
                 dest = Destination.PLANET;
             }
@@ -260,7 +260,7 @@ public class Coords implements Comparable {
      * @return raportowy kordynat
      */
     public String toReportString() {
-        return "" + this.universe + ":" + this.system + ":" + this.position + (this.dest == Destination.MOON ? "(M)" : "");
+        return "" + this.universe + ":" + this.system + ":" + this.position + (this.dest == Destination.MOON ? "M" : "");
     }
 
     /**

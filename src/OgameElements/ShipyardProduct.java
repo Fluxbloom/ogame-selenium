@@ -10,4 +10,10 @@ package OgameElements;
  */
 abstract public class ShipyardProduct {
     protected String name;
+
+    public String getName() {
+        return name;
+    }
+    
+    
 }

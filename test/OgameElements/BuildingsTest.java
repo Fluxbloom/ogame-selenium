@@ -44,7 +44,7 @@ public class BuildingsTest extends OgameTest{
     public void getBuildingPrice() throws OgameException {
         o.start();
         o.login(prop.getUniverse(), prop.getNick(), prop.getPass());
-        PlanetResources cost = o.getCost(ResearchingArea.TECHNOLOGIA_BOJOWA);
+        PlanetResources cost = o.getCost(Technology.TECHNOLOGIA_BOJOWA);
         System.out.println(cost);
         o.logout();
         o.stop();

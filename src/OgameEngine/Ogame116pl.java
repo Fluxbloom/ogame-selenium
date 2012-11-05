@@ -15,7 +15,7 @@ import OgameElements.Planet;
 import OgameElements.PlanetResources;
 import OgameElements.Resources;
 import OgameElements.Speed;
-import OgameElements.ResearchingArea;
+import OgameElements.Technology;
 import OgameElements.Slots;
 import OgameElements.Mission;
 import OgameElements.Defence;
@@ -1210,7 +1210,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
      * **** NIE SPRAWDZONE *****************************************************
      * *************************************************************************/
     @Override
-    public void research(ResearchingArea s) throws OgameException {
+    public void research(Technology s) throws OgameException {
         this.clickLab();
         selenium.click(studyMap.get(s));
         try {
@@ -1426,17 +1426,17 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public HashMap<ResearchingArea, Integer> getPlanetStudy() throws OgameException {
-        HashMap<ResearchingArea, Integer> result = new HashMap<ResearchingArea, Integer>();
+    public HashMap<Technology, Integer> getPlanetStudy() throws OgameException {
+        HashMap<Technology, Integer> result = new HashMap<Technology, Integer>();
         this.clickLab();
         Set set = this.technologyMap.entrySet(); // to jest pobranie listy wszystkich par technologia-xpath
         Iterator it = set.iterator();
-        ResearchingArea temp;
-        Map.Entry<ResearchingArea, String> temp2;
+        Technology temp;
+        Map.Entry<Technology, String> temp2;
         String temp3;
         int i;
         while (it.hasNext()) {
-            temp2 = (Map.Entry<ResearchingArea, String>) it.next();
+            temp2 = (Map.Entry<Technology, String>) it.next();
             temp = temp2.getKey();
             temp3 = selenium.getText(temp2.getValue());
             temp3 = temp3.replace(selenium.getText(temp2.getValue() + "/span"), "").replace(" ", ""); //usuwanie wewnetrznego spana i spacji.
@@ -1479,7 +1479,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public PlanetResources getCost(ResearchingArea s) throws OgameException {
+    public PlanetResources getCost(Technology s) throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1494,7 +1494,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     }
 
     @Override
-    public long getProductionTime(ResearchingArea s) throws OgameException {
+    public long getProductionTime(Technology s) throws OgameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1681,42 +1681,42 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
 
     private void initLab() {
         logger.log(Level.INFO, "Initializing Study Map");
-        studyMap = new HashMap<ResearchingArea, String>();
-        studyMap.put(ResearchingArea.ASTROFIZYKA, mappings.getLab().getStudy_af());
-        studyMap.put(ResearchingArea.NAPED_IMPULSOWY, mappings.getLab().getStudy_ni());
-        studyMap.put(ResearchingArea.NAPED_NADPRZESTRZENNY, mappings.getLab().getStudy_nn());
-        studyMap.put(ResearchingArea.NAPED_SPALINOWY, mappings.getLab().getStudy_nn());
-        studyMap.put(ResearchingArea.OPANCERZENIE, mappings.getLab().getStudy_op());
-        studyMap.put(ResearchingArea.ROZWOJ_GRAWITONOW, mappings.getLab().getStudy_rg());
-        studyMap.put(ResearchingArea.SIEC_BADAN, mappings.getLab().getStudy_sb());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_BOJOWA, mappings.getLab().getStudy_tb());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getStudy_te());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_JONOWA, mappings.getLab().getStudy_tj());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getStudy_tk());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_LASEROWA, mappings.getLab().getStudy_tl());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getStudy_tn());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_OCHRONNA, mappings.getLab().getStudy_to());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getStudy_tp());
-        studyMap.put(ResearchingArea.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getStudy_ts());
+        studyMap = new HashMap<Technology, String>();
+        studyMap.put(Technology.ASTROFIZYKA, mappings.getLab().getStudy_af());
+        studyMap.put(Technology.NAPED_IMPULSOWY, mappings.getLab().getStudy_ni());
+        studyMap.put(Technology.NAPED_NADPRZESTRZENNY, mappings.getLab().getStudy_nn());
+        studyMap.put(Technology.NAPED_SPALINOWY, mappings.getLab().getStudy_nn());
+        studyMap.put(Technology.OPANCERZENIE, mappings.getLab().getStudy_op());
+        studyMap.put(Technology.ROZWOJ_GRAWITONOW, mappings.getLab().getStudy_rg());
+        studyMap.put(Technology.SIEC_BADAN, mappings.getLab().getStudy_sb());
+        studyMap.put(Technology.TECHNOLOGIA_BOJOWA, mappings.getLab().getStudy_tb());
+        studyMap.put(Technology.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getStudy_te());
+        studyMap.put(Technology.TECHNOLOGIA_JONOWA, mappings.getLab().getStudy_tj());
+        studyMap.put(Technology.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getStudy_tk());
+        studyMap.put(Technology.TECHNOLOGIA_LASEROWA, mappings.getLab().getStudy_tl());
+        studyMap.put(Technology.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getStudy_tn());
+        studyMap.put(Technology.TECHNOLOGIA_OCHRONNA, mappings.getLab().getStudy_to());
+        studyMap.put(Technology.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getStudy_tp());
+        studyMap.put(Technology.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getStudy_ts());
         logger.log(Level.INFO, "[DONE]");
         logger.log(Level.INFO, "Initializing Tech map to Technology-level String");
-        technologyMap = new HashMap<ResearchingArea, String>();
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getHm_te());//1
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_LASEROWA, mappings.getLab().getHm_tl());//2
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_JONOWA, mappings.getLab().getHm_tj());//3
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getHm_tn());//4
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getHm_tp());//5
-        technologyMap.put(ResearchingArea.NAPED_SPALINOWY, mappings.getLab().getHm_ns());//6
-        technologyMap.put(ResearchingArea.NAPED_IMPULSOWY, mappings.getLab().getHm_ni());//7
-        technologyMap.put(ResearchingArea.NAPED_NADPRZESTRZENNY, mappings.getLab().getHm_nn());//8
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getHm_ts());//9
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getHm_tk());//10
-        technologyMap.put(ResearchingArea.ASTROFIZYKA, mappings.getLab().getHm_af());//11
-        technologyMap.put(ResearchingArea.SIEC_BADAN, mappings.getLab().getHm_ms());//12
-        technologyMap.put(ResearchingArea.ROZWOJ_GRAWITONOW, mappings.getLab().getHm_rg());//13
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_BOJOWA, mappings.getLab().getHm_tb());//13
-        technologyMap.put(ResearchingArea.TECHNOLOGIA_OCHRONNA, mappings.getLab().getHm_to());//13
-        technologyMap.put(ResearchingArea.OPANCERZENIE, mappings.getLab().getHm_op());//13
+        technologyMap = new HashMap<Technology, String>();
+        technologyMap.put(Technology.TECHNOLOGIA_ENERGETYCZNA, mappings.getLab().getHm_te());//1
+        technologyMap.put(Technology.TECHNOLOGIA_LASEROWA, mappings.getLab().getHm_tl());//2
+        technologyMap.put(Technology.TECHNOLOGIA_JONOWA, mappings.getLab().getHm_tj());//3
+        technologyMap.put(Technology.TECHNOLOGIA_NADPRZESTRZENNA, mappings.getLab().getHm_tn());//4
+        technologyMap.put(Technology.TECHNOLOGIA_PLAZMOWA, mappings.getLab().getHm_tp());//5
+        technologyMap.put(Technology.NAPED_SPALINOWY, mappings.getLab().getHm_ns());//6
+        technologyMap.put(Technology.NAPED_IMPULSOWY, mappings.getLab().getHm_ni());//7
+        technologyMap.put(Technology.NAPED_NADPRZESTRZENNY, mappings.getLab().getHm_nn());//8
+        technologyMap.put(Technology.TECHNOLOGIA_SZPIEGOWSKA, mappings.getLab().getHm_ts());//9
+        technologyMap.put(Technology.TECHNOLOGIA_KOMPUTEROWA, mappings.getLab().getHm_tk());//10
+        technologyMap.put(Technology.ASTROFIZYKA, mappings.getLab().getHm_af());//11
+        technologyMap.put(Technology.SIEC_BADAN, mappings.getLab().getHm_ms());//12
+        technologyMap.put(Technology.ROZWOJ_GRAWITONOW, mappings.getLab().getHm_rg());//13
+        technologyMap.put(Technology.TECHNOLOGIA_BOJOWA, mappings.getLab().getHm_tb());//13
+        technologyMap.put(Technology.TECHNOLOGIA_OCHRONNA, mappings.getLab().getHm_to());//13
+        technologyMap.put(Technology.OPANCERZENIE, mappings.getLab().getHm_op());//13
         logger.log(Level.INFO, "[DONE]");
     }
 
@@ -1889,12 +1889,12 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     private HashMap<Ships, String> shipsMap;
     private HashMap<Ships, String> shipsAllMap;
     private HashMap<Buildings, String> buildingMap;
-    private HashMap<ResearchingArea, String> studyMap;
+    private HashMap<Technology, String> studyMap;
     private HashMap<Defence, String> defenceMap;
     private HashMap<ShipyardShips, String> shipyardMap;
     private HashMap<Performance.ResourceField, String> performanceMap;
     private HashMap<Ships, String> fleetMap;
-    private HashMap<ResearchingArea, String> technologyMap;
+    private HashMap<Technology, String> technologyMap;
     private HashMap<Defence, String> defcountMap;
     private HashMap<String, Mission> movementsMissionStringMapMission;
     private SimpleDateFormat slotParse;

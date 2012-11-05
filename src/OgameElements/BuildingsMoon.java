@@ -29,5 +29,12 @@ public class BuildingsMoon extends Buildings{
      * Budynek teleportera
      */
     static final BuildingsMoon MOON_TELEPORTER = new BuildingsMoon("MOON_TELEPORTER");
-    // TODO dopisać budynki księżycowe
+    /**
+     * Budynek fabryki robotów
+     */
+    static final BuildingsMoon MOON_ROBOTS = new BuildingsMoon("MOON_ROBOTS");
+    /**
+     * Budynek stoczni
+     */
+    static final BuildingsMoon MOON_SHIPYARD = new BuildingsMoon("MOON_SHIPYARD");
 }
