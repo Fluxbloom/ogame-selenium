@@ -21,7 +21,7 @@ public class GalaxyStatusMinutes extends GalaxyStatus {
 
     @Override
     public String reportPrint() {
-        return "Last active "+minutes+" ago";
+        return "Last active "+minutes+" minutes ago";
     }
 
     @Override

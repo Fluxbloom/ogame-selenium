@@ -164,6 +164,14 @@ abstract public class Buildings {
      * Budynek teleportera
      */
     public static final BuildingsMoon MOON_TELEPORTER = BuildingsMoon.MOON_TELEPORTER;
+        /**
+     * Budynek fabryki robotów
+     */
+    public static final BuildingsMoon MOON_ROBOTS = BuildingsMoon.MOON_ROBOTS;
+    /**
+     * Budynek stoczni
+     */
+    public static final BuildingsMoon MOON_SHIPYARD = BuildingsMoon.MOON_SHIPYARD;
     
     private String name;
 }

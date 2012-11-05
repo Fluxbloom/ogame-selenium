@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report>
+<coords>2:195:6M</coords>
+<statuses>
+<status>i</status>
+<status>bandit</status>
+</statuses>
+<time>11:06:12 06:07:13</time>
+<resources>
+<metal>300</metal>
+<crystal>200</crystal>
+<deuterium>100</deuterium>
+<energy>50</energy>
+</resources>
+<activity minutes="true">17</activity>
+<fleet visible="true">
+<ship type="SAT">20</ship>
+<ship type="LM">2</ship>
+<ship type="MT">5</ship>
+</fleet>
+<defence visible="true">
+<gun type="LL">5</gun>
+<gun type="DG">4</gun>
+</defence>
+<buildings visible="true">
+<building type="METAL MINE">4</building>
+<building type="SHIPYARD">6</building>
+</buildings>
+<technologies visible="true">
+<technology type="TECHNOLOGIA_ENERGETYCZNA">2</technology>
+</technologies>
+</report>

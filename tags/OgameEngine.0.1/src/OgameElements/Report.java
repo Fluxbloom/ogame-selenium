@@ -33,17 +33,29 @@ import org.xml.sax.SAXException;
  * @author Piotr Kowalski
  */
 public class Report extends Message implements Comparable{
+    
+    static private final List<PlayerActivityStatuses> normal = new ArrayList<PlayerActivityStatuses>();
+    static {
+        normal.add(PlayerActivityStatuses.NORMAL);
+    }
     /**
      * Konstruktor podstawowego raportu
      * @param cords kordynaty
      * @param resources zasoby na planecie
      */
     public Report(Coords cords, PlanetResources resources) {
-        this(cords,null,resources,null,null,null,null,null);
+        this(cords,normal,null,resources,null,null,null,null,null);
     }
 
-    public Report(Coords cords, Time time, PlanetResources resources, GalaxyStatus status, FleetAndSatellites fleet, PlanetDefence defence, PlanetBuildings buildings, PlayerTechnologies techs) {
+    public Report(Coords cords, Time time, PlanetResources resources, GalaxyStatus status, 
+            PlanetFleet fleet, PlanetDefence defence, PlanetBuildings buildings, 
+            PlayerTechnologies techs) {
+        this(cords,normal,time,resources,status,fleet,defence,buildings,techs);
+    }
+
+    public Report(Coords cords,List<PlayerActivityStatuses> playerStatus, Time time, PlanetResources resources, GalaxyStatus status, PlanetFleet fleet, PlanetDefence defence, PlanetBuildings buildings, PlayerTechnologies techs) {
         this.cords = cords;
+        this.playerStatus = playerStatus;
         this.time = time;
         this.resources = resources;
         this.status = status;
@@ -53,6 +65,7 @@ public class Report extends Message implements Comparable{
         this.techs = techs;
     }
 
+    
     /**
      * Zwraca koordynaty z raportu
      * @return koordynaty z raportu
@@ -89,7 +102,12 @@ public class Report extends Message implements Comparable{
     public String reportPrint(){
         String report = "Report from "+this.cords.toReportString() + " at "+this.time.getFormattedTimeString()+"\n";
         report+=this.resources.toString()+"\n";
-        report+="Activity ? "+this.status.reportPrint()+"\n";
+        report+="Activity ? "+this.status.reportPrint()+" "+
+                PlayerActivityStatuses.statusesList(this.playerStatus)+"\n";
+        report+=this.fleet!=null?this.fleet.toReportString():"";
+        report+=this.defence!=null?this.defence.toReportString():"";
+        report+=this.buildings!=null?this.buildings.toReportString():"";
+        report+=this.techs!=null?this.techs.toReportString():"";
         return report;
     }
     
@@ -121,13 +139,24 @@ public class Report extends Message implements Comparable{
             Element root = dom.getDocumentElement();
             // wczytujemy kordynat
             Coords coords = Coords.parserXML(root);
+            // wczytujemy status gracza
+            List<PlayerActivityStatuses> playerStatuses = PlayerActivityStatuses.parseXML(root); 
             // wczytujemy czas raportu
             Time time = Time.parseXML(root); 
             // wczytujemy zasoby
             PlanetResources resources = PlanetResources.parseXML(root);
             // wczytujemy aktywnosc
             GalaxyStatus status = GalaxyStatus.parseXML(root);
-            report = new Report(coords,time,resources,status,null,null,null,null);
+            // wczytujemy floty
+            PlanetFleet fleet = PlanetFleet.parseXML(root);
+            // wczytujemy obronę
+            PlanetDefence defence = PlanetDefence.parseXML(root);
+            // wczytujemy budynki
+            PlanetBuildings buildings = PlanetBuildings.parseXML(root);
+            // wczytujemy techy
+            PlayerTechnologies techs = PlayerTechnologies.parseXML(root);
+            // tworzymy obiekt
+            report = new Report(coords,playerStatuses,time,resources,status,fleet,defence,buildings,techs);
         } catch (ParserConfigurationException ex) {
             throw new OgameCannotLoadReportException("Report in "+file+" original exception"+ex.getMessage());
         } catch (SAXException ex ){
@@ -160,9 +189,14 @@ public class Report extends Message implements Comparable{
         out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         out.write("<report>\n");
         out.write(this.cords.toXML());
+        out.write(PlayerActivityStatuses.toXML(this.playerStatus));
         out.write(this.time.toXML());
         out.write(this.resources.toXML());
         out.write(this.status.toXML());
+        out.write(this.fleet==null?PlanetFleet.toXMLNotVisible():this.fleet.toXML());
+        out.write(this.defence==null?PlanetDefence.toXMLNotVisible():this.defence.toXML());
+        out.write(this.buildings==null?PlanetBuildings.toXMLNotVisible():this.buildings.toXML());
+        out.write(this.techs==null?PlayerTechnologies.toXMLNotVisible():this.techs.toXML());
         out.write("</report>");
         out.close();
         } catch (IOException ex){
@@ -239,16 +273,17 @@ public class Report extends Message implements Comparable{
     }
     
     private Coords cords;
+    private List<PlayerActivityStatuses> playerStatus;
     private Time time;
     private PlanetResources resources;
     private GalaxyStatus status;
-    private FleetAndSatellites fleet;
+    private PlanetFleet fleet;
     private PlanetDefence defence;
     private PlanetBuildings buildings;
     private PlayerTechnologies techs;
 
     public static double metal_price=1.0;
-    public static double crystal_price=2.0;
-    public static double deuterium_price=3.0;
+    public static double crystal_price=3.0;
+    public static double deuterium_price=1.0;
 
 }

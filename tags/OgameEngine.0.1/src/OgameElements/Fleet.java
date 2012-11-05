@@ -6,8 +6,10 @@ package OgameElements;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.lang.model.element.Element;
 
 /**
  *
@@ -51,7 +53,10 @@ public class Fleet {
         Iterator<Entry<Ships,Integer>> it = set.iterator();
         boolean first = true;
         for (Entry<Ships,Integer> temp;it.hasNext();){
-            if (!first){ fleetString+=";";}
+            if (!first){ 
+                fleetString+=";";
+                first=false;
+            }
             temp = it.next();
             fleetString+=temp.getKey().name+"-"+(temp.getValue().intValue()==Ships.ALL?"All ":temp.getValue().intValue());
         }
@@ -67,5 +72,6 @@ public class Fleet {
         return fleet.isEmpty();
     }
     
+   
     
 }
