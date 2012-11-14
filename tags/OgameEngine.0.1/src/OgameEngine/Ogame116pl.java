@@ -43,6 +43,7 @@ import OgameElements.Performance.ResourceField;
 import OgameElements.PlayerActivityStatuses;
 import OgameElements.Ships;
 import OgameElements.ShipyardShips;
+import OgameEngine.Exceptions.OgameCannotParseSpyReportException;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
 import OgameEngine.Exceptions.OgameMoonNotFoundException;
@@ -946,8 +947,9 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return Integer.parseInt(s.replace('.', ' ').replace(" ", ""));
     }
 
-    private Report parseReport(String url) throws OgameElementNotFoundException, OgameFileNotFoundException, OgameIOException, OgameParsingException {
+    private Report parseReport(String url) throws OgameCannotParseSpyReportException {
         String mmetal = "0", ccrystal = "0", ddeuter = "0", eenergy = "0";
+        
         Coords c = null;
         selenium.openWindow(url, "temp");
         selenium.selectWindow("temp");
@@ -958,22 +960,22 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
             ccrystal = getText(mappings.getSpyreport().getCristal());
             ddeuter = getText(mappings.getSpyreport().getDeuterium());
             eenergy = getText(mappings.getSpyreport().getEnergy());
+            if (this.isElementPresent("")){}
         } catch (OgameElementNotFoundException ex) {
             selenium.close();
             selenium.selectWindow(null);
-            throw ex;
+            throw new OgameCannotParseSpyReportException("Element not found "+ex.getMessage());
         } catch (OgameFileNotFoundException ex) {
             selenium.close();
             selenium.selectWindow(null);
-            throw ex;
+            throw new OgameCannotParseSpyReportException("File not found "+ex.getMessage());
         } catch (OgameIOException ex) {
             selenium.close();
-            selenium.selectWindow(null);
-            throw ex;
+            throw new OgameCannotParseSpyReportException("IO Error "+ex.getMessage());
         } catch (OgameParsingException ex) {
             selenium.close();
             selenium.selectWindow(null);
-            throw ex;
+            throw new OgameCannotParseSpyReportException("Parsing coord problem "+ex.getMessage());
         }
         selenium.close();
         selenium.selectWindow(null);
@@ -984,19 +986,10 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
         return new Report(c, new PlanetResources(metal, crystal, deuter, energy));
     }
 
-    public List<Report> getReports(List<Coords> coords) throws OgameElementNotFoundException, OgameException {
-        this.clickOverview();
-        this.clickMessages();
-        if (mappings.getMessages().isCommander()){
-            this.click(mappings.getMessages().getSpy_tab());
-        }
-        
-
-        return null;
-    }
+    
 
     @Override
-    public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException {
+    public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameCannotParseSpyReportException, OgameException {
         System.out.println("Get " + count + " previous reports");
         this.clickOverview();
         this.clickMessages();

@@ -28,6 +28,7 @@ import OgameElements.Performance;
 import OgameElements.Performance.Production;
 import OgameElements.Performance.ResourceField;
 import OgameElements.ShipyardShips;
+import OgameEngine.Exceptions.OgameCannotParseSpyReportException;
 import OgameEngine.Exceptions.OgameElementNotFoundException;
 import OgameEngine.Exceptions.OgameFileNotFoundException;
 import OgameEngine.Exceptions.OgameIOException;
@@ -371,9 +372,10 @@ public interface IOgame {
      * @param count ilość raportów
      * @return raporty szpiegowskie
      * @throws OgameElementNotFoundException brak elementu
+     * @throws OgameCannotParseSpyReportException błąd parsowania raportu
      * @throws OgameException inny błąd
      */
-    abstract public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameException;
+    abstract public List<Report> getReports(int count) throws OgameElementNotFoundException, OgameCannotParseSpyReportException, OgameException;
     
      /* ************************************************************************
      * ************************* GALAKTYKA  ************************************
