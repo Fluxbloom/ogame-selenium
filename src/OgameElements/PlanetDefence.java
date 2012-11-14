@@ -17,7 +17,8 @@ import org.w3c.dom.NodeList;
  * @author dyschemist
  */
 public class PlanetDefence {
-      public PlanetDefence() {
+
+    public PlanetDefence() {
         this.planetDefence = new HashMap<Defence, Integer>();
     }
 
@@ -28,7 +29,6 @@ public class PlanetDefence {
             planetDefence.put(s, new Integer(count));
         }
     }
-    
 
     public void add(Defence s, String str) {
         add(s, Integer.parseInt(str));
@@ -42,45 +42,49 @@ public class PlanetDefence {
         }
     }
 
-    public static String toXMLNotVisible(){
-        return "<"+xmlHeader+" visible=\"false\">\n</"+xmlHeader+">\n";
+    public boolean isEmpty() {
+        return this.planetDefence.isEmpty();
     }
-    
-    public String toReportString(){
-        String result="Defence:\n";
-        Set<Entry<Defence,Integer>> set = this.planetDefence.entrySet();
-        Iterator<Entry<Defence,Integer>> it = set.iterator();
-        Entry<Defence,Integer> temp;
-        while(it.hasNext()){
+
+    public static String toXMLNotVisible() {
+        return "<" + xmlHeader + " visible=\"false\">\n</" + xmlHeader + ">\n";
+    }
+
+    public String toReportString() {
+        String result = "Defence:\n";
+        Set<Entry<Defence, Integer>> set = this.planetDefence.entrySet();
+        Iterator<Entry<Defence, Integer>> it = set.iterator();
+        Entry<Defence, Integer> temp;
+        while (it.hasNext()) {
             temp = it.next();
-            result+=defence2String.get(temp.getKey())+" - "+Integer.toString(temp.getValue().intValue())+"\n";
+            result += defence2String.get(temp.getKey()) + " - " + Integer.toString(temp.getValue().intValue()) + "\n";
         }
         return result;
     }
-    
-    public String toXML(){
-        String result="<"+xmlHeader+" visible=\"true\">\n";
-        Set<Entry<Defence,Integer>> set = this.planetDefence.entrySet();
-        Iterator<Entry<Defence,Integer>> it = set.iterator();
-        Entry<Defence,Integer> temp;
-        while(it.hasNext()){
+
+    public String toXML() {
+        String result = "<" + xmlHeader + " visible=\"true\">\n";
+        Set<Entry<Defence, Integer>> set = this.planetDefence.entrySet();
+        Iterator<Entry<Defence, Integer>> it = set.iterator();
+        Entry<Defence, Integer> temp;
+        while (it.hasNext()) {
             temp = it.next();
-            result+="<"+xmlDefenceHeader+" type=\""+defence2String.get(temp.getKey())+"\">"+
-                    Integer.toString(temp.getValue().intValue())+"</"+xmlDefenceHeader+">\n";
+            result += "<" + xmlDefenceHeader + " type=\"" + defence2String.get(temp.getKey()) + "\">"
+                    + Integer.toString(temp.getValue().intValue()) + "</" + xmlDefenceHeader + ">\n";
         }
-        result +="</"+xmlHeader+">\n";
+        result += "</" + xmlHeader + ">\n";
         return result;
     }
-    
-    static public PlanetDefence parseXML(Element root){
+
+    static public PlanetDefence parseXML(Element root) {
         PlanetDefence defence;
         NodeList list = root.getElementsByTagName(xmlHeader);
         Element e = (Element) list.item(0);
-        if (e.getAttribute("visible").compareTo("true")==0){
+        if (e.getAttribute("visible").compareTo("true") == 0) {
             defence = new PlanetDefence();
             NodeList defenceList = e.getElementsByTagName(xmlDefenceHeader);
             Element temp;
-            for (int i=0; i< defenceList.getLength();i++){
+            for (int i = 0; i < defenceList.getLength(); i++) {
                 temp = (Element) defenceList.item(i);
                 defence.add(string2Defence.get(temp.getAttribute("type")), new Integer(Integer.parseInt(temp.getTextContent())));
             }
@@ -89,7 +93,7 @@ public class PlanetDefence {
         }
         return defence;
     }
-    
+
     @Override
     public String toString() {
         String fleetString = "Defence{";
@@ -108,11 +112,11 @@ public class PlanetDefence {
         return fleetString + '}';
     }
     HashMap<Defence, Integer> planetDefence;
-    
     static public String xmlHeader = "defence";
-     static public String xmlDefenceHeader = "gun";
-    static public final Map<String,Defence> string2Defence = new HashMap<String,Defence>();
-    static public final Map<Defence,String> defence2String = new HashMap<Defence,String>();
+    static public String xmlDefenceHeader = "gun";
+    static public final Map<String, Defence> string2Defence = new HashMap<String, Defence>();
+    static public final Map<Defence, String> defence2String = new HashMap<Defence, String>();
+
     static {
         string2Defence.put(Defence.DUZA_POWLOKA.name, Defence.DUZA_POWLOKA);
         string2Defence.put(Defence.DUZY_LASER.name, Defence.DUZY_LASER);
@@ -120,20 +124,20 @@ public class PlanetDefence {
         string2Defence.put(Defence.DZIALO_JONOWE.name, Defence.DZIALO_JONOWE);
         string2Defence.put(Defence.MALA_POWLOKA.name, Defence.MALA_POWLOKA);
         string2Defence.put(Defence.MALY_LASER.name, Defence.MALY_LASER);
-        string2Defence.put(Defence.PRZECIWRAKIETA.name,Defence.PRZECIWRAKIETA);
+        string2Defence.put(Defence.PRZECIWRAKIETA.name, Defence.PRZECIWRAKIETA);
         string2Defence.put(Defence.RAKITA_MIEDZYPLANETARNA.name, Defence.RAKITA_MIEDZYPLANETARNA);
         string2Defence.put(Defence.WYRZUTNIA_PLAZMY.name, Defence.WYRZUTNIA_PLAZMY);
-        string2Defence.put(Defence.WYRZUTNIA_RAKIET.name,Defence.WYRZUTNIA_RAKIET);
-        
-        defence2String.put(Defence.DUZA_POWLOKA,Defence.DUZA_POWLOKA.name);
-        defence2String.put(Defence.DUZY_LASER,Defence.DUZY_LASER.name);
-        defence2String.put(Defence.DZIALO_GAUSSA,Defence.DZIALO_GAUSSA.name);
+        string2Defence.put(Defence.WYRZUTNIA_RAKIET.name, Defence.WYRZUTNIA_RAKIET);
+
+        defence2String.put(Defence.DUZA_POWLOKA, Defence.DUZA_POWLOKA.name);
+        defence2String.put(Defence.DUZY_LASER, Defence.DUZY_LASER.name);
+        defence2String.put(Defence.DZIALO_GAUSSA, Defence.DZIALO_GAUSSA.name);
         defence2String.put(Defence.DZIALO_JONOWE, Defence.DZIALO_JONOWE.name);
         defence2String.put(Defence.MALA_POWLOKA, Defence.MALA_POWLOKA.name);
         defence2String.put(Defence.MALY_LASER, Defence.MALY_LASER.name);
-        defence2String.put(Defence.PRZECIWRAKIETA,Defence.PRZECIWRAKIETA.name);
+        defence2String.put(Defence.PRZECIWRAKIETA, Defence.PRZECIWRAKIETA.name);
         defence2String.put(Defence.RAKITA_MIEDZYPLANETARNA, Defence.RAKITA_MIEDZYPLANETARNA.name);
         defence2String.put(Defence.WYRZUTNIA_PLAZMY, Defence.WYRZUTNIA_PLAZMY.name);
-        defence2String.put(Defence.WYRZUTNIA_RAKIET,Defence.WYRZUTNIA_RAKIET.name);
+        defence2String.put(Defence.WYRZUTNIA_RAKIET, Defence.WYRZUTNIA_RAKIET.name);
     }
 }

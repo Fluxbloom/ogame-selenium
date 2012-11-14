@@ -41,6 +41,10 @@ public class PlanetFleet {
         }
     }
 
+    public boolean isEmpty() {
+        return this.fleetAndDefence.isEmpty();
+    }
+    
     public static String toXMLNotVisible(){
         return "<"+xmlHeader+" visible=\"false\">\n</"+xmlHeader+">\n";
     }

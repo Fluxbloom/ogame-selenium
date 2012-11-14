@@ -42,17 +42,23 @@ public class Report extends Message implements Comparable{
      * Konstruktor podstawowego raportu
      * @param cords kordynaty
      * @param resources zasoby na planecie
+     * @deprecated stary konstruktor do pierwszego szablonu raportów
      */
     public Report(Coords cords, PlanetResources resources) {
         this(cords,normal,null,resources,null,null,null,null,null);
     }
-
-    public Report(Coords cords, Time time, PlanetResources resources, GalaxyStatus status, 
-            PlanetFleet fleet, PlanetDefence defence, PlanetBuildings buildings, 
-            PlayerTechnologies techs) {
-        this(cords,normal,time,resources,status,fleet,defence,buildings,techs);
-    }
-
+    /**
+     * Konstruktor pełnego raportu. podanie null za nieobowiazkowy parametr (fleet,defence,buildings,techs) oznacza jego brak w raporcie
+     * @param cords kordynaty planety lub ksiezyca w raporcie
+     * @param playerStatus lista statusów danego gracza
+     * @param time czas skanowania
+     * @param resources zasoby na planecie w raporcie
+     * @param status status aktywnosci na planecie 
+     * @param fleet skład floty
+     * @param defence skład obrony
+     * @param buildings skład budynków
+     * @param techs skład technologii
+     */
     public Report(Coords cords,List<PlayerActivityStatuses> playerStatus, Time time, PlanetResources resources, GalaxyStatus status, PlanetFleet fleet, PlanetDefence defence, PlanetBuildings buildings, PlayerTechnologies techs) {
         this.cords = cords;
         this.playerStatus = playerStatus;
@@ -129,7 +135,26 @@ public class Report extends Message implements Comparable{
     public int sum(){
         return this.resources.getMetal()+this.resources.getCrystal()+this.resources.getDeuterium();
     }
-   
+    /**
+     * Zwraca true gdy na planecie są działa obronne lub nie widać obrony
+     * @return true gdy na planecie są działa obronne lub nie widać obrony, else pp
+     */
+    public boolean isDefencePresent(){
+        return this.defence==null?true:this.defence.isEmpty();
+    }
+        /**
+     * Zwraca true gdy na planecie stacjonuje flota lub nie widać floty w raporcie
+     * @return true gdy na planecie stacjonuje flota lub nie widać floty w raporcie, else pp
+     */
+    public boolean isFleetPresent(){
+        return this.fleet==null?true:this.fleet.isEmpty();
+    }
+    /**
+     * Metoda wczytuje raport szpiegowski z pliku
+     * @param file plik
+     * @return raport szpiegowski
+     * @throws OgameCannotLoadReportException 
+     */
     static public Report load(String file) throws OgameCannotLoadReportException {
         Report report=null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -181,10 +206,14 @@ public class Report extends Message implements Comparable{
     static FileInputStream fistream;
     static BufferedWriter out;
     static BufferedReader in;
-    
-    public void save(String file) throws OgameCannotSaveReportException{
+    /**
+     * Zapisuje raport do katalogu
+     * @param dir katalog zapisu
+     * @throws OgameCannotSaveReportException 
+     */
+    public void save(String dir) throws OgameCannotSaveReportException{
         try {
-        fostream = new FileWriter(file+"Report-"+this.cords.toReportString()+".xml");
+        fostream = new FileWriter(dir+"Report-"+this.cords.toReportString()+".xml");
         out = new BufferedWriter(fostream);
         out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         out.write("<report>\n");
@@ -200,7 +229,7 @@ public class Report extends Message implements Comparable{
         out.write("</report>");
         out.close();
         } catch (IOException ex){
-            throw new OgameCannotSaveReportException("Report to "+file+" ex="+ex.getMessage());
+            throw new OgameCannotSaveReportException("Report to "+dir+" ex="+ex.getMessage());
         }
     }
 

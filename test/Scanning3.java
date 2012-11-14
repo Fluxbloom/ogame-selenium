@@ -40,7 +40,7 @@ public class Scanning3 extends OgameTest{
     public void hello() throws OgameException {
     o.start();
     o.login(uni, nick, pass);
-    int systems = 13;
+    int systems = 16;
     List<AstronomicalObject> planets = o.getPlanetList();
     Iterator<AstronomicalObject> it = planets.iterator();
     List<GalaxyRow> all,idlers;
