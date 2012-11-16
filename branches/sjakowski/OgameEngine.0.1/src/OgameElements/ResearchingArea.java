@@ -9,7 +9,7 @@ package OgameElements;
  * @author plich
  */
 public class ResearchingArea {
-   private String name;
+   protected String name;
     public static final ResearchingArea TECHNOLOGIA_ENERGETYCZNA = new ResearchingArea("TECHNOLOGIA_ENERGETYCZNA");
     public static final ResearchingArea TECHNOLOGIA_LASEROWA = new ResearchingArea("TECHNOLOGIA_LASEROWA");
     public static final ResearchingArea TECHNOLOGIA_JONOWA = new ResearchingArea("TECHNOLOGIA_JONOWA");
