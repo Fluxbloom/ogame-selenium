@@ -59,13 +59,40 @@ public class PropertiesSpeedSimPL {
         this.defenderMPO = properties.getProperty("defender_mpo");
         this.defenderDPO = properties.getProperty("defender_dpo");
         this.defenderPR = properties.getProperty("defender_pr");
+        this.adress = properties.getProperty("adress");
+        this.submitButton = properties.getProperty("submitButton");
+        this.pz_surowce = properties.getProperty("pz_surowce");
+        this.atacker_loss = properties.getProperty("atacker_loss");
+        this.defender_loss = properties.getProperty("defender_loss");
+        this.theoretical_profit = properties.getProperty("theoretical_profit");
+        this.real_profit = properties.getProperty("real_profit");
+        this.metal = properties.getProperty("metal");
+        this.crystal = properties.getProperty("crystal");
+        this.deuter = properties.getProperty("deuter");
+        this.resource_value = properties.getProperty("resource_value");
+        this.coords = properties.getProperty("coords");
+        this.basicint = properties.getProperty("basicint");
+        this.atacker_won = properties.getProperty("atacker_won");
+        this.defender_won = properties.getProperty("defender_won");
+        this.round_number = properties.getProperty("round_number");
+        this.recycler_number = properties.getProperty("recycler_number");
+        this.flight_time = properties.getProperty("flight_time");
+
+        this.battle_place = properties.getProperty("battle_place");
+        this.result = properties.getProperty("result");
+        this.moon_prob = properties.getProperty("moon_prob");
+        this.deuter_need = properties.getProperty("deuter_need");
+        this.flight = properties.getProperty("flight");
+        this.collected = properties.getProperty("collected");
+        this.dt=properties.getProperty("dt");
+        
 
     }
 
     public String getAttackerMT() {
         return attackerMT;
     }
-    
+
     /**
      * @return the attackerDT
      */
@@ -101,8 +128,6 @@ public class PropertiesSpeedSimPL {
         return attackerOW;
     }
 
-   
-
     /**
      * @return the attackerPan
      */
@@ -130,8 +155,6 @@ public class PropertiesSpeedSimPL {
     public String getAttackerNisz() {
         return attackerNisz;
     }
-
-   
 
     /**
      * @return the attackerRec
@@ -359,11 +382,197 @@ public class PropertiesSpeedSimPL {
     private String defenderMPO;
     private String defenderDPO;
     private String defenderPR;
+    private String adress;
+    private String submitButton;
+    private String pz_surowce, atacker_loss, defender_loss, theoretical_profit, real_profit, battle_place, result, moon_prob, deuter_need, flight;
+    private String metal, crystal, deuter, resource_value, coords, basicint, atacker_won, defender_won, round_number, recycler_number, flight_time,collected,dt;
 
     /**
      * @return the attackerKol
      */
     public String getAttackerKol() {
         return attackerKol;
+    }
+
+    /**
+     * @return the adress
+     */
+    public String getAdress() {
+        return adress;
+    }
+
+    /**
+     * @return the submitButton
+     */
+    public String getSubmitButton() {
+        return submitButton;
+    }
+
+    /**
+     * @return the pz_surowce
+     */
+    public String getPz_surowce() {
+        return pz_surowce;
+    }
+
+    /**
+     * @return the atacker_loss
+     */
+    public String getAtacker_loss() {
+        return atacker_loss;
+    }
+
+    /**
+     * @return the defender_loss
+     */
+    public String getDefender_loss() {
+        return defender_loss;
+    }
+
+    /**
+     * @return the theoretical_profit
+     */
+    public String getTheoretical_profit() {
+        return theoretical_profit;
+    }
+
+    /**
+     * @return the real_profit
+     */
+    public String getReal_profit() {
+        return real_profit;
+    }
+
+    /**
+     * @return the pz_metal
+     */
+    public String getPz_metal() {
+        return getMetal();
+    }
+
+    /**
+     * @return the metal
+     */
+    public String getMetal() {
+        return metal;
+    }
+
+    /**
+     * @return the crystal
+     */
+    public String getCrystal() {
+        return crystal;
+    }
+
+    /**
+     * @return the deuter
+     */
+    public String getDeuter() {
+        return deuter;
+    }
+
+    /**
+     * @return the resource_value
+     */
+    public String getResource_value() {
+        return resource_value;
+    }
+
+    /**
+     * @return the coords
+     */
+    public String getCoords() {
+        return coords;
+    }
+
+    /**
+     * @return the basicint
+     */
+    public String getBasicint() {
+        return basicint;
+    }
+
+    /**
+     * @return the atacker_won
+     */
+    public String getAtacker_won() {
+        return atacker_won;
+    }
+
+    /**
+     * @return the defender_won
+     */
+    public String getDefender_won() {
+        return defender_won;
+    }
+
+    /**
+     * @return the round_number
+     */
+    public String getRound_number() {
+        return round_number;
+    }
+
+    /**
+     * @return the recycler_number
+     */
+    public String getRecycler_number() {
+        return recycler_number;
+    }
+
+    /**
+     * @return the flight_time
+     */
+    public String getFlight_time() {
+        return flight_time;
+    }
+
+    /**
+     * @return the battle_place
+     */
+    public String getBattle_place() {
+        return battle_place;
+    }
+
+    /**
+     * @return the result
+     */
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @return the moon_prob
+     */
+    public String getMoon_prob() {
+        return moon_prob;
+    }
+
+    /**
+     * @return the deuter_need
+     */
+    public String getDeuter_need() {
+        return deuter_need;
+    }
+
+    /**
+     * @return the flight
+     */
+    public String getFlight() {
+        return flight;
+    }
+
+    /**
+     * @return the collected
+     */
+    public String getCollected() {
+        return collected;
+    }
+
+    /**
+     * @return the dt
+     */
+    public String getDt() {
+        return dt;
     }
 }

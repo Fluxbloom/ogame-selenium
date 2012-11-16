@@ -34,9 +34,12 @@ public class Fleet {
     }
     
     public int get(Ships s){
-       if (fleet.containsKey(s))
-                return ((Integer) fleet.get(s)).intValue();
-       else return 0;      
+       if (fleet.containsKey(s)) {
+            return ((Integer) fleet.get(s)).intValue();
+        }
+       else {
+            return 0;
+        }      
     }
 
     public HashMap<Ships, Integer> getFleet() {
@@ -46,7 +49,9 @@ public class Fleet {
     @Override
     public String toString() {
         String fleetString ="Fleet{";
-        if (this==Fleet.WHOLE_FLEET) return "Fleet{Whole}";
+        if (this==Fleet.WHOLE_FLEET) {
+            return "Fleet{Whole}";
+        }
         Set<Entry<Ships,Integer>> set = this.fleet.entrySet();
         Iterator<Entry<Ships,Integer>> it = set.iterator();
         boolean first = true;

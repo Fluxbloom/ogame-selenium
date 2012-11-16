@@ -121,6 +121,10 @@ public class SpeedSimPLTest {
         BattleResult expResult = null;
         instance.start();
         BattleResult result = instance.sim(f1, f2);
+        
+        System.out.print(result.toString());
+      //  System.out.print(result.toString());
+      
         //instance.stop();
         //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
