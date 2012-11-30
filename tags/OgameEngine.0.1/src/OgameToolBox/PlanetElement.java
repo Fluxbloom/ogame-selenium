@@ -74,6 +74,13 @@ public class PlanetElement {
     public void setFleetCount(int fleetCount) {
         this.fleetCount = fleetCount<0?0:fleetCount;
     }
+/**
+     * Ustawia wysyłanie fs-a z planety
+     * @param fs true lub false
+     */
+    public void setFs(boolean fs) {
+        this.fs = fs;
+    }
     
     
     /**

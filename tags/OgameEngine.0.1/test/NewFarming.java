@@ -103,7 +103,7 @@ public class NewFarming extends OgameTest {
         Report.metal_price=1.0;
         Report.crystal_price = 1.5;
         Report.deuterium_price = 1.3;
-        //o.wait(1,48, 0);
+        //o.wait(1,0, 0);
         int i =0;
         while (true) {
             try{

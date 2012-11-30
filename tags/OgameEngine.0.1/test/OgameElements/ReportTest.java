@@ -59,7 +59,7 @@ public class ReportTest extends OgameTest{
     
     @Test
     public void loadTest() throws OgameCannotLoadReportException, OgameFileNotFoundException, OgameIOException {
-    String path = System.getProperty("user.dir")+"/saves/farmer/test/Report-2:195:6M.xml";
+    String path = System.getProperty("user.dir")+"/saves/farmer/test/Report-2_195_6_M.xml";
     Report r  = Report.load(path);
     System.out.println(r.reportPrint());
     }

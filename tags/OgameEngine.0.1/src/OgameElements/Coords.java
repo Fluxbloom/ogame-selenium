@@ -231,7 +231,7 @@ public class Coords implements Comparable {
      */
     public String toXML() {
         String result = "<" + Coords.xmlHeader + ">";
-        result += this.toReportString();
+        result += "" + this.universe + ":" + this.system + ":" + this.position + (this.dest == Destination.MOON ? "M" : "");
         result += "</" + Coords.xmlHeader + ">\n";
         return result;
     }
@@ -260,7 +260,7 @@ public class Coords implements Comparable {
      * @return raportowy kordynat
      */
     public String toReportString() {
-        return "" + this.universe + ":" + this.system + ":" + this.position + (this.dest == Destination.MOON ? "M" : "");
+        return "" + this.universe + "_" + this.system + "_" + this.position + (this.dest == Destination.MOON ? "_M" : "");
     }
 
     /**
