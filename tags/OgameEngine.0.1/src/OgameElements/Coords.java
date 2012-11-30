@@ -231,7 +231,7 @@ public class Coords implements Comparable {
      */
     public String toXML() {
         String result = "<" + Coords.xmlHeader + ">";
-        result += "" + this.universe + ":" + this.system + ":" + this.position + (this.dest == Destination.MOON ? "M" : "");
+        result += this.toBaseString();
         result += "</" + Coords.xmlHeader + ">\n";
         return result;
     }
@@ -254,6 +254,13 @@ public class Coords implements Comparable {
         return result;
     }
 
+    /**
+     * Tworzy stringa w prostej postaci 1:2:3M dla planet i księżycy
+     * @return 
+     */
+    public String toBaseString(){
+        return "" + this.universe + ":" + this.system + ":" + this.position + (this.dest == Destination.MOON ? "M" : "");
+    }
     /**
      * Konwertuje kordynat do postaci [x:xxx:x](M) gdzie (M) pojawia się tylko przy ksiezycu
      * Zaprojektowane na potrzeby zapisywania raportow do pliku
