@@ -63,4 +63,12 @@ public class ReportTest extends OgameTest{
     Report r  = Report.load(path);
     System.out.println(r.reportPrint());
     }
+    
+    @Test
+    public void loadTestWithDir() throws OgameCannotLoadReportException, OgameFileNotFoundException, OgameIOException {
+    String path = System.getProperty("user.dir")+"/saves/farmer/test";
+    Coords c = new Coords(2,195,6,Destination.MOON);
+    Report r  = Report.load(path,c);
+    System.out.println(r.reportPrint());
+    }
 }

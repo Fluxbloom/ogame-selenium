@@ -150,6 +150,18 @@ public class Report extends Message implements Comparable{
         return this.fleet==null?true:this.fleet.isEmpty();
     }
     /**
+     * Wczytuje z danego katalogu raport szpiegowski dla danego kordynatu
+     * @param dir katalog
+     * @param c obiekt kordynatów
+     * @return raport szpiegowski
+     * @throws OgameCannotLoadReportException 
+     */
+    static public Report load(String dir,Coords c) throws OgameCannotLoadReportException {
+        Report report = null;
+        report = load(dir+"/Report-"+c.toReportString()+".xml");
+        return report;
+    }
+    /**
      * Metoda wczytuje raport szpiegowski z pliku
      * @param file plik
      * @return raport szpiegowski
