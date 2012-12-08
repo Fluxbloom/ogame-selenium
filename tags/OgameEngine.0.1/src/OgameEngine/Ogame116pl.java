@@ -850,7 +850,7 @@ public class Ogame116pl extends Ogame {//extends SeleneseTestCase {
     public ArrivalTime sendFleet(Planet p, Fleet f, Coords c, Speed speed, Mission m, Resources r) throws OgameException {
         this.changePlanet(p);
         this.waitMilisecond(400);
-        return this.sendFleet(p, f, c, speed, m, r);
+        return this.sendFleet(f, c, speed, m, r);
     }
 
     @Override

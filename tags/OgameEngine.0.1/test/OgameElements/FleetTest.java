@@ -48,7 +48,8 @@ public class FleetTest extends OgameTest{
         o.stop();
     }
     @Test 
-            public void slotsCountTest() throws OgameElementNotFoundException, OgameException{
+    @Ignore
+    public void slotsCountTest() throws OgameElementNotFoundException, OgameException{
                 o.start();
         o.login(uni, nick, pass);
         int slotsTotal = o.getSlotsTotal(),
@@ -60,5 +61,16 @@ public class FleetTest extends OgameTest{
         System.out.println("Slots "+slotsOcc+"/"+slotsTotal+" ; "+expOcc+"/"+expTotal);
     }
     
-    
+    @Test
+    public void sendTest() throws OgameException {
+        o.start();
+        o.login(uni, nick, pass);
+        Moon nelliel = new Moon(new Coords(2,158,7,Destination.MOON),"Nelliel");
+        Planet videl = new Planet( new Coords(2,158,7),"Videl",nelliel);
+        Fleet fleet = new Fleet();
+        fleet.add(Ships.BOMB, 1);
+        o.sendFleet(videl, fleet, videl.getMoon().getCoords(), Speed.S10, Mission.STATION, Resources.NO_RESOURCES);
+        o.logout();
+        o.stop();
+    }
 }
