@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 
+import OgameElements.Buildings;
 import OgameElements.Coords;
 import OgameElements.Destination;
 import OgameElements.TimePeriod;
@@ -45,7 +46,7 @@ public class NewFarming extends OgameTest {
             "2:50:11","2:50:8","2:50:6","2:47:6","2:42:12"
                 // obrona 2:50:9
                 });
-        Coords[] cAisha = Coords.parseArray(new String[]{
+        Coords[] cKushina = Coords.parseArray(new String[]{
             "2:121:12","2:121:1","2:120:1","2:115:7","2:115:6","2:113:8","2:113:7","2:113:4","2:112:10","2:111:6","2:109:11","2:109:9",
             "2:105:10","2:106:12","2:105:7","2:104:5","2:103:4","2:102:8","2:102:7","2:101:6","2:99:11","2:99:8","2:98:10","2:91:6","2:122:1"
             
@@ -95,8 +96,8 @@ public class NewFarming extends OgameTest {
         exp.add(Ships.DT, 50);
         exp.add(Ships.CM, 60);
         boolean isFs = false;
-        PlanetElement aisha = new PlanetElement(new Planet(new Coords(2, 106, 6), "Aisha"), fs, 1,isFs);
-        PlanetElement videl = new PlanetElement(new Planet(new Coords(2, 158, 7), "Videl"), fs, 1,true);
+        PlanetElement kushina = new PlanetElement(new Planet(new Coords(2, 106, 6), "Kushina"), fs, 1,isFs);
+        PlanetElement videl = new PlanetElement(new Planet(new Coords(2, 158, 7), "Videl"), fs, 1,isFs);
         PlanetElement hinata = new PlanetElement(new Planet(new Coords(2, 199, 7), "Hinata"), fs, 1,isFs);
         PlanetElement tatsuki = new PlanetElement(new Planet(new Coords(2, 244, 7), "Tatsuki"), fs, 1,isFs);
         PlanetElement nami = new PlanetElement(new Planet(new Coords(2, 57, 11), "Nami"), fs, 1,isFs);
@@ -104,9 +105,9 @@ public class NewFarming extends OgameTest {
         PlanetElement juvia = new PlanetElement(new Planet(new Coords(3,182,8),"Juvia"),fs,1,isFs);
         PlanetElement erza = new PlanetElement(new Planet(new Coords(4,344,8),"Erza"),fs,1,isFs);
         Moon nelliel = new Moon(new Coords(2,158,7,Destination.MOON),"Nelliel");
-        Farmer f = new Farmer(aisha,1); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
+        Farmer f = new Farmer(kushina); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
         f.setStationarySonds(true);
-        f.add(aisha, cAisha, farming);
+        f.add(kushina, cKushina, farming);
         f.add(videl, cVidel, farming);
         f.add(hinata, cHinata, farming);
         f.add(tatsuki, cTatsuki, farming);
@@ -116,10 +117,11 @@ public class NewFarming extends OgameTest {
         f.add(erza, cErza, farming);
         TimePeriod await = new TimePeriod(0, 10, 0);
         Report.metal_price=1.0;
-        Report.crystal_price = 1.5;
-        Report.deuterium_price = 1.3;
-        //o.wait(0,15, 0);
+        Report.crystal_price = 1.0;
+        Report.deuterium_price = 1.0;
+        //o.wait(1,45, 0);
         int i =0;
+        boolean budowac = true;
         while (true) {
             try{
                 await = new TimePeriod(0, 10, 0);
@@ -127,13 +129,13 @@ public class NewFarming extends OgameTest {
                 o.login(uni, nick, pass);
                 o.changePlanet(nelliel);
                 try {
-                    o.sendFleet(exp, new Coords(2,156,16), Mission.EXPLORE.setTime(2));
+                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
                 }catch (Exception ex){}
                 try {
-                    o.sendFleet(exp, new Coords(2,157,16), Mission.EXPLORE.setTime(2));
+                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
                 }catch (Exception ex){}
                 try {
-                    o.sendFleet(exp, new Coords(2,159,16), Mission.EXPLORE.setTime(2));
+                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
                 }catch (Exception ex){}
                 await = f.scanAndFarm(o);
             } catch (OgameException ex) {
