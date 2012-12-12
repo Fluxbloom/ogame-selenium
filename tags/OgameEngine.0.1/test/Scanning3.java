@@ -39,6 +39,7 @@ public class Scanning3 extends OgameTest{
     }
     
     @Test
+    @Ignore
     public void scanDlaMadzi() throws OgameException {
         Planet hinata = new Planet(new Coords(2,199,7),"Hinata");
         List<GalaxyRow> all,idlers = new ArrayList<GalaxyRow>();
@@ -86,11 +87,10 @@ public class Scanning3 extends OgameTest{
     }
     
     @Test
-    @Ignore
     public void hello() throws OgameException {
     o.start();
     o.login(uni, nick, pass);
-    int systems = 16;
+    int systems = 17;
     List<AstronomicalObject> planets = o.getPlanetList();
     Iterator<AstronomicalObject> it = planets.iterator();
     List<GalaxyRow> all,idlers;
