@@ -60,7 +60,7 @@ public class NewFarming extends OgameTest {
             
                 });
         Coords[] cHinata = Coords.parseArray(new String[]{
-        "2:216:8","2:216:7","2:215:13","2:214:11","2:214:10","2:214:4","2:212:7","2:210:6","2:209:11","2:208:7","2:203:6",
+        "2:216:8","2:216:7","2:215:13","2:214:11","2:214:10","2:214:4","2:212:7","2:209:11","2:208:7",
         "2:202:13","2:202:10","2:201:11","2:201:9","2:201:4","2:195:12","2:191:12","2:190:10","2:190:6","2:189:6","2:188:11",
         "2:186:4","2:182:8"
         // obrona 2:187:10 
@@ -133,16 +133,16 @@ public class NewFarming extends OgameTest {
                 await = new TimePeriod(0, 10, 0);
                 o.start();
                 o.login(uni, nick, pass);
-                o.changePlanet(nelliel);
-                try {
-                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
-                }catch (Exception ex){}
-                try {
-                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
-                }catch (Exception ex){}
-                try {
-                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
-                }catch (Exception ex){}
+//                o.changePlanet(nelliel);
+//                try {
+//                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
+//                }catch (Exception ex){}
+//                try {
+//                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
+//                }catch (Exception ex){}
+//                try {
+//                    o.sendFleet(exp, new Coords(2,158,16), Mission.EXPLORE);
+//                }catch (Exception ex){}
                 await = f.scanAndFarm(o);
             } catch (OgameException ex) {
                 System.err.println(ex.getMessage());
