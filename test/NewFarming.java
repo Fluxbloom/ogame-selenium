@@ -42,36 +42,46 @@ public class NewFarming extends OgameTest {
     public void farm() throws OgameException {
 
         Coords[] cNami = Coords.parseArray(new String[]{
-                "2:73:12","2:67:11","2:67:3","2:63:10","2:59:13","2:59:12", "2:59:9","2:57:8","2:54:10","2:52:7","2:50:11",
-                "2:50:9","2:50:8","2:42:8",
-                // 1 dp 2:59:10
+            "2:73:12","2:71:6","2:67:11","2:67:3","2:59:13","2:59:12","2:59:10","2:59:9","2:54:10",
+            "2:50:11","2:50:8"
                 });
         Coords[] cKushina = Coords.parseArray(new String[]{
-            "2:122:8","2:121:12","2:121:1","2:115:12","2:115:7","2:115:6","2:113:7","2:113:4","2:109:9",
-            "2:106:12","2:105:11","2:106:7","2:105:6","2:102:8","2:102:7","2:99:11","2:99:8","2:94:10",
-            "2:90:11"
+            "2:122:8","2:121:12","2:115:12","2:115:6","2:115:7","2:113:7","2:113:4","2:101:4",
+            "2:99:11","2:99:8","2:94:10","2:90:11"
+            
+            // obrona "2:93:8"
             
                 });
         Coords[] cVidel = Coords.parseArray(new String[]{
-            "2:169:12","2:168:11","2:159:12","2:158:4","2:155:10","2:153:12","2:146:4"
+            "2:169:12","2:168:11","2:164:6","2:162:6","2:162:4","2:159:12","2:158:4","2:155:10",
+            "2:154:11","2:146:4","2:141:7","2:141:4"
+                
+        // obrona "2:167:6".
+                // mało surowców "2:168:9","2:168:10"
                 });
         Coords[] cHinata = Coords.parseArray(new String[]{
-            "2:215:13","2:214:11","2:214:10","2:214:4","2:212:7","2:208:7","2:202:10","2:201:11","2:201:9","2:197:6",
-            "2:195:12","2:190:10","2:189:6","2:188:11","2:186:4","2:182:8","2:216:7"
+            "2:216:7","2:215:13","2:214:11","2:214:10","2:214:4","2:212:7","2:208:7",
+            "2:201:11","2:201:9","2:197:6","2:195:12","2:191:5","2:190:8","2:189:8","2:188:11",
+            "2:186:4","2:182:8"
+            
+            // obrona "2:214:6","2:192:4"
                 });
         Coords[] cTatsuki = Coords.parseArray(new String[]{
-            "2:261:6","2:261:5","2:247:9","2:243:10","2:230:11","2:230:8","2:228:9","2:227:7"
+            "2:261:6","2:261:5","2:247:9","2:232:11","2:232:10","2:232:6","2:230:11",
+            "2:230:8","2:229:6","2:228:9","2:227:7"
                 });
         Coords[] cHotaru = Coords.parseArray( new String[]{
-            "3:49:5","3:47:11","3:45:7","3:27:12","3:20:10","3:19:5","3:18:10","3:18:6"
+            "3:49:5","3:47:11","3:45:7","3:44:5","3:27:12","3:26:6","3:21:10"
+            
+            // obrona "3:27:5"
         });
         Coords[] cJuvia = Coords.parseArray(new String[]{
-            "3:198:8","3:196:4","3:194:5","3:192:6","3:191:8","3:190:8","3:187:9","3:172:12","3:168:11"
+            "3:196:4","3:194:5","3:192:6","3:191:8","3:190:13","3:190:8","3:187:9","3:177:8",
+            "3:182:6","3:176:12","3:174:11","3:173:7","3:172:12","3:168:11","3:168:8","3:166:10"
         });
         Coords[] cErza = Coords.parseArray(new String[]{
-            "4:349:12","4:343:12","4:343:7","4:343:6","4:335:12","4:335:10","4:334:8","4:330:8","4:339:8"
-            // obrona 4:340:6 1ldl
-            // recznie 4:339:8
+            "4:343:12","4:343:7","4:343:6","4:340:6","4:335:12","4:335:10","4:334:8","4:330:8",
+            "4:332:4"
         });
         
         
@@ -96,7 +106,7 @@ public class NewFarming extends OgameTest {
         PlanetElement juvia = new PlanetElement(new Planet(new Coords(3,182,8),"Juvia"),fs,1,isFs);
         PlanetElement erza = new PlanetElement(new Planet(new Coords(4,344,8),"Erza"),fs,1,isFs);
         Moon nelliel = new Moon(new Coords(2,158,7,Destination.MOON),"Nelliel");
-        Farmer f = new Farmer(kushina); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
+        Farmer f = new Farmer(kushina,1); // ustawiamy na planete z sondami + 1 wolny slot zostawiamy
         f.setStationarySonds(true);
         f.add(kushina, cKushina, farming);
         f.add(videl, cVidel, farming);
@@ -110,7 +120,7 @@ public class NewFarming extends OgameTest {
         Report.metal_price=1.0;
         Report.crystal_price = 1.4;
         Report.deuterium_price = 1.1;
-        //o.wait(1,20, 0);
+        o.wait(1,0, 0);
         int i =0;
         boolean budowac = true;
         while (true) {
@@ -121,7 +131,13 @@ public class NewFarming extends OgameTest {
                 o.changePlanet(nelliel);
                 try {
                     o.sendFleet(exp, new Coords(2,157,16), Mission.EXPLORE);
-                }catch (Exception ex){}
+                }catch (Exception ex){
+                    System.out.println("Błąd pierwszego wysłania");
+                    try{
+                        o.sendFleet(exp, new Coords(2,157,16), Mission.EXPLORE);
+                    }
+                    catch(Exception ex2){}
+                }
                 try {
                     o.sendFleet(exp, new Coords(2,159,16), Mission.EXPLORE);
                 }catch (Exception ex){}
