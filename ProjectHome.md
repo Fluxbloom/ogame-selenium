@@ -1,0 +1,1 @@
+library that provides access to ogame in java code
